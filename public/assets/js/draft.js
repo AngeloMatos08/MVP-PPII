@@ -44,15 +44,41 @@ function sortear() {
     // Sorteia um índice aleatório baseado na quantidade de times disponíveis
     
     const indiceAleatorio = Math.floor(Math.random() * timesDisponiveis.length);
-
+    // Pega o time sorteado baseado no índice aleatório
     timeAtual = timesDisponiveis[indiceAleatorio];
     console.log('Time sorteado:', timeAtual);
-
+    // Executa a função que filtra os jogadores baseado no time sorteado junto do draft
     filtrarJogadoresPorTime();
 }
-
+// Função que filtra os jogadores baseado no time sorteado
 function filtrarJogadoresPorTime() {
     const jogadoresFiltrados = listaDeJogadores.filter(jogador => jogador.time_id === timeAtual);
     console.log('Jogadores filtrados pelo time sorteado:', jogadoresFiltrados);
+
+    //Função para exibir os jogadores filtrados no HTML
+    exibirJogadoresNaTela(jogadoresFiltrados);
+}
+
+// Dev2-> AngeloMatos08: Função responsável por injetar os jogadores filtrados no HTML
+function exibirJogadoresNaTela(jogadoresFiltrados) {
+    // Dev2-> AngeloMatos08: Pega o container do HTML pelo ID
+    const container = document.getElementById('container-jogadores');
+    
+    // Dev2-> AngeloMatos08: Limpa o container para remover os jogadores da rodada anterior
+    container.innerHTML = `<h2>Escolha um jogador do time: ${timeAtual}</h2>`;
+
+    // Dev2-> AngeloMatos08: Cria um elemento visual (card/botão) para cada jogador disponível
+    jogadoresFiltrados.forEach(jogador => {
+        const itemJogador = document.createElement('div');
+        itemJogador.style.margin = "10px 0";
+        
+        itemJogador.innerHTML = `
+            <span>${jogador.nome} (${jogador.funcao})</span>
+            <button onclick="escolherJogador('${jogador.nome}')">Selecionar</button>
+        `;
+        
+        // Dev2-> AngeloMatos08: Adiciona o jogador dentro do container na tela
+        container.appendChild(itemJogador);
+    });
 }
 puxarJogadores();
