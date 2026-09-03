@@ -36,10 +36,15 @@ async function puxarJogadores() {
 
 //Parte do sorteio/draft
 function sortear() {
+    // Filtra os times disponiveis baseado na lista de jogadores puxada anteriormente
+    // e em cada jogador ele pega o time_id,
+    // e com o Set ele remove os duplicados
     const timesDisponiveis = [...new Set(listaDeJogadores.map(jogador => jogador.time_id))];
     console.log('Times disponíveis para sorteio:', timesDisponiveis);
+    // Sorteia um índice aleatório baseado na quantidade de times disponíveis
     
     const indiceAleatorio = Math.floor(Math.random() * timesDisponiveis.length);
+
     timeAtual = timesDisponiveis[indiceAleatorio];
     console.log('Time sorteado:', timeAtual);
 
