@@ -1,5 +1,7 @@
 // Dev2-> AngeloMatos08: Aqui ficarão os jogadores "puxados do banco de dados"
 let listaDeJogadores = [];
+// Dev2-> AngeloMatos08: Aqui ficará o time sorteado definido pela função sortear()
+let timeAtual = null;
 
 // Dev2-> AngeloMatos08: Função que puxa os jogadores do JSON
 
@@ -24,5 +26,28 @@ async function puxarJogadores() {
 }
     function iniciarDraft() {
         console.log('Iniciando o draft com os jogadores:' + listaDeJogadores.length + ' jogadores.');
+        if (listaDeJogadores.length > 0) {
+            sortear();
+        } else {
+            console.log('Nenhum jogador disponível para o draft.');
+        }
     }
+
+
+//Parte do sorteio/draft
+function sortear() {
+    const timesDisponiveis = [...new Set(listaDeJogadores.map(jogador => jogador.time_id))];
+    console.log('Times disponíveis para sorteio:', timesDisponiveis);
+    
+    const indiceAleatorio = Math.floor(Math.random() * timesDisponiveis.length);
+    timeAtual = timesDisponiveis[indiceAleatorio];
+    console.log('Time sorteado:', timeAtual);
+
+    filtrarJogadoresPorTime();
+}
+
+function filtrarJogadoresPorTime() {
+    const jogadoresFiltrados = listaDeJogadores.filter(jogador => jogador.time_id === timeAtual);
+    console.log('Jogadores filtrados pelo time sorteado:', jogadoresFiltrados);
+}
 puxarJogadores();
