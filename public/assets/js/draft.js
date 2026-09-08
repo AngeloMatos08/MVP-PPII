@@ -1,84 +1,208 @@
 // Dev2-> AngeloMatos08: Aqui ficarão os jogadores "puxados do banco de dados"
 let listaDeJogadores = [];
-// Dev2-> AngeloMatos08: Aqui ficará o time sorteado definido pela função sortear()
+// Dev2-> AngeloMatos08: Aqui ficará o time sorteado e o ano definido pela função sortear()
 let timeAtual = null;
+let anoAtual = null;
+
+// Dev2-> AngeloMatos08: Aqui ficará o time escolhido pelo usuário
+let timeEscolhido = [];
+
+let funcoesPreenchidas = {
+    duelista: 0,
+    sentinela: 0,
+    iniciador: 0,
+    controlador: 0
+}
 
 // Dev2-> AngeloMatos08: Função que puxa os jogadores do JSON
-
-// Dev2-> AngeloMatos08: Pq async? Pq a função fetch() é assíncrona, ou seja, 
-// ela não bloqueia a execução do código enquanto aguarda a resposta do servidor. 
-// Isso significa que o código pode continuar sendo executado enquanto a requisição está 
-// sendo processada, o que é importante para não travar a interface do usuário.
 async function puxarJogadores() {
     try {
-        // Dev2-> AngeloMatos08: Indo até o arquivo JSON que contém os jogadores
         const response = await fetch('assets/database/players.json');
-
         listaDeJogadores = await response.json();
-
         console.log('Jogadores carregados!', listaDeJogadores);
         
-        // Dev2-> AngeloMatos08: Chamando a função que irá iniciar o draft
         iniciarDraft();
     } catch (error) {
         console.error('Erro ao carregar jogadores:', error);
     }
 }
-    function iniciarDraft() {
-        console.log('Iniciando o draft com os jogadores:' + listaDeJogadores.length + ' jogadores.');
-        if (listaDeJogadores.length > 0) {
-            sortear();
-        } else {
-            console.log('Nenhum jogador disponível para o draft.');
-        }
+
+function iniciarDraft() {
+    console.log('Iniciando o draft com os jogadores:' + listaDeJogadores.length + ' jogadores.');
+    if (listaDeJogadores.length > 0) {
+        sortear();
+    } else {
+        console.log('Nenhum jogador disponível para o draft.');
     }
+}
 
-
-//Parte do sorteio/draft
+// Parte do sorteio/draft
 function sortear() {
-    // Filtra os times disponiveis baseado na lista de jogadores puxada anteriormente
-    // e em cada jogador ele pega o time_id,
-    // e com o Set ele remove os duplicados
     const timesDisponiveis = [...new Set(listaDeJogadores.map(jogador => jogador.time_id))];
     console.log('Times disponíveis para sorteio:', timesDisponiveis);
-    // Sorteia um índice aleatório baseado na quantidade de times disponíveis
     
     const indiceAleatorio = Math.floor(Math.random() * timesDisponiveis.length);
-    // Pega o time sorteado baseado no índice aleatório
     timeAtual = timesDisponiveis[indiceAleatorio];
     console.log('Time sorteado:', timeAtual);
-    // Executa a função que filtra os jogadores baseado no time sorteado junto do draft
+    
     filtrarJogadoresPorTime();
 }
-// Função que filtra os jogadores baseado no time sorteado
+
 function filtrarJogadoresPorTime() {
     const jogadoresFiltrados = listaDeJogadores.filter(jogador => jogador.time_id === timeAtual);
     console.log('Jogadores filtrados pelo time sorteado:', jogadoresFiltrados);
 
-    //Função para exibir os jogadores filtrados no HTML
     exibirJogadoresNaTela(jogadoresFiltrados);
 }
 
-// Dev2-> AngeloMatos08: Função responsável por injetar os jogadores filtrados no HTML
+// Dev2-> AngeloMatos08: Trata funções se forem Array ou String para renderizar o <select>
 function exibirJogadoresNaTela(jogadoresFiltrados) {
-    // Dev2-> AngeloMatos08: Pega o container do HTML pelo ID
     const container = document.getElementById('container-jogadores');
-    
-    // Dev2-> AngeloMatos08: Limpa o container para remover os jogadores da rodada anterior
     container.innerHTML = `<h2>Escolha um jogador do time: ${timeAtual}</h2>`;
 
-    // Dev2-> AngeloMatos08: Cria um elemento visual (card/botão) para cada jogador disponível
-    jogadoresFiltrados.forEach(jogador => {
+    jogadoresFiltrados.forEach((jogador) => {
         const itemJogador = document.createElement('div');
         itemJogador.style.margin = "10px 0";
         
-        itemJogador.innerHTML = `
-            <span>${jogador.nome} (${jogador.funcao})</span>
-            <button onclick="escolherJogador('${jogador.nome}')">Selecionar</button>
-        `;
-        
-        // Dev2-> AngeloMatos08: Adiciona o jogador dentro do container na tela
+        const jaFoiEscolhido = timeEscolhido.some(j => j.nome === jogador.nome);
+
+        if (jaFoiEscolhido) {
+            itemJogador.style.color = 'gray';
+            itemJogador.style.textDecoration = 'line-through';
+            itemJogador.innerHTML = `<span>${jogador.nome} (${jogador.funcoes}) - Overall: ${jogador.overall} - Já escolhido</span>`;
+        } else {
+            // Dev2-> AngeloMatos08: Garante a conversão para Array em qualquer formato de dados do JSON
+            let listaFuncoes = [];
+            if (Array.isArray(jogador.funcoes)) {
+                listaFuncoes = jogador.funcoes;
+            } else if (typeof jogador.funcoes === 'string') {
+                listaFuncoes = jogador.funcoes.split(',').map(f => f.trim());
+            } else {
+                listaFuncoes = [jogador.funcoes];
+            }
+
+            let htmlFuncoes = '';
+            const idUnicoSelect = `select-funcao-${jogador.nome.replace(/\s+/g, '')}`;
+
+            // Dev2-> AngeloMatos08: Se o atleta tiver 2+ funções, cria o dropdown
+            if (listaFuncoes.length > 1) {
+                htmlFuncoes = `<select id="${idUnicoSelect}">
+                    <option value="" disabled selected>Escolha a função...</option>`;
+                listaFuncoes.forEach(funcao => {
+                    htmlFuncoes += `<option value="${funcao}">${funcao}</option>`;
+                });
+                htmlFuncoes += `</select>`;
+            } else {
+                htmlFuncoes = `<span>(${listaFuncoes[0]})</span>`;
+            }
+
+            itemJogador.innerHTML = `
+                <span><strong>${jogador.nome}</strong></span>
+                ${htmlFuncoes}
+                <span>- Overall: ${jogador.overall}</span>
+                <button onclick="prepararEscolha('${jogador.nome}', ${JSON.stringify(listaFuncoes).replace(/"/g, '&quot;')})">Selecionar</button>
+            `;
+        }
+
         container.appendChild(itemJogador);
     });
 }
+
+// Dev2-> AngeloMatos08: Lê o dropdown com segurança
+function prepararEscolha(nomeJogador, listaFuncoes) {
+    let funcaoSelecionada = '';
+
+    if (listaFuncoes.length > 1) {
+        const idUnicoSelect = `select-funcao-${nomeJogador.replace(/\s+/g, '')}`;
+        const selectElement = document.getElementById(idUnicoSelect);
+        
+        if (selectElement) {
+            funcaoSelecionada = selectElement.value;
+        }
+
+        if (!funcaoSelecionada) {
+            alert(`⚠️ Por favor, selecione qual função o jogador ${nomeJogador} vai exercer!`);
+            return;
+        }
+    } else {
+        funcaoSelecionada = listaFuncoes[0];
+    }
+
+    escolherJogador(nomeJogador, funcaoSelecionada);
+}
+
+// Dev2-> AngeloMatos08: Valida a nova regra de limite (até 2 da mesma função, máximo 1 das restantes)
+function validarEContarFuncao(funcao) {
+    const funcaoFormatada = funcao.toLowerCase();
+
+    if (timeEscolhido.length >= 5) {
+        alert("⚠️ O seu time já possui 5 jogadores!");
+        return false;
+    }
+
+    if (funcoesPreenchidas[funcaoFormatada] >= 2) {
+        alert(`❌ Você já possui 2 jogadores na função ${funcao}! O limite máximo de repetição é 2.`);
+        return false;
+    }
+
+    const jaExisteAlgumaFuncaoDuplicada = Object.values(funcoesPreenchidas).some(qtd => qtd >= 2);
+
+    if (jaExisteAlgumaFuncaoDuplicada && funcoesPreenchidas[funcaoFormatada] >= 1) {
+        alert(`❌ Você já possui uma função duplicada no time. As funções restantes só podem ter 1 jogador!`);
+        return false;
+    }
+
+    if (funcoesPreenchidas[funcaoFormatada] !== undefined) {
+        funcoesPreenchidas[funcaoFormatada]++;
+    }
+
+    return true;
+}
+
+// Dev2-> AngeloMatos08: Processa a escolha garantindo que a busca no JSON use 'j.nome'
+function escolherJogador(nomeJogador, funcaoJogador) {
+    if (jogadorJaFoiEscolhido(nomeJogador)) {
+        alert(`❌ O jogador ${nomeJogador} já foi escolhido em outro ano!`);
+        return;
+    }
+
+    if (!validarEContarFuncao(funcaoJogador)) {
+        return;
+    }
+
+    const objetoJogador = listaDeJogadores.find(j => j.nome === nomeJogador && j.time_id === timeAtual);
+
+    timeEscolhido.push({
+        nome: nomeJogador,
+        funcao: funcaoJogador,
+        overall: objetoJogador ? objetoJogador.overall : 0
+    });
+
+    console.log('Jogador escolhido:', nomeJogador, 'Função:', funcaoJogador, timeEscolhido);
+
+    if (timeEscolhido.length === 5) {
+        finalizarDraft();
+    } else {
+        sortear(); // Dev2-> AngeloMatos08: Opcional - Sorteia um novo time após a escolha. Se quiser ficar no mesmo time, mude de volta para 'filtrarJogadoresPorTime()'.
+    }
+}
+
+function jogadorJaFoiEscolhido(nomeJogador) {
+    return timeEscolhido.some(jogador => jogador.nome === nomeJogador);
+}
+
+function finalizarDraft() {
+    const somaOverall = timeEscolhido.reduce((soma, jogador) => soma + jogador.overall, 0);
+    const mediaOverall = somaOverall / timeEscolhido.length;
+
+    const container = document.getElementById('container-jogadores');
+    container.innerHTML = `
+        <h2>Draft Concluído!</h2>
+        <p><strong>Média Geral do Time:</strong> ${mediaOverall}</p>
+        <ul>
+            ${timeEscolhido.map(j => `<li>${j.nome} - ${j.funcao} (Overall: ${j.overall})</li>`).join('')}
+        </ul>
+    `;
+}
+
 puxarJogadores();

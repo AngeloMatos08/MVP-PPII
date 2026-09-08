@@ -36,7 +36,7 @@
     "card_id": "saadhak_loud_2022",
     "atleta_id": "saadhak",
     "nome": "Saadhak",
-    "funcoes": ["sentinela"],
+    "funcoes": ["sentinela", "iniciador"],
     "overall": 91
   },
   {
@@ -206,7 +206,7 @@
     "card_id": "cryocells_xset_2022",
     "atleta_id": "cryocells",
     "nome": "Cryocells",
-    "funcoes": ["duelista"],
+    "funcoes": ["duelista", "sentinela"],
     "overall": 93
   },
   {
@@ -216,7 +216,7 @@
     "card_id": "bcj_xset_2022",
     "atleta_id": "bcj",
     "nome": "BcJ",
-    "funcoes": ["iniciador"],
+    "funcoes": ["iniciador", "controlador"],
     "overall": 89
   },
   {
@@ -226,7 +226,7 @@
     "card_id": "zekken_xset_2022",
     "atleta_id": "zekken",
     "nome": "zekken",
-    "funcoes": ["duelista"],
+    "funcoes": ["duelista", "iniciador"],
     "overall": 92
   },
   {
@@ -236,7 +236,7 @@
     "card_id": "ayrin_xset_2022",
     "atleta_id": "ayrin",
     "nome": "AYRIN",
-    "funcoes": ["controlador"],
+    "funcoes": ["sentinela", "controlador"],
     "overall": 88
   },
   {
@@ -246,7 +246,7 @@
     "card_id": "dephh_xset_2022",
     "atleta_id": "dephh",
     "nome": "dephh",
-    "funcoes": ["iniciador"],
+    "funcoes": ["iniciador", "controlador"],
     "overall": 86
   },
   {
@@ -298,5 +298,505 @@
     "nome": "Boaster",
     "funcoes": ["controlador"],
     "overall": 87
+  },
+  {
+    "time_id": "leviatan_2022",
+    "nome_time": "LEVIATAN",
+    "ano": 2022,
+    "card_id": "king_leviatan_2022",
+    "atleta_id": "king",
+    "nome": "kiNgg",
+    "funcoes": ["duelista", "iniciador"],
+    "overall": 94
+  },
+    {
+    "time_id": "leviatan_2022",
+    "nome_time": "LEVIATAN",
+    "ano": 2022,
+    "card_id": "melser_leviatan_2022",
+    "atleta_id": "melser",
+    "nome": "Melser",
+    "funcoes": ["controlador", "sentinela"],
+    "overall": 87
+  },
+    {
+    "time_id": "leviatan_2022",
+    "nome_time": "LEVIATAN",
+    "ano": 2022,
+    "card_id": "shy_leviatan_2022",
+    "atleta_id": "shy",
+    "nome": "Shyy",
+    "funcoes": ["iniciador"],
+    "overall": 90
+  },
+    {
+    "time_id": "leviatan_2022",
+    "nome_time": "LEVIATAN",
+    "ano": 2022,
+    "card_id": "tacolilla_leviatan_2022",
+    "atleta_id": "tacolilla",
+    "nome": "Tacolilla",
+    "funcoes": ["sentinela"],
+    "overall": 87
+  },
+    {
+    "time_id": "leviatan_2022",
+    "nome_time": "LEVIATAN",
+    "ano": 2022,
+    "card_id": "adverso_leviatan_2022",
+    "atleta_id": "adverso",
+    "nome": "adverso",
+    "funcoes": ["controlador", "iniciador"],
+    "overall": 88
+  },
+      {
+    "time_id": "team_liquid_2022",
+    "nome_time": "TEAM LIQUID",
+    "ano": 2022,
+    "card_id": "jamppi_team_liquid_2022",
+    "atleta_id": "jamppi",
+    "nome": "Jamppi",
+    "funcoes": ["sentinela"],
+    "overall": 87
+  },
+        {
+    "time_id": "team_liquid_2022",
+    "nome_time": "TEAM LIQUID",
+    "ano": 2022,
+    "card_id": "scream_team_liquid_2022",
+    "atleta_id": "scream",
+    "nome": "ScreaM",
+    "funcoes": ["duelista"],
+    "overall": 91
+  },
+        {
+    "time_id": "team_liquid_2022",
+    "nome_time": "TEAM LIQUID",
+    "ano": 2022,
+    "card_id": "dimasick_team_liquid_2022",
+    "atleta_id": "dimasick",
+    "nome": "dimasick",
+    "funcoes": ["controlador", "iniciador"],
+    "overall": 86
+  },
+        {
+    "time_id": "team_liquid_2022",
+    "nome_time": "TEAM LIQUID",
+    "ano": 2022,
+    "card_id": "nivera_team_liquid_2022",
+    "atleta_id": "nivera",
+    "nome": "Nivera",
+    "funcoes": ["controlador", "iniciador"],
+    "overall": 91
+  },
+        {
+    "time_id": "team_liquid_2022",
+    "nome_time": "TEAM LIQUID",
+    "ano": 2022,
+    "card_id": "soulcas_team_liquid_2022",
+    "atleta_id": "soulcas",
+    "nome": "soulcas",
+    "funcoes": ["iniciador"],
+    "overall": 84
+  },
+        {
+    "time_id": "paper_rex_2022",
+    "nome_time": "PAPER REX",
+    "ano": 2022,
+    "card_id": "d4v41_paper_rex_2022",
+    "atleta_id": "d4v41",
+    "nome": "d4v41",
+    "funcoes": ["sentinela", "iniciador"],
+    "overall": 86
+  },
+          {
+    "time_id": "paper_rex_2022",
+    "nome_time": "PAPER REX",
+    "ano": 2022,
+    "card_id": "jinggg_paper_rex_2022",
+    "atleta_id": "jinggg",
+    "nome": "Jinggg",
+    "funcoes": ["duelista"],
+    "overall": 85
+  },
+          {
+    "time_id": "paper_rex_2022",
+    "nome_time": "PAPER REX",
+    "ano": 2022,
+    "card_id": "mindfreak_paper_rex_2022",
+    "atleta_id": "mindfreak",
+    "nome": "mindfreak",
+    "funcoes": ["controlador"],
+    "overall": 85
+  },
+          {
+    "time_id": "paper_rex_2022",
+    "nome_time": "PAPER REX",
+    "ano": 2022,
+    "card_id": "f0rsaken_paper_rex_2022",
+    "atleta_id": "f0rsaken",
+    "nome": "f0rsakeN",
+    "funcoes": ["sentinela", "duelista"],
+    "overall": 86
+  },
+          {
+    "time_id": "paper_rex_2022",
+    "nome_time": "PAPER REX",
+    "ano": 2022,
+    "card_id": "benkai_paper_rex_2022",
+    "atleta_id": "benkai",
+    "nome": "Benkai",
+    "funcoes": ["iniciador", "sentinela"],
+    "overall": 78
+  },
+          {
+    "time_id": "xerxia_2022",
+    "nome_time": "XERXIA",
+    "ano": 2022,
+    "card_id": "sscary_xerxia_2022",
+    "atleta_id": "sscary",
+    "nome": "sScary",
+    "funcoes": ["controlador"],
+    "overall": 86
+  },
+          {
+    "time_id": "xerxia_2022",
+    "nome_time": "XERXIA",
+    "ano": 2022,
+    "card_id": "crws_xerxia_2022",
+    "atleta_id": "crws",
+    "nome": "Crws",
+    "funcoes": ["iniciador", "controlador"],
+    "overall": 82
+  },
+          {
+    "time_id": "xerxia_2022",
+    "nome_time": "XERXIA",
+    "ano": 2022,
+    "card_id": "foxz_xerxia_2022",
+    "atleta_id": "foxz",
+    "nome": "foxz",
+    "funcoes": ["duelista"],
+    "overall": 79
+  },
+          {
+    "time_id": "xerxia_2022",
+    "nome_time": "XERXIA",
+    "ano": 2022,
+    "card_id": "sushiboys_xerxia_2022",
+    "atleta_id": "sushiboys",
+    "nome": "Sushiboys",
+    "funcoes": ["sentinela", "iniciador"],
+    "overall": 73
+  },
+            {
+    "time_id": "xerxia_2022",
+    "nome_time": "XERXIA",
+    "ano": 2022,
+    "card_id": "surf_xerxia_2022",
+    "atleta_id": "surf",
+    "nome": "Surf",
+    "funcoes": ["sentinela", "duelista"],
+    "overall": 70
+  },
+            {
+    "time_id": "zeta_2022",
+    "nome_time": "ZETA DIVISION",
+    "ano": 2022,
+    "card_id": "sugarz3r0_zeta_2022",
+    "atleta_id": "sugarz3r0",
+    "nome": "SugarZ3r0",
+    "funcoes": ["controlador"],
+    "overall": 82
+  },
+            {
+    "time_id": "zeta_2022",
+    "nome_time": "ZETA DIVISION",
+    "ano": 2022,
+    "card_id": "laz_zeta_2022",
+    "atleta_id": "laz",
+    "nome": "Laz",
+    "funcoes": ["sentinela"],
+    "overall": 79
+  },
+            {
+    "time_id": "zeta_2022",
+    "nome_time": "ZETA DIVISION",
+    "ano": 2022,
+    "card_id": "crow_zeta_2022",
+    "atleta_id": "crow",
+    "nome": "crow",
+    "funcoes": ["iniciador"],
+    "overall": 73
+  },
+            {
+    "time_id": "zeta_2022",
+    "nome_time": "ZETA DIVISION",
+    "ano": 2022,
+    "card_id": "dep_zeta_2022",
+    "atleta_id": "dep",
+    "nome": "Dep",
+    "funcoes": ["duelista"],
+    "overall": 80
+  },
+            {
+    "time_id": "zeta_2022",
+    "nome_time": "ZETA DIVISION",
+    "ano": 2022,
+    "card_id": "tennn_zeta_2022",
+    "atleta_id": "tennn",
+    "nome": "TENNN",
+    "funcoes": ["duelista", "sentinela"],
+    "overall": 82
+  },
+            {
+    "time_id": "kru_2022",
+    "nome_time": "KRU",
+    "ano": 2022,
+    "card_id": "keznitdeuS_kru_2022",
+    "atleta_id": "keznitdeuS",
+    "nome": "KeznitdeuS",
+    "funcoes": ["duelista"],
+    "overall": 85
+  },
+            {
+    "time_id": "kru_2022",
+    "nome_time": "KRU",
+    "ano": 2022,
+    "card_id": "klaus_kru_2022",
+    "atleta_id": "klaus",
+    "nome": "Klaus",
+    "funcoes": ["iniciador"],
+    "overall": 72
+  },
+            {
+    "time_id": "kru_2022",
+    "nome_time": "KRU",
+    "ano": 2022,
+    "card_id": "mazino_kru_2022",
+    "atleta_id": "mazino",
+    "nome": "Mazino",
+    "funcoes": ["sentinela", "iniciador"],
+    "overall": 81
+  },
+            {
+    "time_id": "kru_2022",
+    "nome_time": "KRU",
+    "ano": 2022,
+    "card_id": "nagz_kru_2022",
+    "atleta_id": "nagz",
+    "nome": "NagZ",
+    "funcoes": ["sentinela"],
+    "overall": 79
+  },
+            {
+    "time_id": "kru_2022",
+    "nome_time": "KRU",
+    "ano": 2022,
+    "card_id": "delz1k_kru_2022",
+    "atleta_id": "delz1k",
+    "nome": "Delz1k",
+    "funcoes": ["duelista"],
+    "overall": 85
+  },
+            {
+    "time_id": "100thieves_2022",
+    "nome_time": "100 Thieves",
+    "ano": 2022,
+    "card_id": "will_100t_2022",
+    "atleta_id": "will",
+    "nome": "Will",
+    "funcoes": ["duelista"],
+    "overall": 85
+  },
+            {
+    "time_id": "100thieves_2022",
+    "nome_time": "100 Thieves",
+    "ano": 2022,
+    "card_id": "bang_100t_2022",
+    "atleta_id": "bang",
+    "nome": "bang",
+    "funcoes": ["controlador"],
+    "overall": 85
+  },
+            {
+    "time_id": "100thieves_2022",
+    "nome_time": "100 Thieves",
+    "ano": 2022,
+    "card_id": "stellar_100t_2022",
+    "atleta_id": "stellar",
+    "nome": "stellar",
+    "funcoes": ["sentinela"],
+    "overall": 78
+  },
+            {
+    "time_id": "100thieves_2022",
+    "nome_time": "100 Thieves",
+    "ano": 2022,
+    "card_id": "derrek_100t_2022",
+    "atleta_id": "derrek",
+    "nome": "Derrek",
+    "funcoes": ["iniciador"],
+    "overall": 75
+  },
+            {
+    "time_id": "100thieves_2022",
+    "nome_time": "100 Thieves",
+    "ano": 2022,
+    "card_id": "asuna_100t_2022",
+    "atleta_id": "asuna",
+    "nome": "Asuna",
+    "funcoes": ["duelista", "iniciador", "sentinela"],
+    "overall": 73
+  },
+            {
+    "time_id": "edward_gaming_2022",
+    "nome_time": "EDward Gaming",
+    "ano": 2022,
+    "card_id": "chichoo_edg_2022",
+    "atleta_id": "chichoo",
+    "nome": "CHICHOO",
+    "funcoes": ["controlador","sentinela"],
+    "overall": 81
+  },
+            {
+    "time_id": "edward_gaming_2022",
+    "nome_time": "EDward Gaming",
+    "ano": 2022,
+    "card_id": "zmjjkk_edg_2022",
+    "atleta_id": "zmjjkk",
+    "nome": "ZmjjKK",
+    "funcoes": ["sentinela", "duelista"],
+    "overall": 83
+  },
+            {
+    "time_id": "edward_gaming_2022",
+    "nome_time": "EDward Gaming",
+    "ano": 2022,
+    "card_id": "life_edg_2022",
+    "atleta_id": "life",
+    "nome": "Life",
+    "funcoes": ["duelista"],
+    "overall": 71
+  },
+            {
+    "time_id": "edward_gaming_2022",
+    "nome_time": "EDward Gaming",
+    "ano": 2022,
+    "card_id": "haodong_edg_2022",
+    "atleta_id": "haodong",
+    "nome": "Haodong",
+    "funcoes": ["iniciador","controlador"],
+    "overall": 73
+  },
+            {
+    "time_id": "edward_gaming_2022",
+    "nome_time": "EDward Gaming",
+    "ano": 2022,
+    "card_id": "smoggy_edg_2022",
+    "atleta_id": "smoggy",
+    "nome": "Smoggy",
+    "funcoes": ["duelista","iniciador"],
+    "overall": 83
+  },
+            {
+    "time_id": "boom_esports_2022",
+    "nome_time": "BOOM Esports",
+    "ano": 2022,
+    "card_id": "xffero_bme_2022",
+    "atleta_id": "xffero",
+    "nome": "xffero",
+    "funcoes": ["iniciador","controlador"],
+    "overall": 81
+  },
+            {
+    "time_id": "boom_esports_2022",
+    "nome_time": "BOOM Esports",
+    "ano": 2022,
+    "card_id": "fl1pzjder_bme_2022",
+    "atleta_id": "xffero",
+    "nome": "xffero",
+    "funcoes": ["sentinela","controlador","iniciador"],
+    "overall": 77
+  },
+            {
+    "time_id": "boom_esports_2022",
+    "nome_time": "BOOM Esports",
+    "ano": 2022,
+    "card_id": "blazek1ng_bme_2022",
+    "atleta_id": "blazek1ng",
+    "nome": "BlaZek1ng",
+    "funcoes": ["iniciador","controlador"],
+    "overall": 75
+  },
+            {
+    "time_id": "boom_esports_2022",
+    "nome_time": "BOOM Esports",
+    "ano": 2022,
+    "card_id": "famouz_bme_2022",
+    "atleta_id": "famouz",
+    "nome": "Famouz",
+    "funcoes": ["duelista","sentinela"],
+    "overall": 71
+  },
+            {
+    "time_id": "boom_esports_2022",
+    "nome_time": "BOOM Esports",
+    "ano": 2022,
+    "card_id": "berserx_bme_2022",
+    "atleta_id": "berserx",
+    "nome": "BerserX",
+    "funcoes": ["duelista","iniciador"],
+    "overall": 70
+  },
+            {
+    "time_id": "furia_2022",
+    "nome_time": "FURIA",
+    "ano": 2022,
+    "card_id": "dgzin_2022",
+    "atleta_id": "dgzin",
+    "nome": "Dgzin",
+    "funcoes": ["duelista","sentinela"],
+    "overall": 83
+  },
+            {
+    "time_id": "furia_2022",
+    "nome_time": "FURIA",
+    "ano": 2022,
+    "card_id": "nzr_2022",
+    "atleta_id": "nzr",
+    "nome": "nzr",
+    "funcoes": ["iniciador"],
+    "overall": 79
+  },
+            {
+    "time_id": "furia_2022",
+    "nome_time": "FURIA",
+    "ano": 2022,
+    "card_id": "qck_2022",
+    "atleta_id": "qck",
+    "nome": "qck",
+    "funcoes": ["duelista","sentinela"],
+    "overall": 74
+  },
+            {
+    "time_id": "furia_2022",
+    "nome_time": "FURIA",
+    "ano": 2022,
+    "card_id": "khalil_2022",
+    "atleta_id": "khalil",
+    "nome": "Khalil",
+    "funcoes": ["controlador"],
+    "overall": 70
+  },
+            {
+    "time_id": "furia_2022",
+    "nome_time": "FURIA",
+    "ano": 2022,
+    "card_id": "mazin_2022",
+    "atleta_id": "mazin",
+    "nome": "mazin",
+    "funcoes": ["duelista","iniciador"],
+    "overall": 70
   }
 ]
