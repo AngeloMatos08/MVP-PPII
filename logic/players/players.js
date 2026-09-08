@@ -1,16 +1,16 @@
 class Player {
     constructor(id, nome) {
-        this.id = id;
+        this.atleta_id = atleta_id;
         this.nome = nome;
         this.historico = [];
     }
 
-    adicionarHistorico(ano, time, funcao, geral) {
+    adicionarHistorico(ano, time, funcao, overall) {
         this.historico.push({
             ano: ano,
             time: time,
             funcao: funcao,
-            geral: geral
+            overall: overall
         });
     }
 }
