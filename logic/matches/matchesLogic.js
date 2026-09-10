@@ -1,0 +1,1 @@
+//Lógica responsável pela simulação das partidas
