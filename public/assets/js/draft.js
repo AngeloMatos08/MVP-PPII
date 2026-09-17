@@ -2,6 +2,7 @@
 let listaDeJogadores = [];
 // Dev2-> AngeloMatos08: Aqui ficará o time sorteado e o ano definido pela função sortear()
 let timeAtual = null;
+let nomeTimeAtual = null;
 let anoAtual = null;
 
 // Dev2-> AngeloMatos08: Aqui ficará o time escolhido pelo usuário
@@ -14,16 +15,17 @@ let funcoesPreenchidas = {
     controlador: 0
 }
 
-// Dev2-> AngeloMatos08: Função que puxa os jogadores do JSON
+// Função atualizada para puxar da API do MongoDB
 async function puxarJogadores() {
     try {
-        const response = await fetch('assets/database/players.json');
+        // Altera a rota do arquivo local para a rota do servidor backend
+        const response = await fetch('http://localhost:3000/api/jogadores');
         listaDeJogadores = await response.json();
-        console.log('Jogadores carregados!', listaDeJogadores);
+        console.log('Jogadores carregados do Banco de Dados!', listaDeJogadores);
         
         iniciarDraft();
     } catch (error) {
-        console.error('Erro ao carregar jogadores:', error);
+        console.error('Erro ao carregar jogadores do banco:', error);
     }
 }
 
@@ -37,14 +39,23 @@ function iniciarDraft() {
 }
 
 // Parte do sorteio/draft
+function definirTimeAtual(timeId, ano = null) {
+    timeAtual = timeId;
+
+    const jogadorExemplo = listaDeJogadores.find(jogador => jogador.time_id === timeId);
+    nomeTimeAtual = jogadorExemplo ? jogadorExemplo.nome_time : null;
+    anoAtual = ano ?? (jogadorExemplo ? jogadorExemplo.ano : null);
+}
+
 function sortear() {
     const timesDisponiveis = [...new Set(listaDeJogadores.map(jogador => jogador.time_id))];
     console.log('Times disponíveis para sorteio:', timesDisponiveis);
-    
+
     const indiceAleatorio = Math.floor(Math.random() * timesDisponiveis.length);
-    timeAtual = timesDisponiveis[indiceAleatorio];
+    const timeSorteado = timesDisponiveis[indiceAleatorio];
+    definirTimeAtual(timeSorteado);
     console.log('Time sorteado:', timeAtual);
-    
+
     filtrarJogadoresPorTime();
 }
 
@@ -53,6 +64,21 @@ function filtrarJogadoresPorTime() {
     console.log('Jogadores filtrados pelo time sorteado:', jogadoresFiltrados);
 
     exibirJogadoresNaTela(jogadoresFiltrados);
+}
+
+function carregarTimePorAno(nomeTime, ano) {
+    const jogadoresDoTime = listaDeJogadores.filter(jogador => jogador.nome_time === nomeTime && jogador.ano === ano);
+
+    if (!jogadoresDoTime.length) {
+        alert(`⚠️ Não foi possível encontrar o time ${nomeTime} no ano ${ano}.`);
+        return;
+    }
+
+    timeAtual = jogadoresDoTime[0].time_id;
+    nomeTimeAtual = nomeTime;
+    anoAtual = ano;
+
+    filtrarJogadoresPorTime();
 }
 
 // Dev2-> AngeloMatos08: Trata funções se forem Array ou String para renderizar o <select>
@@ -195,6 +221,11 @@ function finalizarDraft() {
     const somaOverall = timeEscolhido.reduce((soma, jogador) => soma + jogador.overall, 0);
     const mediaOverall = somaOverall / timeEscolhido.length;
 
+    const painelControles = document.querySelector('.painel-controles');
+    if (painelControles) {
+        painelControles.style.display = 'none';
+    }
+
     const container = document.getElementById('container-jogadores');
     container.innerHTML = `
         <h2>Draft Concluído!</h2>
@@ -203,6 +234,54 @@ function finalizarDraft() {
             ${timeEscolhido.map(j => `<li>${j.nome} - ${j.funcao} (Overall: ${j.overall})</li>`).join('')}
         </ul>
     `;
+}
+// Dev2-> AngeloMatos08: Função de reroll do draft selecionando outro time aleatório criando o botão de reroll
+function carregarTimePorId(timeId) {
+    const jogadorExemplo = listaDeJogadores.find(jogador => jogador.time_id === timeId);
+
+    if (!jogadorExemplo) {
+        alert(`⚠️ Não foi possível localizar o time ${timeId}.`);
+        return;
+    }
+
+    definirTimeAtual(timeId, jogadorExemplo.ano);
+    filtrarJogadoresPorTime();
+}
+
+function rerollOutroTime() {
+    const timesDisponiveis = [...new Set(listaDeJogadores.map(jogador => jogador.time_id))]
+        .filter(timeId => timeId !== timeAtual);
+
+    if (timesDisponiveis.length === 0) {
+        alert('⚠️ Não há outro time disponível para sortear.');
+        return;
+    }
+
+    const indiceAleatorio = Math.floor(Math.random() * timesDisponiveis.length);
+    const novoTimeId = timesDisponiveis[indiceAleatorio];
+
+    carregarTimePorId(novoTimeId);
+}
+
+function rerollMesmoTimeOutroAno() {
+    const nomeTimeRef = nomeTimeAtual || (listaDeJogadores.find(jogador => jogador.time_id === timeAtual)?.nome_time ?? null);
+
+    if (!nomeTimeRef) {
+        alert('⚠️ Não foi possível identificar o time atual.');
+        return;
+    }
+
+    const opcoesAno = listaDeJogadores.filter(jogador => jogador.nome_time === nomeTimeRef && jogador.ano !== anoAtual);
+
+    if (opcoesAno.length === 0) {
+        alert('Este time não possui outras temporadas cadastradas.');
+        return;
+    }
+
+    const anosDisponiveis = [...new Set(opcoesAno.map(jogador => jogador.ano))];
+    const anoSorteado = anosDisponiveis[Math.floor(Math.random() * anosDisponiveis.length)];
+
+    carregarTimePorAno(nomeTimeRef, anoSorteado);
 }
 
 puxarJogadores();
