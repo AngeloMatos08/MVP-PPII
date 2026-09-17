@@ -6,11 +6,9 @@ const {
     calcularTaxaVitoria
 } = require("./matchesLogic");
 
-
 // Classe para representar um time de teste
 
 class Time {
-
     constructor(nome, jogadores) {
         this.nome = nome;
         this.jogadores = jogadores;
@@ -18,9 +16,7 @@ class Time {
 
 }
 
-
 // Criando os jogadores do Time A
-
 const jogadoresA = [
     {
         nome: "Aspas",
@@ -48,7 +44,6 @@ const jogadoresA = [
         overall: 92
     }
 ];
-
 
 // Criando os jogadores do Time B
 
@@ -80,13 +75,11 @@ const jogadoresB = [
     }
 ];
 
-
 // Criando os times
 
 const timeTestA = new Time("Time de Teste A", jogadoresA);
 
 const timeTestB = new Time("Time de Teste B", jogadoresB);
-
 
 // Calculando os atributos do Time A
 
@@ -94,13 +87,11 @@ const ataqueA = calcularAtaque(timeTestA.jogadores);
 
 const defesaA = calcularDefesa(timeTestA.jogadores);
 
-
 // Calculando os atributos do Time B
 
 const ataqueB = calcularAtaque(timeTestB.jogadores);
 
 const defesaB = calcularDefesa(timeTestB.jogadores);
-
 
 // Fatores do mapa
 
@@ -111,7 +102,6 @@ const defM = 1.05;
 console.log("");
 
 console.log("=== TESTE DE TROCA DE LADOS ===");
-
 
 // Primeiro lado
 // A ataca e B defende
@@ -129,7 +119,6 @@ const vbPrimeiroLado = calcularTaxaVitoria(
     defM,
     atkM
 );
-
 
 console.log("");
 console.log("Primeiro lado:");
@@ -153,7 +142,6 @@ const vbSegundoLado = calcularTaxaVitoria(
     atkM,
     defM
 );
-
 
 console.log("");
 console.log("Segundo lado:");
