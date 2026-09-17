@@ -47,3 +47,26 @@ function calcularDefesa(time) {
     }
     return soma / 5;
 }
+
+// Função para calcular a taxa de vitória de um time
+function calcularTaxaVitoria(ataque, defesaInimigo, atkM, defM) {
+
+    return (ataque * atkM) - (defesaInimigo * defM);
+}
+
+// Função para calcular a probabilidade de vitória
+
+function calcularProbabilidade(va, vb) {
+
+    return va / (va + vb);
+}
+
+//Exporando as funções para serem utilizadas em outros arquivos
+
+module.exports = {
+    obterFatoresFuncao,
+    calcularAtaque,
+    calcularDefesa,
+    calcularTaxaVitoria,
+    calcularProbabilidade
+};
