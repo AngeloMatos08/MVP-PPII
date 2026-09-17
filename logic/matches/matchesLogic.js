@@ -22,7 +22,7 @@ function obterFatoresFuncao(funcao) {
     }
 }
 
-// Função para calcular o overall do Time
+// Função para calcular o ataque do Time
 
 function calcularAtaque(time) {
     let soma = 0;
@@ -30,9 +30,20 @@ function calcularAtaque(time) {
     for (let jogador of time) {
  
         const fatores = obterFatoresFuncao(jogador.funcao);
-
         soma += jogador.overall * fatores.atkF;
     }
+    return soma / 5;
+}
 
+// Função para calcular a defesa do time
+
+function calcularDefesa(time) {
+    let soma = 0;
+
+    for (let jogador of time) {
+
+        const fatores = obterFatoresFuncao(jogador.funcao);
+        soma += jogador.overall * fatores.defF;
+    }
     return soma / 5;
 }
