@@ -3,7 +3,8 @@
 const {
     calcularAtaque,
     calcularDefesa,
-    calcularTaxaVitoria
+    calcularTaxaVitoria,
+    calcularProbabilidade
 } = require("./matchesLogic");
 
 // Classe para representar um time de teste
@@ -125,6 +126,22 @@ console.log("Primeiro lado:");
 console.log("A atacando:", vaPrimeiroLado);
 console.log("B defendendo:", vbPrimeiroLado);
 
+const probabilidadePrimeiroLado = calcularProbabilidade(
+    vaPrimeiroLado,
+    vbPrimeiroLado
+);
+
+console.log("Probabilidade de A:", probabilidadePrimeiroLado);
+
+const escala = 20;
+
+const diferencaPrimeiroLado = (vaPrimeiroLado - vbPrimeiroLado) / escala;
+
+const probabilidadeLogistica = 1 / (1 + Math.exp(-diferencaPrimeiroLado));
+
+console.log("Escala:", escala);
+console.log("Diferença:", diferencaPrimeiroLado);
+console.log("Probabilidade logistica de A:", probabilidadeLogistica);
 
 // Segundo lado
 // B ataca e A defende
