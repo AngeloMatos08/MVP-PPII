@@ -10,6 +10,7 @@ const {
 // Classe para representar um time de teste
 
 class Time {
+
     constructor(nome, jogadores) {
         this.nome = nome;
         this.jogadores = jogadores;
@@ -18,62 +19,75 @@ class Time {
 }
 
 // Criando os jogadores do Time A
+
 const jogadoresA = [
+
     {
         nome: "Aspas",
         funcao: "Duelista",
         overall: 98
     },
+
     {
         nome: "Sacy",
         funcao: "Iniciador",
         overall: 94
     },
+
     {
         nome: "pAncada",
         funcao: "Controlador",
         overall: 93
     },
+
     {
         nome: "Saadhak",
         funcao: "Sentinela",
         overall: 91
     },
+
     {
         nome: "Less",
         funcao: "Sentinela",
         overall: 92
     }
+
 ];
 
 // Criando os jogadores do Time B
 
 const jogadoresB = [
+
     {
         nome: "yay",
         funcao: "Duelista",
         overall: 98
     },
+
     {
         nome: "crashies",
         funcao: "Iniciador",
         overall: 93
     },
+
     {
         nome: "Victor",
         funcao: "Duelista",
         overall: 92
     },
+
     {
         nome: "Marved",
         funcao: "Controlador",
         overall: 94
     },
+
     {
         nome: "FNS",
         funcao: "Sentinela",
         overall: 87
     }
+
 ];
 
 // Criando os times
@@ -101,7 +115,6 @@ const atkM = 1.00;
 const defM = 1.05;
 
 console.log("");
-
 console.log("=== TESTE DE TROCA DE LADOS ===");
 
 // Primeiro lado
@@ -135,13 +148,18 @@ console.log("Probabilidade de A:", probabilidadePrimeiroLado);
 
 const escala = 20;
 
-const diferencaPrimeiroLado = (vaPrimeiroLado - vbPrimeiroLado) / escala;
+const diferencaPrimeiroLado =
+    (vaPrimeiroLado - vbPrimeiroLado) / escala;
 
-const probabilidadeLogistica = 1 / (1 + Math.exp(-diferencaPrimeiroLado));
+const probabilidadeLogisticaPrimeiroLado =
+    1 / (1 + Math.exp(-diferencaPrimeiroLado));
 
 console.log("Escala:", escala);
 console.log("Diferença:", diferencaPrimeiroLado);
-console.log("Probabilidade logistica de A:", probabilidadeLogistica);
+console.log(
+    "Probabilidade logistica de A:",
+    probabilidadeLogisticaPrimeiroLado
+);
 
 // Segundo lado
 // B ataca e A defende
@@ -165,20 +183,35 @@ console.log("Segundo lado:");
 console.log("A defendendo:", vaSegundoLado);
 console.log("B atacando:", vbSegundoLado);
 
+const probabilidadeSegundoLado = calcularProbabilidade(
+    vaSegundoLado,
+    vbSegundoLado
+);
+
+console.log("Probabilidade de A:", probabilidadeSegundoLado);
+
+const diferencaSegundoLado =
+    (vaSegundoLado - vbSegundoLado) / escala;
+
+const probabilidadeLogisticaSegundoLado =
+    1 / (1 + Math.exp(-diferencaSegundoLado));
+
+console.log("Escala:", escala);
+console.log("Diferença:", diferencaSegundoLado);
+console.log(
+    "Probabilidade logistica de A:",
+    probabilidadeLogisticaSegundoLado
+);
+
 // Exibindo os resultados
 
 console.log("=== TESTE DOS TIMES ===");
-
 console.log("");
-
 console.log("Time:", timeTestA.nome);
 console.log("Ataque:", ataqueA);
 console.log("Defesa:", defesaA);
-
 console.log("");
-
 console.log("Time:", timeTestB.nome);
 console.log("Ataque:", ataqueB);
 console.log("Defesa:", defesaB);
-
 console.log("");
