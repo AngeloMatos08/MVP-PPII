@@ -1,5 +1,4 @@
-// Área de teste para o overall de ataque e defesa dos times
-
+// ÁREA DE TESTE PARA O OVERALL DE ATAQUE E DEFESA DOS TIMES 
 const {
     calcularAtaque,
     calcularDefesa,
@@ -7,19 +6,17 @@ const {
     calcularProbabilidade
 } = require("./matchesLogic");
 
-// Classe para representar um time de teste
 
+// CLASSE PARA REPRESENTAR UM TIME DE TESTE
 class Time {
-
     constructor(nome, jogadores) {
         this.nome = nome;
         this.jogadores = jogadores;
     }
-
 }
 
-// Criando os jogadores do Time A
 
+// CRIANDO OS JOGADORES DO TIME A
 const jogadoresA = [
 
     {
@@ -51,11 +48,10 @@ const jogadoresA = [
         funcao: "Sentinela",
         overall: 92
     }
-
 ];
 
-// Criando os jogadores do Time B
 
+// CRIANDO OS JOGADORES DO TIME B
 const jogadoresB = [
 
     {
@@ -87,131 +83,93 @@ const jogadoresB = [
         funcao: "Sentinela",
         overall: 87
     }
-
 ];
 
-// Criando os times
 
+// CRIANDO OS TIMES
 const timeTestA = new Time("Time de Teste A", jogadoresA);
-
 const timeTestB = new Time("Time de Teste B", jogadoresB);
 
-// Calculando os atributos do Time A
 
+// CALCULANDO OS ATRIBUTOS DO TIME A
 const ataqueA = calcularAtaque(timeTestA.jogadores);
-
 const defesaA = calcularDefesa(timeTestA.jogadores);
 
-// Calculando os atributos do Time B
 
+// CALCULANDO OS ATRIBUTOS DO TIME B
 const ataqueB = calcularAtaque(timeTestB.jogadores);
-
 const defesaB = calcularDefesa(timeTestB.jogadores);
 
-// Fatores do mapa
 
-const atkM = 1.00;
+// CONFIGURAÇÃO DO MAPA
+const mapa = {
+    nome: "Mapa Teste",
+    ladoFavorecido: "defesa"
+};
 
-const defM = 1.05;
+const escala = 30;
+const bonusMapa = 0.05;
+
+
+// FORÇA GERAL DOS TIMES
+const forcaA = (ataqueA + defesaA) / 2;
+const forcaB = (ataqueB + defesaB) / 2;
+
+const diferenca = forcaA - forcaB;
+
+const probabilidadeBase = 
+    1 / (1 + Math.exp(-(diferenca / escala)));
+
+
+// FUNÇÃO QUE APLICA O BÔNUS DO MAPA
+function aplicarBonusMapa(probabilidade, ladoTime, mapa, bonus) {
+    if (ladoTime === mapa.ladoFavorecido) {
+        return probabilidade + ((1 - probabilidade) * bonus);
+    }
+    
+    return probabilidade
+}
+
+
+// DEFINIÇÃO DAS PROBABILIDADES DE CADA LADO
+const probabilidadePrimeiroLadoNova = 
+    aplicarBonusMapa(
+        probabilidadeBase,
+        "ataque",
+        mapa,
+        bonusMapa
+    );
+
+const probabilidadeSegundoLadoNova =
+    aplicarBonusMapa(
+        probabilidadeBase,
+        "defesa",
+        mapa,
+        bonusMapa
+    );
+
+
+// TESTE NO CONSOLE
+console.log("");
+console.log("=== NOVA LÓGICA COM MAPA ===");
+
+console.log("")
+console.log("Mapa:", mapa.nome);
+console.log("Lado Favorecido:", mapa.ladoFavorecido);
+console.log("Bônus do mapa:", bonusMapa);
 
 console.log("");
-console.log("=== TESTE DE TROCA DE LADOS ===");
-
-// Primeiro lado
-// A ataca e B defende
-
-const vaPrimeiroLado = calcularTaxaVitoria(
-    ataqueA,
-    defesaB,
-    atkM,
-    defM
-);
-
-const vbPrimeiroLado = calcularTaxaVitoria(
-    ataqueB,
-    defesaA,
-    defM,
-    atkM
-);
+console.log("A atacando / B defendendo:");
+console.log("Probabilidade de A:", probabilidadePrimeiroLadoNova);
+console.log("Probabilidade de B:", 1 - probabilidadePrimeiroLadoNova);
 
 console.log("");
-console.log("Primeiro lado:");
-console.log("A atacando:", vaPrimeiroLado);
-console.log("B defendendo:", vbPrimeiroLado);
+console.log("A defendendo / B atacando:");
+console.log("Probabilidade de A:", probabilidadeSegundoLadoNova);
+console.log("Probabilidade de B:", 1 - probabilidadeSegundoLadoNova);
 
-const probabilidadePrimeiroLado = calcularProbabilidade(
-    vaPrimeiroLado,
-    vbPrimeiroLado
-);
-
-console.log("Probabilidade de A:", probabilidadePrimeiroLado);
-
-const escala = 20;
-
-const diferencaPrimeiroLado =
-    (vaPrimeiroLado - vbPrimeiroLado) / escala;
-
-const probabilidadeLogisticaPrimeiroLado =
-    1 / (1 + Math.exp(-diferencaPrimeiroLado));
-
-console.log("Escala:", escala);
-console.log("Diferença:", diferencaPrimeiroLado);
-console.log(
-    "Probabilidade logistica de A:",
-    probabilidadeLogisticaPrimeiroLado
-);
-
-// Segundo lado
-// B ataca e A defende
-
-const vaSegundoLado = calcularTaxaVitoria(
-    ataqueA,
-    defesaB,
-    defM,
-    atkM
-);
-
-const vbSegundoLado = calcularTaxaVitoria(
-    ataqueB,
-    defesaA,
-    atkM,
-    defM
-);
 
 console.log("");
-console.log("Segundo lado:");
-console.log("A defendendo:", vaSegundoLado);
-console.log("B atacando:", vbSegundoLado);
-
-const probabilidadeSegundoLado = calcularProbabilidade(
-    vaSegundoLado,
-    vbSegundoLado
-);
-
-console.log("Probabilidade de A:", probabilidadeSegundoLado);
-
-const diferencaSegundoLado =
-    (vaSegundoLado - vbSegundoLado) / escala;
-
-const probabilidadeLogisticaSegundoLado =
-    1 / (1 + Math.exp(-diferencaSegundoLado));
-
-console.log("Escala:", escala);
-console.log("Diferença:", diferencaSegundoLado);
-console.log(
-    "Probabilidade logistica de A:",
-    probabilidadeLogisticaSegundoLado
-);
-
-// Exibindo os resultados
-
-console.log("=== TESTE DOS TIMES ===");
-console.log("");
-console.log("Time:", timeTestA.nome);
-console.log("Ataque:", ataqueA);
-console.log("Defesa:", defesaA);
-console.log("");
-console.log("Time:", timeTestB.nome);
-console.log("Ataque:", ataqueB);
-console.log("Defesa:", defesaB);
-console.log("");
+console.log(" ======================");
+console.log("|Código antigo removido|");
+console.log(" ======================");
