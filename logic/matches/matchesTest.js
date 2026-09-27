@@ -2,6 +2,9 @@
 const {
     calcularAtaque,
     calcularDefesa,
+    calcularForcaTime,
+    calcularProbabilidadeBase,
+    aplicarBonusMapa,
     calcularTaxaVitoria,
     calcularProbabilidade
 } = require("./matchesLogic");
@@ -22,31 +25,31 @@ const jogadoresA = [
     {
         nome: "Aspas",
         funcao: "Duelista",
-        overall: 98
+        overall: 90
     },
 
     {
         nome: "Sacy",
         funcao: "Iniciador",
-        overall: 94
+        overall: 90
     },
 
     {
         nome: "pAncada",
         funcao: "Controlador",
-        overall: 93
+        overall: 90
     },
 
     {
         nome: "Saadhak",
         funcao: "Sentinela",
-        overall: 91
+        overall: 90
     },
 
     {
         nome: "Less",
-        funcao: "Sentinela",
-        overall: 92
+        funcao: "Duelista",
+        overall: 90
     }
 ];
 
@@ -57,31 +60,31 @@ const jogadoresB = [
     {
         nome: "yay",
         funcao: "Duelista",
-        overall: 98
+        overall: 70
     },
 
     {
         nome: "crashies",
         funcao: "Iniciador",
-        overall: 93
+        overall: 70
     },
 
     {
         nome: "Victor",
         funcao: "Duelista",
-        overall: 92
+        overall: 70
     },
 
     {
         nome: "Marved",
         funcao: "Controlador",
-        overall: 94
+        overall: 70
     },
 
     {
         nome: "FNS",
         funcao: "Sentinela",
-        overall: 87
+        overall: 70
     }
 ];
 
@@ -112,41 +115,14 @@ const bonusMapa = 0.05;
 
 
 // FORÇA GERAL DOS TIMES
-const forcaA = (ataqueA + defesaA) / 2;
-const forcaB = (ataqueB + defesaB) / 2;
-
-const diferenca = forcaA - forcaB;
-
-const probabilidadeBase = 
-    1 / (1 + Math.exp(-(diferenca / escala)));
+const forcaA = calcularForcaTime(ataqueA, defesaA);
+const forcaB = calcularForcaTime(ataqueB, defesaB);
 
 
-// FUNÇÃO QUE APLICA O BÔNUS DO MAPA
-function aplicarBonusMapa(probabilidade, ladoTime, mapa, bonus) {
-    if (ladoTime === mapa.ladoFavorecido) {
-        return probabilidade + ((1 - probabilidade) * bonus);
-    }
-    
-    return probabilidade
-}
+// PROBABILIDADE BASE
+const probabilidadeBase =
+    calcularProbabilidadeBase(forcaA, forcaB, escala);
 
-
-// DEFINIÇÃO DAS PROBABILIDADES DE CADA LADO
-const probabilidadePrimeiroLadoNova = 
-    aplicarBonusMapa(
-        probabilidadeBase,
-        "ataque",
-        mapa,
-        bonusMapa
-    );
-
-const probabilidadeSegundoLadoNova =
-    aplicarBonusMapa(
-        probabilidadeBase,
-        "defesa",
-        mapa,
-        bonusMapa
-    );
 
 
 // TESTE NO CONSOLE
@@ -155,18 +131,18 @@ console.log("=== NOVA LÓGICA COM MAPA ===");
 
 console.log("")
 console.log("Mapa:", mapa.nome);
-console.log("Lado Favorecido:", mapa.ladoFavorecido);
+console.log("Lado Favorecido:", mapa.bonusMapa);
 console.log("Bônus do mapa:", bonusMapa);
 
 console.log("");
 console.log("A atacando / B defendendo:");
-console.log("Probabilidade de A:", probabilidadePrimeiroLadoNova);
-console.log("Probabilidade de B:", 1 - probabilidadePrimeiroLadoNova);
+console.log("Probabilidade de A:", probabilidadeBase);
+console.log("Probabilidade de B:", 1 - probabilidadeBase);
 
 console.log("");
 console.log("A defendendo / B atacando:");
-console.log("Probabilidade de A:", probabilidadeSegundoLadoNova);
-console.log("Probabilidade de B:", 1 - probabilidadeSegundoLadoNova);
+console.log("Probabilidade de A:", probabilidadeBase);
+console.log("Probabilidade de B:", 1 - probabilidadeBase);
 
 
 console.log("");

@@ -1,6 +1,6 @@
-//Lógica responsável pela simulação das partidas
+// LÓGICA RESPONSÁVEL PELA SIMULAÇÃO DAS PARTIDAS
 
-// Função para obter Fatores de cada posição
+// FUNÇÃO PARA OBTER OS FATORES DE CADA FUNÇÃO (ORIGINAL)
 function obterFatoresFuncao(funcao) {
     
     switch (funcao) {
@@ -22,8 +22,8 @@ function obterFatoresFuncao(funcao) {
     }
 }
 
-// Função para calcular o ataque do Time
 
+// FUNÇÃO PARA CALCULAR O ATAQUE DO TIME (ORIGINAL/ANTIGA)
 function calcularAtaque(time) {
     let soma = 0;
 
@@ -35,8 +35,8 @@ function calcularAtaque(time) {
     return soma / 5;
 }
 
-// Função para calcular a defesa do time
 
+// FUNÇÃO PARA CALCULAR A DEFESA DO TIME (ORIGINAL/ANTIGA)
 function calcularDefesa(time) {
     let soma = 0;
 
@@ -48,25 +48,53 @@ function calcularDefesa(time) {
     return soma / 5;
 }
 
-// Função para calcular a taxa de vitória de um time
+
+// FUNÇÃO PARA CALCULAR A FORÇA GERAL DO TIME (NOVO)
+function calcularForcaTime(ataque, defesa) {
+    return (ataque + defesa) / 2;
+}
+
+
+// FUNÇÃO PARA CALCULAR PROBABILIDADE BASE 
+// DE CADA TIME E DIFERENÇA ENTRE ELES (NOVO)
+function calcularProbabilidadeBase(forcaA, forcaB, escala) {
+    
+    const diferenca = forcaA - forcaB;
+    return 1 / (1 + Math.exp(-(diferenca / escala)));
+}
+
+
+// FUNÇÃO QUE APLICA O BÔNUS DO MAPA (NOVO)
+function aplicarBonusMapa(probabilidade, ladoTime, mapa, bonus) {
+    if (ladoTime === mapa.ladoFavorecido) {
+        return probabilidade + ((1 - probabilidade) * bonus);
+    }
+
+    return probabilidade;
+}
+
+// FUNÇÃO PARA CALCULAR A TAXA DE VITÓRIA DE UM TIME (ORIGINAL/ANTIGA)
 function calcularTaxaVitoria(ataque, defesaInimigo, atkM, defM) {
 
     return (ataque * atkM) - (defesaInimigo * defM);
 }
 
-// Função para calcular a probabilidade de vitória
 
+// FUNÇÃO PARA CALCULAR A PROBABILIDADE DE VITÓRIA (ORIGINAL/ANTIGA)
 function calcularProbabilidade(va, vb) {
 
     return va / (va + vb);
 }
 
-//Exporando as funções para serem utilizadas em outros arquivos
 
+//EXPORTANDO AS FUNÇÕES PARA SEREM USADAS EM OUTROS ARQUIVOS
 module.exports = {
     obterFatoresFuncao,
     calcularAtaque,
     calcularDefesa,
+    calcularForcaTime,
+    calcularProbabilidadeBase,
+    aplicarBonusMapa,
     calcularTaxaVitoria,
     calcularProbabilidade
 };
