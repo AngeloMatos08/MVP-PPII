@@ -1,29 +1,52 @@
-// Classe responsável por representar uma partida 
+// CLASSE RESPONSÁVEL POR REPRESENTAR UMA PARTIDA
 
 const { 
     calcularAtaque, 
-    calcularDefesa    
+    calcularDefesa, 
+    calcularForcaTime
 } = require("./matchesLogic");
+
 
 class Match {
     constructor(timeA, timeB) {
+        // TIMES DA PARTIDA
         this.timeA = timeA;
         this.timeB = timeB;
 
-        // Atributos time A
+
+        // MAPA DA PARTIDA
+        this.mapa = this.mapa;
+
+
+        // ATRIBUTOS DO TIME A
         this.ataqueA = calcularAtaque(timeA.jogadores);
         this.defesaA = calcularDefesa(timeA.jogadores);
 
-        // Atributos time B
+        this.forcaA = calcularForcaTime(
+            this.ataqueA,
+            this.defesaA
+        );
+
+
+        // ATRIBUTOS DO TIME B
         this.ataqueB = calcularAtaque(timeB.jogadores);
         this.defesaB = calcularDefesa(timeB.jogadores);
 
+        this.forcaB = calcularForcaTime(
+            this.ataqueB,
+            this.defesaB
+        );
+
+
+        // PLACAR INICIAL DA PARTIDA
         this.placarA = 0;
         this.placarB = 0;
 
+
+        // VENCEDOR DA PARTIDA
         this.vencedor = null;
     }
 }
 
-// Expondo a classe
+// EXPORTANDO A CLASSE
 module.exports = Match;

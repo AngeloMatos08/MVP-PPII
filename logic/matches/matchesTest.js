@@ -1,13 +1,5 @@
-// ÁREA DE TESTE PARA O OVERALL DE ATAQUE E DEFESA DOS TIMES 
-const {
-    calcularAtaque,
-    calcularDefesa,
-    calcularForcaTime,
-    calcularProbabilidadeBase,
-    aplicarBonusMapa,
-    calcularTaxaVitoria,
-    calcularProbabilidade
-} = require("./matchesLogic");
+// ÁREA DE TESTE DA CLASS MATCH 
+const Match = require("./matches");
 
 
 // CLASSE PARA REPRESENTAR UM TIME DE TESTE
@@ -25,31 +17,31 @@ const jogadoresA = [
     {
         nome: "Aspas",
         funcao: "Duelista",
-        overall: 90
+        overall: 98
     },
 
     {
         nome: "Sacy",
         funcao: "Iniciador",
-        overall: 90
+        overall: 94
     },
 
     {
         nome: "pAncada",
         funcao: "Controlador",
-        overall: 90
+        overall: 93
     },
 
     {
         nome: "Saadhak",
         funcao: "Sentinela",
-        overall: 90
+        overall: 91
     },
 
     {
         nome: "Less",
-        funcao: "Duelista",
-        overall: 90
+        funcao: "Sentinela",
+        overall: 92
     }
 ];
 
@@ -60,48 +52,46 @@ const jogadoresB = [
     {
         nome: "yay",
         funcao: "Duelista",
-        overall: 70
+        overall: 98
     },
 
     {
         nome: "crashies",
         funcao: "Iniciador",
-        overall: 70
+        overall: 91
     },
 
     {
         nome: "Victor",
         funcao: "Duelista",
-        overall: 70
+        overall: 93
     },
 
     {
         nome: "Marved",
         funcao: "Controlador",
-        overall: 70
+        overall: 92
     },
 
     {
         nome: "FNS",
         funcao: "Sentinela",
-        overall: 70
+        overall: 87
     }
 ];
 
 
 // CRIANDO OS TIMES
-const timeTestA = new Time("Time de Teste A", jogadoresA);
-const timeTestB = new Time("Time de Teste B", jogadoresB);
+const timeTestA = new Time (
+    "LOUD",
+    jogadoresA
+);
 
+const timeTestB = new Time (
+    "FNATIC",
+    jogadoresB
+);
 
-// CALCULANDO OS ATRIBUTOS DO TIME A
-const ataqueA = calcularAtaque(timeTestA.jogadores);
-const defesaA = calcularDefesa(timeTestA.jogadores);
-
-
-// CALCULANDO OS ATRIBUTOS DO TIME B
-const ataqueB = calcularAtaque(timeTestB.jogadores);
-const defesaB = calcularDefesa(timeTestB.jogadores);
 
 
 // CONFIGURAÇÃO DO MAPA
@@ -110,42 +100,62 @@ const mapa = {
     ladoFavorecido: "defesa"
 };
 
-const escala = 30;
-const bonusMapa = 0.05;
 
-
-// FORÇA GERAL DOS TIMES
-const forcaA = calcularForcaTime(ataqueA, defesaA);
-const forcaB = calcularForcaTime(ataqueB, defesaB);
-
-
-// PROBABILIDADE BASE
-const probabilidadeBase =
-    calcularProbabilidadeBase(forcaA, forcaB, escala);
-
+// CRIANDO PARTIDA TESTE
+const partidaTeste = new Match (
+    timeTestA,
+    timeTestB,
+    mapa
+);
 
 
 // TESTE NO CONSOLE
 console.log("");
-console.log("=== NOVA LÓGICA COM MAPA ===");
+console.log("=== TESTE DA CLASSE MATCH ===");
+console.log("");
 
-console.log("")
+
+// TIMES
+console.log("Time A:", partidaTeste.timeA.nome);
+console.log("Time B:", partidaTeste.timeB.nome);
+console.log("");
+
+
+// MAPA
 console.log("Mapa:", mapa.nome);
-console.log("Lado Favorecido:", mapa.bonusMapa);
-console.log("Bônus do mapa:", bonusMapa);
-
+console.log(
+    "Lado favorecido:", mapa.ladoFavorecido
+);
 console.log("");
-console.log("A atacando / B defendendo:");
-console.log("Probabilidade de A:", probabilidadeBase);
-console.log("Probabilidade de B:", 1 - probabilidadeBase);
 
+
+// ATRIBUTOS DO TIME A
+console.log("=== ATRIBUTOS DO TIME A ===");
+console.log("Ataque A:", partidaTeste.ataqueA);
+console.log("Defesa A:", partidaTeste.defesaA);
+console.log("Força A:", partidaTeste.forcaA);
 console.log("");
-console.log("A defendendo / B atacando:");
-console.log("Probabilidade de A:", probabilidadeBase);
-console.log("Probabilidade de B:", 1 - probabilidadeBase);
 
 
+// ATRIBUTOS DO TIME B
+console.log("=== ATRIBUTOS DO TIME B ===");
+console.log("Ataque B:", partidaTeste.ataqueB);
+console.log("Defesa B:", partidaTeste.defesaB);
+console.log("Força B:", partidaTeste.forcaB);
 console.log("");
-console.log(" ======================");
-console.log("|Código antigo removido|");
-console.log(" ======================");
+
+
+// ESTADO INICIAL DA PARTIDA
+console.log("=== ESTADO INICIAL DA PARTIDA ===");
+console.log(
+    "Placar:",
+    partidaTeste.placarA,
+    "x",
+    partidaTeste.placarB
+);
+
+console.log("Vencedor:", partidaTeste.vencedor);
+console.log("");
+console.log(" ========================= ");
+console.log("| TESTE DA MATCH FINALIZADO |");
+console.log("  ========================= ");

@@ -1,6 +1,6 @@
 // LÓGICA RESPONSÁVEL PELA SIMULAÇÃO DAS PARTIDAS
 
-// FUNÇÃO PARA OBTER OS FATORES DE CADA FUNÇÃO (ORIGINAL)
+// FUNÇÃO PARA OBTER OS FATORES DE CADA FUNÇÃO (V. FINAL)
 function obterFatoresFuncao(funcao) {
     
     switch (funcao) {
@@ -23,7 +23,7 @@ function obterFatoresFuncao(funcao) {
 }
 
 
-// FUNÇÃO PARA CALCULAR O ATAQUE DO TIME (ORIGINAL/ANTIGA)
+// FUNÇÃO PARA CALCULAR O ATAQUE DO TIME (V. FINAL)
 function calcularAtaque(time) {
     let soma = 0;
 
@@ -36,7 +36,7 @@ function calcularAtaque(time) {
 }
 
 
-// FUNÇÃO PARA CALCULAR A DEFESA DO TIME (ORIGINAL/ANTIGA)
+// FUNÇÃO PARA CALCULAR A DEFESA DO TIME (V. FINAL)
 function calcularDefesa(time) {
     let soma = 0;
 
@@ -49,14 +49,14 @@ function calcularDefesa(time) {
 }
 
 
-// FUNÇÃO PARA CALCULAR A FORÇA GERAL DO TIME (NOVO)
+// FUNÇÃO PARA CALCULAR A FORÇA GERAL DO TIME (V. FINAL)
 function calcularForcaTime(ataque, defesa) {
     return (ataque + defesa) / 2;
 }
 
 
 // FUNÇÃO PARA CALCULAR PROBABILIDADE BASE 
-// DE CADA TIME E DIFERENÇA ENTRE ELES (NOVO)
+// DE CADA TIME E DIFERENÇA ENTRE ELES (V. FINAL)
 function calcularProbabilidadeBase(forcaA, forcaB, escala) {
     
     const diferenca = forcaA - forcaB;
@@ -64,26 +64,13 @@ function calcularProbabilidadeBase(forcaA, forcaB, escala) {
 }
 
 
-// FUNÇÃO QUE APLICA O BÔNUS DO MAPA (NOVO)
+// FUNÇÃO QUE APLICA O BÔNUS DO MAPA (V. FINAL)
 function aplicarBonusMapa(probabilidade, ladoTime, mapa, bonus) {
     if (ladoTime === mapa.ladoFavorecido) {
         return probabilidade + ((1 - probabilidade) * bonus);
     }
 
     return probabilidade;
-}
-
-// FUNÇÃO PARA CALCULAR A TAXA DE VITÓRIA DE UM TIME (ORIGINAL/ANTIGA)
-function calcularTaxaVitoria(ataque, defesaInimigo, atkM, defM) {
-
-    return (ataque * atkM) - (defesaInimigo * defM);
-}
-
-
-// FUNÇÃO PARA CALCULAR A PROBABILIDADE DE VITÓRIA (ORIGINAL/ANTIGA)
-function calcularProbabilidade(va, vb) {
-
-    return va / (va + vb);
 }
 
 
@@ -94,7 +81,5 @@ module.exports = {
     calcularDefesa,
     calcularForcaTime,
     calcularProbabilidadeBase,
-    aplicarBonusMapa,
-    calcularTaxaVitoria,
-    calcularProbabilidade
+    aplicarBonusMapa
 };
