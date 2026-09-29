@@ -8,14 +8,14 @@ const {
 
 
 class Match {
-    constructor(timeA, timeB) {
+    constructor(timeA, timeB, mapa) {
         // TIMES DA PARTIDA
         this.timeA = timeA;
         this.timeB = timeB;
 
 
         // MAPA DA PARTIDA
-        this.mapa = this.mapa;
+        this.mapa = mapa;
 
 
         // ATRIBUTOS DO TIME A
