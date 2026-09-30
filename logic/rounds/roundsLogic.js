@@ -23,6 +23,7 @@ function calcularProbabilidadeRound(match, round) {
     let forcaAtacante;
     let forcaDefensor;
 
+
     // IDENTIFICA AS FORÇAS DE ACORDO COM OS LADOS
     if (round.timeAtacante === match.timeA) {
 
@@ -47,14 +48,8 @@ function calcularProbabilidadeRound(match, round) {
     // VERIFICA QUAL LADO DO MAPA É FAVORECIDO
     if (match.mapa.ladoFavorecido === "ataque") {
 
-<<<<<<< HEAD
-        // O MAPA FAVORECE O ATACANTE
-        // ENTÃO APLICAMOS O BÔNUS DIRETAMENTE A ELE
-        return aplicarBonusMapa(
-=======
         // O MAPA FAVORECE O ATAQUE
-        return aplicarBonusMapa (
->>>>>>> fe2c331 (Atualização da sintaxe)
+        return aplicarBonusMapa(
             probabilidadeAtacanteBase,
             "ataque",
             match.mapa,
@@ -63,41 +58,21 @@ function calcularProbabilidadeRound(match, round) {
     }
 
 
-<<<<<<< HEAD
-    // CASO O MAPA FAVOREÇA A DEFESA,
-    // CALCULAMOS PRIMEIRO A PROBABILIDADE DO DEFENSOR
+    // CASO O MAPA FAVOREÇA A DEFESA
     const probabilidadeDefensorBase =
         1 - probabilidadeAtacanteBase;
 
 
     const probabilidadeDefensor = aplicarBonusMapa(
-=======
-    // CASO O MAPA FAVOREÇA A DEFESA
-    const probabilidadeDefensorBase =
-        1 - probabilidadeAtacanteBase;
-
-    const probabilidadeDefensor = aplicarBonusMapa (
->>>>>>> fe2c331 (Atualização da sintaxe)
         probabilidadeDefensorBase,
         "defesa",
         match.mapa,
         0.05
     );
 
-<<<<<<< HEAD
 
-    // COMO AS PROBABILIDADES DEVEM SOMAR 100%,
-    // A PROBABILIDADE DO ATACANTE SERÁ O COMPLEMENTO
-    return 1 - probabilidadeDefensor;
-}
-
-
-// EXPORTANDO A FUNÇÃO
-module.exports = {
-    calcularProbabilidadeRound
-=======
     // RETORNA A PROBABILIDADE FINAL DO ATACANTE
-    return 1 - probabilidadeAtacanteBase;
+    return 1 - probabilidadeDefensor;
 }
 
 
@@ -105,15 +80,17 @@ module.exports = {
 function simularRound(match, round) {
 
     // CALCULA A PROBABILIDADE DO ATACANTE
-    const probabilidadeAtacante = calcularProbabilidadeRound (
+    const probabilidadeAtacante = calcularProbabilidadeRound(
         match,
         round
     );
 
+
     // GERA UM NÚMERO ALEATÓRIO ENTRE 0 E 1
     const sorteio = Math.random();
 
-    // VEFIRICA QUEM VENCEU O ROUND
+
+    // VERIFICA QUEM VENCEU O ROUND
     if (sorteio < probabilidadeAtacante) {
 
         // ATACANTE VENCE
@@ -125,6 +102,7 @@ function simularRound(match, round) {
         round.vencedor = round.timeDefensor;
     }
 
+
     // RETORNA O VENCEDOR
     return round.vencedor;
 }
@@ -134,8 +112,9 @@ function simularRound(match, round) {
 function atualizarPlacar(match, round) {
 
     if (round.vencedor === match.timeA) {
-        
+
         match.placarA++;
+
     } else if (round.vencedor === match.timeB) {
 
         match.placarB++;
@@ -152,5 +131,4 @@ module.exports = {
     calcularProbabilidadeRound,
     simularRound,
     atualizarPlacar
->>>>>>> fe2c331 (Atualização da sintaxe)
 };
