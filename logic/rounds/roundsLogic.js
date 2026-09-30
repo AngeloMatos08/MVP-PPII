@@ -127,8 +127,20 @@ function atualizarPlacar(match, round) {
 }
 
 
+// FUNÇÃO PARA TROCAR OS LADOS DOS TIMES
+function trocarLados(round) {
+
+    const antigoAtacante = round.timeAtacante;
+
+    round.timeAtacante = round.timeDefensor;
+    round.timeDefensor = antigoAtacante
+
+    return round;
+}
+
 module.exports = {
     calcularProbabilidadeRound,
     simularRound,
-    atualizarPlacar
+    atualizarPlacar,
+    trocarLados
 };

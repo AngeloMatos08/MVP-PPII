@@ -14,7 +14,8 @@ const Match = require("../matches/matches");
 const {
     calcularProbabilidadeRound,
     simularRound,
-    atualizarPlacar
+    atualizarPlacar,
+    trocarLados
 } = require("./roundsLogic");
 
 
@@ -116,108 +117,148 @@ const mapa = {
 };
 
 
-
 // CRIANDO UMA PARTIDA DE TESTE
-
 const partidaTeste = new Match (
-
     timeA,
     timeB,
     mapa
 );
 
 
+// SIMULANDO PRIMEIRA METADE
+for (let numero = 1; numero <= 12; numero++) {
+    
+    // CRIANDO ROUND
+    const round = new Round (
+        numero,
+        timeA,
+        timeB
+    );
 
-// CRIANDO UM ROUND DE TESTE
-const roundTeste = new Round(
-    1,
+    // CALCULANDO A PROBABILIDADE DE CADA TIME
+    const probabilidadeRound = calcularProbabilidadeRound (
+        partidaTeste,
+        round
+    );
+
+    // SIMULANDO O VENCEDOR DO ROUND
+    const vencedorRound = simularRound (
+        partidaTeste,
+        round
+    );
+
+    // ATUALIZANDO O PLACAR AO DECORRER DOS ROUNDS
+    atualizarPlacar (
+        partidaTeste,
+        round
+    );
+
+    // TESTE NO CONSOLE
+    console.log (
+        "Round:",
+        round.numero,
+        "| Atacante:",
+        round.timeAtacante.nome,
+        "| Defensor:",
+        round.timeDefensor.nome,
+        "| Vencedor:",
+        vencedorRound.nome,
+        "| Placar:",
+        partidaTeste.placarA,
+        "x",
+        partidaTeste.placarB
+    );
+}
+
+
+// TROCA DE LADOS
+console.log("");
+console.log("=== TROCA DE LADOS ===");
+console.log("");
+
+console.log (
+    "Antes da troca:",
+    timeA.nome,
+    "Atacando |",
+    timeB.nome,
+    "Defendendo"
+);
+
+const roundTeste = new Round (
+    13,
     timeA,
     timeB
 );
 
+trocarLados(roundTeste);
 
-// FUNÇÃO PARA CALCULAR A PROBABILIDADE DE CADA TIME NO ROUND
-const probabilidadeRound = calcularProbabilidadeRound (
-    partidaTeste,
-    roundTeste
-);
-
-
-// CHAMAR FUNÇÃO PARA SIMULAR O VENCEDOR DO ROUND
-const vencedorRound = simularRound (
-    partidaTeste,
-    roundTeste
-);
-
-
-// FUNÇÃO PARA ATUALIZAR O PLACAR AO DECORRER DOS ROUNDS
-atualizarPlacar (
-    partidaTeste,
-    roundTeste
-);
-
-
-// TESTE NO CONSOLE
-console.log("");
-console.log("=== TESTE DA CLASSE ROUND ===");
-console.log("");
-
-
-// INFORMAÇÕES DO ROUND
-console.log("Número do Round:", roundTeste.numero);
-console.log("");
-
-
-// InFORMAÇÕES DOS TIMES
-console.log(
-    "Time Atacante:",
-    roundTeste.timeAtacante.nome
-);
-
-console.log(
-    "Time Defensor:",
-    roundTeste.timeDefensor.nome
-);
-console.log("");
-
-
-// INFORMAÇÕES DO MAPA
-console.log(
-    "Mapa:",
-    partidaTeste.mapa.nome
-);
-
-console.log(
-    "Lado Favorecido:",
-    partidaTeste.mapa.ladoFavorecido
+console.log (
+    "Depois da troca:",
+    roundTeste.timeAtacante.nome,
+    "Atacando |",
+    roundTeste.timeDefensor.nome,
+    "Defendendo"
 );
 
 console.log("");
-
-
-// PROBABILIDADE
-console.log(
-    "Probabilidade do atacante:",
-    probabilidadeRound
-);
-
-console.log(
-    "Probabilidade do defensor:",
-    1 - probabilidadeRound
-);
-
-
-// TIMES
-console.log("Time Atacante:", roundTeste.timeAtacante.nome);
-console.log("Time Defensor:", roundTeste.timeDefensor.nome);
-console.log("Probabilidade do atacante:", probabilidadeRound);
+console.log("======================");
 console.log("");
 
 
-// VENCEDOR
-console.log("Vencedor:", vencedorRound.nome);
+// SIMULANDO SEGUNDA METADE
+for (let numero = 13; numero <= 24; numero++) {
+    
+    // CRIANDO ROUND COM OS LADOS INVERTIDOS
+    const round = new Round (
+        numero,
+        roundTeste.timeAtacante,
+        roundTeste.timeDefensor
+    );
+
+    // CALCULANDO A PROBABILIDADE DE CADA TIME
+    const probabilidadeRound = calcularProbabilidadeRound (
+        partidaTeste,
+        round
+    );
+
+    // SIMULANDO O VENCEDOR DO ROUND
+    const vencedorRound = simularRound (
+        partidaTeste,
+        round
+    );
+
+    // ATUALIZANDO O PLACAR AO DECORRER DOS ROUNDS
+    atualizarPlacar (
+        partidaTeste,
+        round
+    );
+
+    // TESTE NO CONSOLE
+    console.log (
+        "Round:",
+        round.numero,
+        "| Atacante:",
+        round.timeAtacante.nome,
+        "| Defensor:",
+        round.timeDefensor.nome,
+        "| Vencedor:",
+        vencedorRound.nome,
+        "| Placar:",
+        partidaTeste.placarA,
+        "x",
+        partidaTeste.placarB
+    );
+}
+
+// FINALIZANDO TESTE
 console.log("");
-console.log("Placar:", partidaTeste.placarA, "x", partidaTeste.placarB);
 console.log("==============================");
-console.log("| TESTE DO ROUND FINALIZADO |");
+console.log("| TESTE DA PARTIDA FINALIZADO |");
 console.log("==============================");
+console.log("");
+console.log(
+    "Placar final:",
+    partidaTeste.placarA,
+    "x",
+    partidaTeste.placarB
+);
