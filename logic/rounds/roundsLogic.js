@@ -47,9 +47,14 @@ function calcularProbabilidadeRound(match, round) {
     // VERIFICA QUAL LADO DO MAPA É FAVORECIDO
     if (match.mapa.ladoFavorecido === "ataque") {
 
+<<<<<<< HEAD
         // O MAPA FAVORECE O ATACANTE
         // ENTÃO APLICAMOS O BÔNUS DIRETAMENTE A ELE
         return aplicarBonusMapa(
+=======
+        // O MAPA FAVORECE O ATAQUE
+        return aplicarBonusMapa (
+>>>>>>> fe2c331 (Atualização da sintaxe)
             probabilidadeAtacanteBase,
             "ataque",
             match.mapa,
@@ -58,6 +63,7 @@ function calcularProbabilidadeRound(match, round) {
     }
 
 
+<<<<<<< HEAD
     // CASO O MAPA FAVOREÇA A DEFESA,
     // CALCULAMOS PRIMEIRO A PROBABILIDADE DO DEFENSOR
     const probabilidadeDefensorBase =
@@ -65,12 +71,20 @@ function calcularProbabilidadeRound(match, round) {
 
 
     const probabilidadeDefensor = aplicarBonusMapa(
+=======
+    // CASO O MAPA FAVOREÇA A DEFESA
+    const probabilidadeDefensorBase =
+        1 - probabilidadeAtacanteBase;
+
+    const probabilidadeDefensor = aplicarBonusMapa (
+>>>>>>> fe2c331 (Atualização da sintaxe)
         probabilidadeDefensorBase,
         "defesa",
         match.mapa,
         0.05
     );
 
+<<<<<<< HEAD
 
     // COMO AS PROBABILIDADES DEVEM SOMAR 100%,
     // A PROBABILIDADE DO ATACANTE SERÁ O COMPLEMENTO
@@ -81,4 +95,62 @@ function calcularProbabilidadeRound(match, round) {
 // EXPORTANDO A FUNÇÃO
 module.exports = {
     calcularProbabilidadeRound
+=======
+    // RETORNA A PROBABILIDADE FINAL DO ATACANTE
+    return 1 - probabilidadeAtacanteBase;
+}
+
+
+// FUNÇÃO PARA SIMULAR O VENCEDOR DE UM ROUND
+function simularRound(match, round) {
+
+    // CALCULA A PROBABILIDADE DO ATACANTE
+    const probabilidadeAtacante = calcularProbabilidadeRound (
+        match,
+        round
+    );
+
+    // GERA UM NÚMERO ALEATÓRIO ENTRE 0 E 1
+    const sorteio = Math.random();
+
+    // VEFIRICA QUEM VENCEU O ROUND
+    if (sorteio < probabilidadeAtacante) {
+
+        // ATACANTE VENCE
+        round.vencedor = round.timeAtacante;
+
+    } else {
+
+        // DEFENSOR VENCE
+        round.vencedor = round.timeDefensor;
+    }
+
+    // RETORNA O VENCEDOR
+    return round.vencedor;
+}
+
+
+// FUNÇÃO PARA ATUALIZAR O PLACAR DA PARTIDA
+function atualizarPlacar(match, round) {
+
+    if (round.vencedor === match.timeA) {
+        
+        match.placarA++;
+    } else if (round.vencedor === match.timeB) {
+
+        match.placarB++;
+    }
+
+    return {
+        placarA: match.placarA,
+        placarB: match.placarB
+    };
+}
+
+
+module.exports = {
+    calcularProbabilidadeRound,
+    simularRound,
+    atualizarPlacar
+>>>>>>> fe2c331 (Atualização da sintaxe)
 };
