@@ -10,21 +10,21 @@
 // ../matches/matchesLogic.js
 
 
+// LÓGICA RESPONSÁVEL PELA SIMULAÇÃO DOS ROUNDS
+
 const {
     calcularProbabilidadeBase,
     aplicarBonusMapa
 } = require("../matches/matchesLogic");
 
 
-// FUNÇÃO PARA CALCULAR A PROBABILIDADE DE VITÓRIA
-// DO TIME QUE ESTÁ ATACANDO
+// FUNÇÃO PARA CALCULAR A PROBABILIDADE DE UM ROUND
 function calcularProbabilidadeRound(match, round) {
 
     let forcaAtacante;
     let forcaDefensor;
 
 
-    // IDENTIFICA AS FORÇAS DE ACORDO COM OS LADOS
     if (round.timeAtacante === match.timeA) {
 
         forcaAtacante = match.forcaA;
@@ -37,18 +37,18 @@ function calcularProbabilidadeRound(match, round) {
     }
 
 
-    // CALCULA A PROBABILIDADE BASE DO ATACANTE
-    const probabilidadeAtacanteBase = calcularProbabilidadeBase(
-        forcaAtacante,
-        forcaDefensor,
-        30
-    );
+    // CALCULANDO A PROBABILIDADE BASE DO ATACANTE
+    const probabilidadeAtacanteBase =
+        calcularProbabilidadeBase(
+            forcaAtacante,
+            forcaDefensor,
+            30
+        );
 
 
-    // VERIFICA QUAL LADO DO MAPA É FAVORECIDO
+    // MAPA FAVORECE O ATAQUE
     if (match.mapa.ladoFavorecido === "ataque") {
 
-        // O MAPA FAVORECE O ATAQUE
         return aplicarBonusMapa(
             probabilidadeAtacanteBase,
             "ataque",
@@ -58,20 +58,20 @@ function calcularProbabilidadeRound(match, round) {
     }
 
 
-    // CASO O MAPA FAVOREÇA A DEFESA
+    // MAPA FAVORECE A DEFESA
     const probabilidadeDefensorBase =
         1 - probabilidadeAtacanteBase;
 
 
-    const probabilidadeDefensor = aplicarBonusMapa(
-        probabilidadeDefensorBase,
-        "defesa",
-        match.mapa,
-        0.05
-    );
+    const probabilidadeDefensor =
+        aplicarBonusMapa(
+            probabilidadeDefensorBase,
+            "defesa",
+            match.mapa,
+            0.05
+        );
 
 
-    // RETORNA A PROBABILIDADE FINAL DO ATACANTE
     return 1 - probabilidadeDefensor;
 }
 
@@ -79,36 +79,33 @@ function calcularProbabilidadeRound(match, round) {
 // FUNÇÃO PARA SIMULAR O VENCEDOR DE UM ROUND
 function simularRound(match, round) {
 
-    // CALCULA A PROBABILIDADE DO ATACANTE
-    const probabilidadeAtacante = calcularProbabilidadeRound(
-        match,
-        round
-    );
+    const probabilidadeAtacante =
+        calcularProbabilidadeRound(
+            match,
+            round
+        );
 
 
-    // GERA UM NÚMERO ALEATÓRIO ENTRE 0 E 1
     const sorteio = Math.random();
 
 
-    // VERIFICA QUEM VENCEU O ROUND
     if (sorteio < probabilidadeAtacante) {
 
-        // ATACANTE VENCE
-        round.vencedor = round.timeAtacante;
+        round.vencedor =
+            round.timeAtacante;
 
     } else {
 
-        // DEFENSOR VENCE
-        round.vencedor = round.timeDefensor;
+        round.vencedor =
+            round.timeDefensor;
     }
 
 
-    // RETORNA O VENCEDOR
     return round.vencedor;
 }
 
 
-// FUNÇÃO PARA ATUALIZAR O PLACAR DA PARTIDA
+// FUNÇÃO PARA ATUALIZAR O PLACAR
 function atualizarPlacar(match, round) {
 
     if (round.vencedor === match.timeA) {
@@ -119,6 +116,7 @@ function atualizarPlacar(match, round) {
 
         match.placarB++;
     }
+
 
     return {
         placarA: match.placarA,
@@ -141,6 +139,7 @@ function verificarFimPartida(match) {
     return false;
 }
 
+
 // FUNÇÃO PARA OBTER O VENCEDOR DA PARTIDA
 function obterVencedorPartida(match) {
 
@@ -155,19 +154,17 @@ function obterVencedorPartida(match) {
     return null;
 }
 
+
 // FUNÇÃO PARA VERIFICAR SE A PRORROGAÇÃO TERMINOU
 function verificarFimProrrogacao(match) {
 
-    const diferenca = Match.abs (
-        match.placaA - match.placarB
+    const diferenca = Math.abs(
+        match.placarA - match.placarB
     );
 
-    if (diferenca >= 2) {
-        return true;
-    }
-
-    return false;
+    return diferenca >= 2;
 }
+
 
 // FUNÇÃO PARA OBTER O VENCEDOR DA PRORROGAÇÃO
 function obterVencedorProrrogacao(match) {
@@ -184,19 +181,25 @@ function obterVencedorProrrogacao(match) {
 }
 
 
-
-// FUNÇÃO PARA TROCAR OS LADOS DOS TIMES
+// FUNÇÃO PARA TROCAR OS LADOS
 function trocarLados(round) {
 
-    const antigoAtacante = round.timeAtacante;
+    const antigoAtacante =
+        round.timeAtacante;
 
-    round.timeAtacante = round.timeDefensor;
-    round.timeDefensor = antigoAtacante
+    round.timeAtacante =
+        round.timeDefensor;
+
+    round.timeDefensor =
+        antigoAtacante;
+
 
     return round;
 }
 
+
 module.exports = {
+
     calcularProbabilidadeRound,
     simularRound,
     atualizarPlacar,

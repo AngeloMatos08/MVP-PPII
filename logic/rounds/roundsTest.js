@@ -293,3 +293,106 @@ console.log(
     "x",
     partidaTeste.placarB
 );
+
+
+// TESTE PRORROGAÇÃO
+console.log("");
+console.log("=== INÍCIO DA PRORROGAÇÃO ===");
+console.log("");
+
+const partidaProrrogacao = new Match(
+    timeA,
+    timeB,
+    mapa
+);
+
+
+// FORÇANDO O PLACAR PARA 12 x 12
+partidaProrrogacao.placarA = 12;
+partidaProrrogacao.placarB = 12;
+
+
+// DEFININDO OS LADOS INICIAIS DA PRORROGAÇÃO
+let timeAtacante = timeB;
+let timeDefensor = timeA;
+
+
+// LOOP DA PRORROGAÇÃO
+for (let numero = 25; ; numero++) {
+
+    // CRIANDO O ROUND
+    const round = new Round(
+        numero,
+        timeAtacante,
+        timeDefensor
+    );
+
+
+    // SIMULANDO O VENCEDOR DO ROUND
+    const vencedorRound = simularRound(
+        partidaProrrogacao,
+        round
+    );
+
+
+    // ATUALIZANDO O PLACAR
+    atualizarPlacar(
+        partidaProrrogacao,
+        round
+    );
+
+
+    // MOSTRANDO O RESULTADO DO ROUND
+    console.log(
+        "Round:",
+        round.numero,
+        "| Atacante:",
+        round.timeAtacante.nome,
+        "| Defensor:",
+        round.timeDefensor.nome,
+        "| Vencedor:",
+        vencedorRound.nome,
+        "| Placar:",
+        partidaProrrogacao.placarA,
+        "x",
+        partidaProrrogacao.placarB
+    );
+
+
+    // VERIFICANDO SE A PRORROGAÇÃO TERMINOU
+    if (verificarFimProrrogacao(partidaProrrogacao)) {
+
+        console.log("");
+
+        console.log(
+            "Prorrogação encerrada no Round:",
+            round.numero
+        );
+
+        console.log(
+            "Vencedor:",
+            obterVencedorProrrogacao(
+                partidaProrrogacao
+            ).nome
+        );
+
+        break;
+    }
+
+
+    // CRIANDO O PRÓXIMO ROUND
+    const proximoRound = new Round(
+        numero + 1,
+        round.timeAtacante,
+        round.timeDefensor
+    );
+
+
+    // TROCANDO OS LADOS
+    trocarLados(proximoRound);
+
+
+    // ATUALIZANDO OS LADOS PARA O PRÓXIMO ROUND
+    timeAtacante = proximoRound.timeAtacante;
+    timeDefensor = proximoRound.timeDefensor;
+}
