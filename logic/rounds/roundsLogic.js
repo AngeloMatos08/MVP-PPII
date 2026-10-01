@@ -127,6 +127,64 @@ function atualizarPlacar(match, round) {
 }
 
 
+// FUNÇÃO PARA VERIFICAR SE A PARTIDA TERMINOU
+function verificarFimPartida(match) {
+
+    if (match.placarA >= 13) {
+        return true;
+    }
+
+    if (match.placarB >= 13) {
+        return true;
+    }
+
+    return false;
+}
+
+// FUNÇÃO PARA OBTER O VENCEDOR DA PARTIDA
+function obterVencedorPartida(match) {
+
+    if (match.placarA >= 13) {
+        return match.timeA;
+    }
+
+    if (match.placarB >= 13) {
+        return match.timeB;
+    }
+
+    return null;
+}
+
+// FUNÇÃO PARA VERIFICAR SE A PRORROGAÇÃO TERMINOU
+function verificarFimProrrogacao(match) {
+
+    const diferenca = Match.abs (
+        match.placaA - match.placarB
+    );
+
+    if (diferenca >= 2) {
+        return true;
+    }
+
+    return false;
+}
+
+// FUNÇÃO PARA OBTER O VENCEDOR DA PRORROGAÇÃO
+function obterVencedorProrrogacao(match) {
+
+    if (match.placarA > match.placarB) {
+        return match.timeA;
+    }
+
+    if (match.placarB > match.placarA) {
+        return match.timeB;
+    }
+
+    return null;
+}
+
+
+
 // FUNÇÃO PARA TROCAR OS LADOS DOS TIMES
 function trocarLados(round) {
 
@@ -142,5 +200,9 @@ module.exports = {
     calcularProbabilidadeRound,
     simularRound,
     atualizarPlacar,
-    trocarLados
+    trocarLados,
+    verificarFimPartida,
+    obterVencedorPartida,
+    verificarFimProrrogacao,
+    obterVencedorProrrogacao
 };

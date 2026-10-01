@@ -15,7 +15,11 @@ const {
     calcularProbabilidadeRound,
     simularRound,
     atualizarPlacar,
-    trocarLados
+    trocarLados,
+    verificarFimPartida,
+    obterVencedorPartida,
+    verificarFimProrrogacao,
+    obterVencedorProrrogacao
 } = require("./roundsLogic");
 
 
@@ -153,14 +157,27 @@ for (let numero = 1; numero <= 12; numero++) {
         round
     );
 
+     // VERIFICANDO SE A PARTIDA TERMINOU
+    if (verificarFimPartida(partidaTeste)) {
+
+        console.log("");
+        console.log(
+            "Partida encerrada no Round:",
+            round.numero
+        );
+
+        console.log (
+            "Vencedor:",
+            obterVencedorPartida(partidaTeste).nome
+        );
+
+        break;
+    }
+
     // TESTE NO CONSOLE
     console.log (
         "Round:",
         round.numero,
-        "| Atacante:",
-        round.timeAtacante.nome,
-        "| Defensor:",
-        round.timeDefensor.nome,
         "| Vencedor:",
         vencedorRound.nome,
         "| Placar:",
@@ -233,14 +250,28 @@ for (let numero = 13; numero <= 24; numero++) {
         round
     );
 
+    // VERIFICANDO SE A PARTIDA TERMINOU
+    if (verificarFimPartida(partidaTeste)) {
+
+        console.log("");
+        console.log(
+            "Partida encerrada no Round",
+            round.numero
+        );
+
+        console.log (
+            "Vencedor:",
+            obterVencedorPartida(partidaTeste).nome
+        );
+
+        break;
+    }
+
+
     // TESTE NO CONSOLE
     console.log (
         "Round:",
         round.numero,
-        "| Atacante:",
-        round.timeAtacante.nome,
-        "| Defensor:",
-        round.timeDefensor.nome,
         "| Vencedor:",
         vencedorRound.nome,
         "| Placar:",
