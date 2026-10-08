@@ -1,0 +1,120 @@
+.jog-name {
+    align-items: left;
+    justify-content: space-between;
+    padding: 10px;
+    font-size: 1.25rem;
+}
+
+.select-roles {
+    margin: 10px 0;
+    padding: 4px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.img-role {
+    display: block;
+    height: 1.4rem;
+    fill: rgba(255, 0, 0, 0.65);
+}
+
+.jog-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    border-radius: 8px;
+    justify-content: space-between;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.0) 10%, var(--atk) 100%);
+}
+
+.jog-item:hover {
+    outline: 1px solid var(--def);
+}
+
+.jog-info {
+    display: flex;
+    flex-direction: line;
+    padding: 8px;
+    font-size: 1.5rem;
+    gap: 1rem;
+    align-items: center;
+}
+
+.jog-roles-container {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.jog-item-disabled {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border: none;
+    color: rgba(255, 255, 255, 1);
+    font-size: 1rem;
+    border-radius: 8px;
+    justify-content: space-between;
+    background: linear-gradient(120deg, rgba(64, 64, 64, 0) 10%, rgba(64, 64, 64, 1) 100%);
+    opacity: 0.65;
+}
+
+.jogadores-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    max-width: 30rem;
+    padding: 8px;
+}
+
+.time {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid #13FF00;
+    border-radius: 16px;
+    padding: 32px;
+    background: linear-gradient(120deg, rgba(0, 255, 196, 0.0) 10%, #13FF00 100%);
+}
+
+.time-name {
+    font-size: 2rem;
+    text-align: left;
+}
+
+.time-img {
+    width: 5rem;
+}
+
+.time-year {
+    font-size: 1.5rem;
+    text-align: left;
+}
+
+.time-podium {
+    font-size: 3rem;
+    text-align: right;
+}
+
+.time-info {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 30rem;
+    align-items: left;
+    justify-content: center;
+    margin: 0 auto;
+}
