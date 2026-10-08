@@ -1,0 +1,44 @@
+:root {
+    --bg: #281A24;
+    --atk: #FF413A;
+    --def: #00FFC4;
+}
+
+body {
+    background-color: var(--bg);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+}
+
+.btn-remake {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 0 5px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+
+}
+
+.btn-remake:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.item-name {
+    align-items: left;
+    justify-content: space-between;
+    padding: 10px;
+    font-size: 1.25rem;
+}
+.select-role {
+    margin: 10px 0;
+    padding: 4px;
+    border-radius: 5px;
+    border: none;
+    font-size: 1rem;
+
+}

@@ -112,7 +112,7 @@ function exibirJogadoresNaTela(jogadoresFiltrados) {
 
             // Dev2-> AngeloMatos08: Se o atleta tiver 2+ funções, cria o dropdown
             if (listaFuncoes.length > 1) {
-                htmlFuncoes = `<select id="${idUnicoSelect}">
+                htmlFuncoes = `<select class="select-role" id="${idUnicoSelect}">
                     <option value="" disabled selected>Escolha a função...</option>`;
                 listaFuncoes.forEach(funcao => {
                     htmlFuncoes += `<option value="${funcao}">${funcao}</option>`;
@@ -123,10 +123,10 @@ function exibirJogadoresNaTela(jogadoresFiltrados) {
             }
 
             itemJogador.innerHTML = `
-                <span><strong>${jogador.nome}</strong></span>
+                <span class="item-name">${jogador.nome}</span>
                 ${htmlFuncoes}
-                <span>- Overall: ${jogador.overall}</span>
-                <button onclick="prepararEscolha('${jogador.nome}', ${JSON.stringify(listaFuncoes).replace(/"/g, '&quot;')})">Selecionar</button>
+                <span class="item-overall">- Overall: ${jogador.overall}</span>
+                <button class="btn-remake" onclick="prepararEscolha('${jogador.nome}', ${JSON.stringify(listaFuncoes).replace(/"/g, '&quot;')})">Selecionar</button>
             `;
         }
 

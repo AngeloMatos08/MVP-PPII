@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teste - Draft Valorant</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+
 </head>
+
 <body>
 
     <h1>Painel de Teste do Draft</h1>
@@ -13,10 +17,30 @@
     <!-- Dev2-> AngeloMatos08: Local onde os jogadores filtrados vão aparecer dinamicamente -->
     <div id="container-jogadores"></div>
     <div class="painel-controles">
-        <button id="btn-outro-time" onclick="rerollOutroTime()">Outro Time</button>
-        <button id="btn-outro-ano" onclick="rerollMesmoTimeOutroAno()">Outro Ano</button>
+        <button class="btn-remake" id="btn-outro-time" onclick="rerollOutroTime()">Outro Time</button>
+        <button class="btn-remake" id="btn-outro-ano" onclick="rerollMesmoTimeOutroAno()">Outro Ano</button>
     </div>
-    <!-- Chamada do arquivo JavaScript -->
+
+    <div style="margin-top: 50px; border-top: 1px dashed white; padding-top: 20px;">
+        <h2>Exemplo de Jogador</h2>
+    <span class="item-name">Jogador</span>
+    <select class="select-role">
+        <option value="" disabled selected>Escolha a função...</option>
+    </select>
+    <span class="item-overall">- Overall: 67</span>
+    <button class="btn-remake">Selecionar</button>
+    </div>
+
+    <div>
+        <span class="item-name">Jogador</span>
+        <span class="item-role">(duelista)</span>
+        <span class="item-overall">- Overall: 67</span>
+        <button class="btn-remake">Selecionar</button>
+    </div>
+    <!-- Chamada dos arquivos JavaScript -->
     <script src="assets/js/draft.js"></script>
+    <script src="assets/js/index.js"></script>
+
 </body>
+
 </html>
