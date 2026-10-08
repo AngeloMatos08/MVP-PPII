@@ -6,37 +6,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teste - Draft Valorant</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
 
 </head>
 
 <body>
 
-    <h1>Painel de Teste do Draft</h1>
-    <p>Abra o Console do navegador (F12) para ver os dados.</p>
+    <header>Painel de Teste do Draft</header>
+    <main>
+        <p>Abra o Console do navegador (F12) para ver os dados.</p>
 
-    <!-- Dev2-> AngeloMatos08: Local onde os jogadores filtrados vão aparecer dinamicamente -->
-    <div id="container-jogadores"></div>
-    <div class="painel-controles">
-        <button class="btn-remake" id="btn-outro-time" onclick="rerollOutroTime()">Outro Time</button>
-        <button class="btn-remake" id="btn-outro-ano" onclick="rerollMesmoTimeOutroAno()">Outro Ano</button>
-    </div>
+        <!-- Dev2-> AngeloMatos08: Local onde os jogadores filtrados vão aparecer dinamicamente -->
+        <div id="container-jogadores"></div>
+        <div class="painel-controles">
+            <button class="btn-remake" id="btn-outro-time" onclick="rerollOutroTime()">Outro Time</button>
+            <button class="btn-remake" id="btn-outro-ano" onclick="rerollMesmoTimeOutroAno()">Outro Ano</button>
+        </div>
 
-    <div style="margin-top: 50px; border-top: 1px dashed white; padding-top: 20px;">
-        <h2>Exemplo de Jogador</h2>
-    <span class="item-name">Jogador</span>
-    <select class="select-role">
-        <option value="" disabled selected>Escolha a função...</option>
-    </select>
-    <span class="item-overall">- Overall: 67</span>
-    <button class="btn-remake">Selecionar</button>
-    </div>
+        <div style="margin-top: 50px; border-top: 1px dashed white; padding-top: 20px;">
+            <h2>Exemplo de Jogador</h2>
+            <span class="jog-name">Jogador</span>
+            <select class="select-roles">
+                <option value="" disabled selected>Escolha a função...</option>
+            </select>
+            <span class="jog-overall">- Overall: 67</span>
+            <button class="btn-remake">Selecionar</button>
+        </div>
 
-    <div>
-        <span class="item-name">Jogador</span>
-        <span class="item-role">(duelista)</span>
-        <span class="item-overall">- Overall: 67</span>
-        <button class="btn-remake">Selecionar</button>
-    </div>
+        <div>
+            <span class="jog-name">Jogador</span>
+            <span class="jog-roles">(duelista)</span>
+            <span class="jog-overall">- Overall: 67</span>
+            <button class="btn-remake">Selecionar</button>
+        </div>
+
+
+
+        <div class="jog-item">
+            <span class="jog-name">Jogador</span>
+            <div class="jog-info">
+                <div class="jog-roles-container">
+                    <span class="jog-roles"><img src="assets/images/roles/duelista.svg" class="img-role"></span>
+                    <span class="jog-roles"><img src="assets/images/roles/controlador.svg" class="img-role"></span>
+                </div>
+                <span class="jog-overall">67</span>
+            </div>
+        </div>
+
+    </main>
+
     <!-- Chamada dos arquivos JavaScript -->
     <script src="assets/js/draft.js"></script>
     <script src="assets/js/index.js"></script>

@@ -7,8 +7,15 @@
 body {
     background-color: var(--bg);
     color: white;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 1rem;
+}
+
+header {
+    text-align: center;
+    font-size: 2rem;
+    padding: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn-remake {
@@ -19,7 +26,7 @@ body {
     margin: 0 5px;
     padding: 8px 16px;
     border-radius: 8px;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 1rem;
 
 }
@@ -28,17 +35,53 @@ body {
     background-color: rgba(255, 255, 255, 0.4);
 }
 
-.item-name {
+.jog-name {
     align-items: left;
     justify-content: space-between;
     padding: 10px;
     font-size: 1.25rem;
 }
-.select-role {
+.select-roles {
     margin: 10px 0;
     padding: 4px;
     border-radius: 5px;
     border: none;
     font-size: 1rem;
+    font-family: 'Ubuntu', sans-serif;
+}
 
+.img-role {
+    display: block;
+    height: 1.25rem;
+}
+
+.jog-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border: none;
+    background-color: var(--atk);
+    color: white;
+    font-size: 1rem;
+    border-radius: 4px;
+    justify-content: space-between;
+    max-width: 300px;
+    margin: 10px auto;
+}
+
+.jog-item:hover {
+    outline: 1px solid white;
+}
+
+.jog-info {
+    display: flex;
+    flex-direction: line;
+    padding: 8px;
+    font-size: 1.5rem;
+    gap: 1rem;
+    align-items: center;
+}
+.jog-roles-container {
+    display: flex;
+    gap: 0.5rem;
 }

@@ -22,7 +22,7 @@ async function puxarJogadores() {
         const response = await fetch('http://localhost:3000/api/jogadores');
         listaDeJogadores = await response.json();
         console.log('Jogadores carregados do Banco de Dados!', listaDeJogadores);
-        
+
         iniciarDraft();
     } catch (error) {
         console.error('Erro ao carregar jogadores do banco:', error);
@@ -89,7 +89,7 @@ function exibirJogadoresNaTela(jogadoresFiltrados) {
     jogadoresFiltrados.forEach((jogador) => {
         const itemJogador = document.createElement('div');
         itemJogador.style.margin = "10px 0";
-        
+
         const jaFoiEscolhido = timeEscolhido.some(j => j.nome === jogador.nome);
 
         if (jaFoiEscolhido) {
@@ -111,8 +111,9 @@ function exibirJogadoresNaTela(jogadoresFiltrados) {
             const idUnicoSelect = `select-funcao-${jogador.nome.replace(/\s+/g, '')}`;
 
             // Dev2-> AngeloMatos08: Se o atleta tiver 2+ funções, cria o dropdown
+            // Render
             if (listaFuncoes.length > 1) {
-                htmlFuncoes = `<select class="select-role" id="${idUnicoSelect}">
+                htmlFuncoes = `<select class="select-roles" id="${idUnicoSelect}">
                     <option value="" disabled selected>Escolha a função...</option>`;
                 listaFuncoes.forEach(funcao => {
                     htmlFuncoes += `<option value="${funcao}">${funcao}</option>`;
@@ -123,9 +124,9 @@ function exibirJogadoresNaTela(jogadoresFiltrados) {
             }
 
             itemJogador.innerHTML = `
-                <span class="item-name">${jogador.nome}</span>
+                <span class="jog-name">${jogador.nome}</span>
                 ${htmlFuncoes}
-                <span class="item-overall">- Overall: ${jogador.overall}</span>
+                <span class="jog-overall">- Overall: ${jogador.overall}</span>
                 <button class="btn-remake" onclick="prepararEscolha('${jogador.nome}', ${JSON.stringify(listaFuncoes).replace(/"/g, '&quot;')})">Selecionar</button>
             `;
         }
@@ -141,7 +142,7 @@ function prepararEscolha(nomeJogador, listaFuncoes) {
     if (listaFuncoes.length > 1) {
         const idUnicoSelect = `select-funcao-${nomeJogador.replace(/\s+/g, '')}`;
         const selectElement = document.getElementById(idUnicoSelect);
-        
+
         if (selectElement) {
             funcaoSelecionada = selectElement.value;
         }
