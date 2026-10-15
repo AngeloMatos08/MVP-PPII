@@ -1,6 +1,15 @@
 // ÁREA DE TESTE DA CLASSE CAMPAIGN
-// IMPORTANDO A CLASSE CAMPAIGN
+
+// IMPORTANDO A CLASSE CAMPAIGN & MATCH
 const Campaign = require("./campaign");
+
+// IMPORTANDO AS FUNÇÕES DA LÓGICA
+const {
+    carregarJogadores,
+    obterTimesHistoricos,
+    obterJogadoresDoTime,
+    montarTimeHistorico
+} = require("./campaignLogic");
 
 // CLASSE PARA REPRESENTAR UM TIME DE TESTE
 class Time {
@@ -9,6 +18,7 @@ class Time {
         this.jogadores = jogadores;
     }
 }
+
 
 // CRIANDO JOGADORES DE TESTE
 const jogadores = [
@@ -19,11 +29,13 @@ const jogadores = [
     { nome: "Jogador 5", funcao: "Duelista", overall: 93 }
 ];
 
+
 // CRIANDO O TIME DO JOGADOR 
 const timeJogador = new Time (
     "Time Frankeinstein",
     jogadores
 );
+
 
 // CRIANDO UMA LISTA DE ADVERSÁRIOS DE TESTE
 const adversarios = [
@@ -32,11 +44,13 @@ const adversarios = [
     { timeId: 3, ano: 2025 },
 ];
 
+
 // CRIANDO A CAMPANHA
 const campanhaTeste = new Campaign (
     timeJogador,
     adversarios
 );
+
 
 // EXIBINDO OS DADOS DA CAMPANHA
 console.log("===== TESTE DA CAMPANHA =====");
@@ -45,3 +59,37 @@ console.log("Adversários:", campanhaTeste.adversarios);
 console.log("Vitórias:", campanhaTeste.vitorias);
 console.log("Derrotas:", campanhaTeste.derrotas);
 console.log("Estado:", campanhaTeste.estado);
+
+
+// TESTANDO A LEITURA DOS DADOS
+const jogadoresBanco = carregarJogadores();
+
+const timesHistoricos = 
+    obterTimesHistoricos(jogadoresBanco);
+
+console.log("");
+console.log("===== DADOS DO BANCO =====");
+console.log("Total de jogadores:", jogadoresBanco.length);
+console.log("Times encontrados:", timesHistoricos);
+
+console.log("");
+console.log("===== TESTE DOS JOGADORES DE UM TIME =====");
+
+const jogadoresLOUD = obterJogadoresDoTime (
+    jogadoresBanco,
+    "loud_2022"
+);
+
+console.log("Quantidade de jogadores:", jogadoresLOUD.length);
+console.log("Jogadores da LOUD:", jogadoresLOUD);
+
+console.log("");
+console.log("===== TESTE DO TIME HISTÓRICO =====");
+
+const timeLOUD = montarTimeHistorico (
+    jogadoresBanco,
+    "loud_2022"
+);
+
+console.log("Time montado:", timeLOUD.nome);
+console.log("Jogadores:", timeLOUD.jogadores);

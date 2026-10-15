@@ -4,7 +4,6 @@
 class Campaign {
 
     constructor(timeJogador, adversarios) {
-
         // TIME CONTROLADO PELO JOGADOR
         this.timeJogador = timeJogador;
 
@@ -16,7 +15,7 @@ class Campaign {
 
         // QUANTIDADE DE DERROTAS
         this.derrotas = 0;
-
+        
         // ESTADO ATUAL DA CAMPANHA
         this.estado = "em andamento";
     }
