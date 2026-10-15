@@ -1,6 +1,14 @@
 // ÁREA DE TESTE DA CLASSE CAMPAIGN
 
-// IMPORTANDO A CLASSE CAMPAIGN & MATCH
+// IMPORTANDO A CLASSE MATCH
+const Match = require("../matches/matches");
+
+// IMPORTANDO A SIMUALÇAO DA PARTIDA
+const {
+    simularPartida
+} = require("../rounds/roundsLogic");
+
+// IMPORTANDO A CLASSE CAMPAIGN
 const Campaign = require("./campaign");
 
 // IMPORTANDO AS FUNÇÕES DA LÓGICA
@@ -93,3 +101,42 @@ const timeLOUD = montarTimeHistorico (
 
 console.log("Time montado:", timeLOUD.nome);
 console.log("Jogadores:", timeLOUD.jogadores);
+
+
+// CRIANDO UM ADVERSÁRIO A PARTIR DO JSON
+console.log("");
+console.log("===== TESTE DE INTEGRAÇÃO DA PARTIDA =====");
+
+const adversario = montarTimeHistorico (
+    jogadoresBanco,
+    "optic_2022"
+);
+
+console.log("Time do jogador:", timeJogador.nome);
+console.log("Adversário:", adversario.nome);
+
+
+// DEFININDO O MAPA
+const mapaTeste = {
+    nome: "Ascent",
+    ladoFavorecido: "defesa"
+};
+
+// CRIANDO A PARTIDA
+const partidaTeste = new Match (
+    timeJogador,
+    adversario,
+    mapaTeste
+);
+
+// SIMULANDO A PARTIDA
+simularPartida(partidaTeste);
+
+// EXIBINDO O RESULTADO
+console.log("");
+console.log("===== RESULTADO DA PARTIDA =====");
+console.log("Mapa:", partidaTeste.mapa.nome);
+console.log("Placar:",
+    `${partidaTeste.placarA} x ${partidaTeste.placarB}`
+);
+console.log("Vencedor:", partidaTeste.vencedor.nome);
