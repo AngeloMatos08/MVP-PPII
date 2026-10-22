@@ -1,34 +1,27 @@
-// LÓGICA RESPONSÁVEL PELA CAMPANHA
 
-// MÓDULOS PARA ACESSAR ARQUIVOS
-const fs = require("fs");
-const path = require("path");
+const API_URL = "http://localhost:3000/api/jogadores";
 
-// CAMINHO DO ARQUIVO JSON
-const caminhoPlayers = path.join (
-    __dirname,
-    "../../public/assets/database/players.json"
-);
+// Busca os jogadores pela API conectada ao MongoDB Atlas
+async function carregarJogadores() {
+    const resposta = await fetch(API_URL);
 
-// FUNÇÃO PARA CARREGAR OS JOGADORES
-function carregarJogadores() {
-    const dados = fs.readFileSync (
-        caminhoPlayers,
-        "utf8"
-    );
+    if (!resposta.ok) {
+        throw new Error(
+            `Erro ao buscar jogadores: HTTP ${resposta.status}`
+        );
+    }
 
-    return JSON.parse(dados);
+    return await resposta.json();
 }
 
-
-// FUNÇÃO PARA OBTER OS TIMES HISTÓRICOS ÚNICOS
+// Identifica os times históricos cadastrados
 function obterTimesHistoricos(jogadores) {
     const times = new Map();
 
     for (const jogador of jogadores) {
         if (!times.has(jogador.time_id)) {
             times.set(jogador.time_id, {
-                timeId: jogador.time_id, 
+                timeId: jogador.time_id,
                 nome: jogador.nome_time,
                 ano: jogador.ano
             });
@@ -39,38 +32,98 @@ function obterTimesHistoricos(jogadores) {
 }
 
 
-// FUNÇÃO PARA OBTER OS JOGADORES DE UM TIME HISTÓRICO
+ // Seleciona adversários históricos aleatoriamente
+function selecionarAdversariosAleatorios(
+    jogadores,
+    quantidade = 7,
+    timesExcluidos = []
+) {
+    // Identifica todos os times históricos cadastrados
+    const timesHistoricos = obterTimesHistoricos(jogadores);
+
+    // Cria um conjunto com os IDs que não podem ser selecionados
+    const idsExcluidos = new Set(timesExcluidos);
+
+    // Mantém somente times completos e não excluídos
+    const timesValidos = timesHistoricos.filter(time => {
+        const jogadoresDoTime = obterJogadoresDoTime(
+            jogadores,
+            time.timeId
+        );
+
+        return jogadoresDoTime.length === 5
+            && !idsExcluidos.has(time.timeId);
+    });
+
+// Diagnóstico temporário
+console.log("Total de jogadores recebidos:", jogadores.length);
+console.log("Total de times históricos:", timesHistoricos.length);
+console.log("Times excluídos:", timesExcluidos);
+console.log("Times válidos para sorteio:", timesValidos.length);
+
+    if (timesValidos.length < quantidade) {
+        throw new Error(
+            `Não existem times suficientes para selecionar ${quantidade} adversários.`
+        );
+    }
+
+    // Cria uma cópia para não alterar a lista original
+    const timesEmbaralhados = [...timesValidos];
+
+    // Embaralha os times usando o algoritmo Fisher-Yates
+    for (let i = timesEmbaralhados.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [
+            timesEmbaralhados[i],
+            timesEmbaralhados[j]
+        ] = [
+            timesEmbaralhados[j],
+            timesEmbaralhados[i]
+        ];
+    }
+
+    // Retorna somente a quantidade solicitada
+    return timesEmbaralhados.slice(0, quantidade);
+}
+
+
+// Busca os jogadores pertencentes a um time
 function obterJogadoresDoTime(jogadores, timeId) {
-    return jogadores.filter (
+    return jogadores.filter(
         jogador => jogador.time_id === timeId
     );
 }
 
-
-// FUNÇÃO PARA MONTAR UM TIME HISTÓRICO
-function montarTimeHistorico(jogadores,timeId) {
-    const jogadoresDoTime = obterJogadoresDoTime (
+// Monta um time histórico no formato esperado pela lógica das partidas
+function montarTimeHistorico(jogadores, timeId) {
+    const jogadoresDoTime = obterJogadoresDoTime(
         jogadores,
         timeId
     );
 
     if (jogadoresDoTime.length !== 5) {
-        throw new Error (
-            `O time ${timeId} não possui exatamente 5 jogadores.`
+        throw new Error(
+            `O time ${timeId} possui ${jogadoresDoTime.length} jogadores, mas deveria possuir exatamente 5.`
         );
     }
 
+    const jogadoresFormatados = jogadoresDoTime.map(jogador => {
+        const funcao = jogador.funcoes?.[0];
 
-    const jogadoresFormatados = jogadoresDoTime.map (
-        jogador => ({
+        if (!funcao) {
+            throw new Error(
+                `O jogador ${jogador.nome} não possui função cadastrada.`
+            );
+        }
+
+        return {
             nome: jogador.nome,
-            funcao: jogador.funcoes[0]
-                .charAt(0)
-                .toUpperCase()
-                + jogador.funcoes[0].slice(1),
+            funcao: funcao.charAt(0).toUpperCase()
+                + funcao.slice(1),
             overall: jogador.overall
-        })
-    );
+        };
+    });
 
     return {
         nome: jogadoresDoTime[0].nome_time,
@@ -78,10 +131,10 @@ function montarTimeHistorico(jogadores,timeId) {
     };
 }
 
-// EXPORTANDO AS FUNÇÕES
 module.exports = {
     carregarJogadores,
     obterTimesHistoricos,
+    selecionarAdversariosAleatorios,
     obterJogadoresDoTime,
     montarTimeHistorico
 };
