@@ -1,25 +1,25 @@
-// ÁREA DE TESTE DA CLASSE CAMPAIGN
 
-// IMPORTANDO A CLASSE MATCH
 const Match = require("../matches/matches");
-
-// IMPORTANDO A SIMUALÇAO DA PARTIDA
-const {
-    simularPartida
-} = require("../rounds/roundsLogic");
-
-// IMPORTANDO A CLASSE CAMPAIGN
+const { simularPartida } = require("../matches/matchesLogic");
 const Campaign = require("./campaign");
 
-// IMPORTANDO AS FUNÇÕES DA LÓGICA
 const {
     carregarJogadores,
     obterTimesHistoricos,
-    obterJogadoresDoTime,
+    selecionarAdversariosAleatorios,
     montarTimeHistorico
 } = require("./campaignLogic");
 
-// CLASSE PARA REPRESENTAR UM TIME DE TESTE
+
+// TIME FRANKENSTEIN FICTÍCIO PARA TESTES
+const jogadoresFrankenstein = [
+    { nome: "Jogador 1", funcao: "Duelista", overall: 95 },
+    { nome: "Jogador 2", funcao: "Iniciador", overall: 92 },
+    { nome: "Jogador 3", funcao: "Controlador", overall: 90 },
+    { nome: "Jogador 4", funcao: "Sentinela", overall: 91 },
+    { nome: "Jogador 5", funcao: "Sentinela", overall: 89 }
+];
+
 class Time {
     constructor(nome, jogadores) {
         this.nome = nome;
@@ -27,116 +27,155 @@ class Time {
     }
 }
 
-
-// CRIANDO JOGADORES DE TESTE
-const jogadores = [
-    { nome: "Jogador 1", funcao: "Duelista", overall: 95 },
-    { nome: "Jogador 2", funcao: "Iniciador", overall: 92 },
-    { nome: "Jogador 3", funcao: "Controlador", overall: 90 },
-    { nome: "Jogador 4", funcao: "Sentinela", overall: 91 },
-    { nome: "Jogador 5", funcao: "Duelista", overall: 93 }
-];
-
-
-// CRIANDO O TIME DO JOGADOR 
-const timeJogador = new Time (
-    "Time Frankeinstein",
-    jogadores
+const timeJogador = new Time(
+    "Time Frankenstein",
+    jogadoresFrankenstein
 );
 
 
-// CRIANDO UMA LISTA DE ADVERSÁRIOS DE TESTE
-const adversarios = [
-    { timeId: 1, ano: 2023 },
-    { timeId: 2, ano: 2024 },
-    { timeId: 3, ano: 2025 },
-];
-
-
-// CRIANDO A CAMPANHA
-const campanhaTeste = new Campaign (
-    timeJogador,
-    adversarios
-);
-
-
-// EXIBINDO OS DADOS DA CAMPANHA
-console.log("===== TESTE DA CAMPANHA =====");
-console.log("Time:", campanhaTeste.timeJogador.nome);
-console.log("Adversários:", campanhaTeste.adversarios);
-console.log("Vitórias:", campanhaTeste.vitorias);
-console.log("Derrotas:", campanhaTeste.derrotas);
-console.log("Estado:", campanhaTeste.estado);
-
-
-// TESTANDO A LEITURA DOS DADOS
-const jogadoresBanco = carregarJogadores();
-
-const timesHistoricos = 
-    obterTimesHistoricos(jogadoresBanco);
-
-console.log("");
-console.log("===== DADOS DO BANCO =====");
-console.log("Total de jogadores:", jogadoresBanco.length);
-console.log("Times encontrados:", timesHistoricos);
-
-console.log("");
-console.log("===== TESTE DOS JOGADORES DE UM TIME =====");
-
-const jogadoresLOUD = obterJogadoresDoTime (
-    jogadoresBanco,
-    "loud_2022"
-);
-
-console.log("Quantidade de jogadores:", jogadoresLOUD.length);
-console.log("Jogadores da LOUD:", jogadoresLOUD);
-
-console.log("");
-console.log("===== TESTE DO TIME HISTÓRICO =====");
-
-const timeLOUD = montarTimeHistorico (
-    jogadoresBanco,
-    "loud_2022"
-);
-
-console.log("Time montado:", timeLOUD.nome);
-console.log("Jogadores:", timeLOUD.jogadores);
-
-
-// CRIANDO UM ADVERSÁRIO A PARTIR DO JSON
-console.log("");
-console.log("===== TESTE DE INTEGRAÇÃO DA PARTIDA =====");
-
-const adversario = montarTimeHistorico (
-    jogadoresBanco,
-    "optic_2022"
-);
-
-console.log("Time do jogador:", timeJogador.nome);
-console.log("Adversário:", adversario.nome);
-
-
-// DEFININDO O MAPA
+// CONFIGURAÇÃO DO MAPA DE TESTE
 const mapaTeste = {
     nome: "Ascent",
-    ladoFavorecido: "defesa"
+    ladoFavorecido: "defesa",
+    ladoInicialTimeA: "ataque"
 };
 
-// CRIANDO A PARTIDA
-const partidaTeste = new Match (
-    timeJogador,
-    adversario,
-    mapaTeste
-);
 
-// SIMULANDO A PARTIDA
-simularPartida(partidaTeste);
+// EXECUÇÃO DA CAMPANHA COMPLETA
+async function executarTestes() {
+    console.log("===== TESTE DA CAMPANHA COMPLETA =====\n");
 
-// EXIBINDO O RESULTADO
-console.log("");
-console.log("===== RESULTADO DA PARTIDA =====");
-console.log("Mapa:", partidaTeste.mapa.nome);
-console.log("Placar:",
-    `${partidaTeste.placarA} x ${partidaTeste.placarB}`
-);
-console.log("Vencedor:", partidaTeste.vencedor.nome);
+    // 1. CARREGA OS JOGADORES DO BANCO
+    const jogadoresBanco = await carregarJogadores();
+
+    console.log(
+        "Total de jogadores recebidos do banco:",
+        jogadoresBanco.length
+    );
+
+    // 2. IDENTIFICA OS TIMES HISTÓRICOS
+    const timesHistoricos = obterTimesHistoricos(jogadoresBanco);
+
+    console.log(
+        "Total de times históricos encontrados:",
+        timesHistoricos.length
+    );
+
+    // 3. SORTEIA OS SETE ADVERSÁRIOS
+    const adversariosSelecionados =
+        selecionarAdversariosAleatorios(jogadoresBanco);
+
+    console.log("\n===== ADVERSÁRIOS SORTEADOS =====");
+
+    adversariosSelecionados.forEach((adversario, indice) => {
+        console.log(
+            `${indice + 1}. ${adversario.nome} (${adversario.ano})` +
+            ` - ID: ${adversario.timeId}`
+        );
+    });
+
+    console.log(
+        "\nQuantidade de adversários selecionados:",
+        adversariosSelecionados.length
+    );
+
+    // 4. CRIA A CAMPANHA
+    const campanhaTeste = new Campaign(
+        timeJogador,
+        adversariosSelecionados
+    );
+
+    console.log("\n===== ESTADO INICIAL DA CAMPANHA =====");
+    console.log("Vitórias:", campanhaTeste.vitorias);
+    console.log("Derrotas:", campanhaTeste.derrotas);
+    console.log("Estado:", campanhaTeste.estado);
+
+    // 5. ENFRENTA OS ADVERSÁRIOS EM SEQUÊNCIA
+    let numeroPartida = 0;
+
+    for (const adversario of adversariosSelecionados) {
+        // Não continua se a campanha já tiver terminado
+        if (campanhaTeste.estado !== "em andamento") {
+            break;
+        }
+
+        numeroPartida++;
+
+        // Monta a equipe adversária com os dados do banco
+        const timeRival = montarTimeHistorico(
+            jogadoresBanco,
+            adversario.timeId
+        );
+
+        // Cria uma nova partida
+        const mapaPartida = { ...mapaTeste };
+
+        const partidaTeste = new Match(
+            timeJogador,
+            timeRival,
+            mapaPartida
+        );
+
+        console.log(`\n===== PARTIDA ${numeroPartida} =====`);
+        console.log("Time A:", partidaTeste.timeA.nome);
+        console.log("Time B:", partidaTeste.timeB.nome);
+        console.log("Mapa:", mapaPartida.nome);
+        console.log("Lado inicial do Time A:", partidaTeste.ladoA);
+        console.log("Lado inicial do Time B:", partidaTeste.ladoB);
+        console.log("Lado favorecido:", mapaPartida.ladoFavorecido);
+
+        console.log("\n--- SIMULAÇÃO DA PARTIDA ---");
+
+        // Simula as rodadas até a partida terminar
+        simularPartida(partidaTeste);
+
+        console.log(
+            "Placar:",
+            `${partidaTeste.timeA.nome} ${partidaTeste.placarA}` +
+            ` x ${partidaTeste.placarB} ${partidaTeste.timeB.nome}`
+        );
+
+        console.log(
+            "Rodadas jogadas:",
+            partidaTeste.rodadasJogadas
+        );
+
+        console.log("Vencedor:", partidaTeste.vencedor.nome);
+
+        // Registra o resultado na campanha
+        campanhaTeste.registrarResultado(partidaTeste);
+
+        console.log("\n--- ESTADO DA CAMPANHA ---");
+        console.log("Vitórias:", campanhaTeste.vitorias);
+        console.log("Derrotas:", campanhaTeste.derrotas);
+        console.log("Estado:", campanhaTeste.estado);
+
+        // Uma derrota encerra a campanha imediatamente
+        if (campanhaTeste.estado === "eliminado") {
+            console.log("\nO Time Frankenstein foi eliminado!");
+            break;
+        }
+
+        // Sete vitórias garantem o título
+        if (campanhaTeste.estado === "campeão") {
+            console.log("\nO Time Frankenstein conquistou o título!");
+            break;
+        }
+    }
+
+    // 6. EXIBE O RESULTADO FINAL
+    console.log("\n===== RESULTADO FINAL DA CAMPANHA =====");
+    console.log("Partidas disputadas:", numeroPartida);
+    console.log("Vitórias:", campanhaTeste.vitorias);
+    console.log("Derrotas:", campanhaTeste.derrotas);
+    console.log("Estado final:", campanhaTeste.estado);
+
+    console.log("\n===== FIM DO TESTE =====");
+}
+
+
+// TRATA EVENTUAIS ERROS NO CARREGAMENTO OU NA SIMULAÇÃO
+executarTestes().catch((erro) => {
+    console.error("\nERRO AO EXECUTAR A CAMPANHA:");
+    console.error(erro.message);
+});
