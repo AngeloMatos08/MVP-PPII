@@ -12,23 +12,23 @@ let jogadorEmSelecao = null;
 const coresPorTime = {
     loud: { inicio: '13FF00', fim: '13FF00' },
     leviatan: { inicio: '69ABDC', fim: '69ABDC' },
-    furia: { inicio: '000000', fim: '000000' },
+    furia: { inicio: '000000', fim: 'EEEEEE' },
     optic: { inicio: '92C950', fim: '92C950' },
     edg: { inicio: 'FF0000', fim: 'FF0000' },
     edwardgaming: { inicio: 'FF0000', fim: 'FF0000' },
     paperrex: { inicio: 'FF07CD', fim: 'FF07CD' },
     drx: { inicio: '0D0282', fim: '0D0282' },
-    zetadivision: { inicio: '000000', fim: '000000' },
+    zetadivision: { inicio: 'EEEEEE', fim: '000000' },
     fnatic: { inicio: 'FF5900', fim: 'FF5900' },
     '100thieves': { inicio: 'F23535', fim: 'F23535' },
     kru: { inicio: 'FF198F', fim: 'FF198F' },
     xerxia: { inicio: 'FF198F', fim: 'FF198F' },
     fpx: { inicio: 'FF0600', fim: 'FF0600' },
-    teamliquid: { inicio: '001538', fim: '001538' },
-    boomesports: { inicio: '515761', fim: '515761' },
+    teamliquid: { inicio: 'EEEEEE', fim: '001538' },
+    boomesports: { inicio: '515761', fim: 'B30314' },
     xset: { inicio: 'F40F30', fim: 'F40F30' },
     evilgeniuses: { inicio: '202D5A', fim: '202D5A' },
-    bilibiligaming: { inicio: '36D0F4', fim: '36D0F4' },
+    bilibiligaming: { inicio: 'FF198F', fim: '36D0F4' },
 };
 
 let funcoesPreenchidas = {
