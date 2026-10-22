@@ -21,6 +21,8 @@ app.get('/api/jogadores', async (req, res) => {
     const jogadores = await Jogador.find({});
     res.json(jogadores);
   } catch (error) {
+    console.error('Erro ao buscar jogadores:', error);
+    
     res.status(500).json({ erro: 'Erro ao buscar jogadores' });
   }
 });
