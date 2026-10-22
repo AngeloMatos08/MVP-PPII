@@ -9,24 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root { color-scheme: dark; }
-        body { font-family: 'Ubuntu', sans-serif; }
-        .team-highlight {
-            border: 2px solid transparent;
-            background:
-                linear-gradient(105deg, #151615 8%, color-mix(in srgb, var(--team-color-start, #167d38) 14%, #211820) 58%, color-mix(in srgb, var(--team-color-end, #11d83d) 38%, #211820)) padding-box,
-                linear-gradient(105deg, color-mix(in srgb, var(--team-color-start, #167d38) 76%, transparent), color-mix(in srgb, var(--team-color-end, #11d83d) 88%, transparent)) border-box;
-        }
-        .player-row { animation: rise-in 260ms ease-out both; }
-        @keyframes rise-in {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after { animation-duration: 0.01ms !important; scroll-behavior: auto !important; }
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/destaque.css">
 </head>
 <body class="min-h-screen bg-[#211820] text-white antialiased">
     <div class="mx-auto min-h-screen w-full max-w-5xl px-4 py-6 sm:px-8 sm:py-10">

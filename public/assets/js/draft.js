@@ -349,13 +349,13 @@ function atualizarRoster() {
         const linha = document.createElement('div');
         linha.className = 'flex min-h-8 items-center gap-2 rounded-sm bg-gradient-to-r from-teal-900/90 to-emerald-500 px-2.5 py-1 text-sm shadow-sm';
         const overall = document.createElement('span');
-        overall.className = 'w-7 shrink-0 text-right text-xs tabular-nums';
+        overall.className = 'w-7 shrink-0 text-right text-[1rem] tabular-nums';
         overall.textContent = jogador.overall;
         const nome = document.createElement('span');
         nome.className = 'min-w-0 flex-1 truncate';
         nome.textContent = jogador.nome;
         const funcao = document.createElement('span');
-        funcao.className = 'shrink-0 rounded bg-black/15 px-1.5 py-0.5 text-[10px]';
+        funcao.className = 'shrink-0 rounded bg-black/15 px-1.5 py-0.5 text-[10px] uppercase';
         funcao.textContent = jogador.funcao;
         const iconeSrc = obterIconeFuncao(jogador.funcao);
         if (iconeSrc) {
