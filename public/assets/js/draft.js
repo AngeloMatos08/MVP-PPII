@@ -34,6 +34,17 @@ const coresPorTime = {
     giantsgaming: { inicio: 'EEEEEE', fim: '000000' },
     t1: { inicio: 'E2012D', fim: 'E2012D' },
     navi: { inicio: 'FFED00', fim: 'FFED00' },
+    "cloud9": { inicio: '26ACE2', fim: '26ACE2' },
+    acend: { inicio: '6738EC', fim: '6738EC' },
+    gambit: { inicio: 'E4002B', fim: 'E4002B' },
+    teamsecret: { inicio: 'EEEEEE', fim: 'EEEEEE' },
+    "x10esports": { inicio: 'D2D1D2', fim: 'D2D1D2' },
+    teamvikings: { inicio: 'DBD595', fim: 'DBD595' },
+    visionstrikers: { inicio: 'D40080', fim: 'D40080' },
+    sentinels: { inicio: 'CE0037', fim: 'CE0037' },
+    keydstars: { inicio: '5C2A82', fim: '3A0C66' },
+    fullsense: { inicio: 'FD7B01', fim: 'FD7B01' },
+    crazyraccoon: { inicio: 'F30614', fim: '000000' },
 };
 
 let funcoesPreenchidas = {
