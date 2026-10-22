@@ -29,6 +29,11 @@ const coresPorTime = {
     xset: { inicio: 'F40F30', fim: 'F40F30' },
     evilgeniuses: { inicio: '202D5A', fim: '202D5A' },
     bilibiligaming: { inicio: 'FF198F', fim: '36D0F4' },
+    nrg: { inicio: 'F73D0A', fim: 'F73D0A' },
+    futesports: { inicio: 'ED1A3A', fim: '121824' },
+    giantsgaming: { inicio: 'EEEEEE', fim: '000000' },
+    t1: { inicio: 'E2012D', fim: 'E2012D' },
+    navi: { inicio: 'FFED00', fim: 'FFED00' },
 };
 
 let funcoesPreenchidas = {
