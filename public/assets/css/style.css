@@ -1,0 +1,37 @@
+:root {
+    --bg: #281A24;
+    --atk: #FF413A;
+    --def: #00FFC4;
+}
+
+body {
+    background-color: var(--bg);
+    color: white;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 1rem;
+}
+
+header {
+    text-align: center;
+    font-size: 2rem;
+    padding: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-remake {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 0 5px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 1rem;
+
+}
+
+.btn-remake:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
