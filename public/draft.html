@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#211820">
+    <title>Draft Valorant | MVP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { color-scheme: dark; }
+        body { font-family: 'Ubuntu', sans-serif; }
+        .team-highlight {
+            border: 2px solid transparent;
+            background:
+                linear-gradient(105deg, #151615 8%, color-mix(in srgb, var(--team-color-start, #167d38) 14%, #211820) 58%, color-mix(in srgb, var(--team-color-end, #11d83d) 38%, #211820)) padding-box,
+                linear-gradient(105deg, color-mix(in srgb, var(--team-color-start, #167d38) 76%, transparent), color-mix(in srgb, var(--team-color-end, #11d83d) 88%, transparent)) border-box;
+        }
+        .player-row { animation: rise-in 260ms ease-out both; }
+        @keyframes rise-in {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; scroll-behavior: auto !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-[#211820] text-white antialiased">
+    <div class="mx-auto min-h-screen w-full max-w-5xl px-4 py-6 sm:px-8 sm:py-10">
+        <header class="mb-5 flex items-center justify-between border-b border-white/20 pb-4">
+            <a class="flex items-center gap-3 text-3xl font-medium tracking-wide sm:text-4xl" href="index.html" aria-label="MVP, início">
+                <span class="grid h-9 w-9 place-items-center text-[#f5f2ed]" aria-hidden="true">
+                    <svg viewBox="0 0 40 40" class="h-full w-full" fill="currentColor">
+                        <path d="M20 2 37 12v16L20 38 3 28V12L20 2Zm0 5L8 14v12l12 7 12-7V14L20 7Z" />
+                        <path d="m11 16 9 5 9-5-9 15-9-15Z" />
+                    </svg>
+                </span>
+                <span>MVP</span>
+            </a>
+            <button type="button" class="rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs text-white/75 transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-emerald-400" aria-label="Opções">
+                Opções
+            </button>
+        </header>
+
+        <main class="grid grid-cols-1 gap-5 md:grid-cols-[minmax(0,1fr)_1px_minmax(0,1fr)] md:gap-5">
+            <section aria-label="Jogadores disponíveis" class="min-w-0">
+                <div id="team-highlight" class="team-highlight flex min-h-[110px] items-center justify-between gap-3 rounded-lg px-4 py-3 shadow-lg shadow-black/20" style="--team-color-start:#167d38; --team-color-end:#11d83d">
+                    <div class="flex min-w-0 items-center gap-3">
+                        <div id="team-logo-wrap" class="grid h-12 w-12 shrink-0 place-items-center">
+                            <img id="team-logo" class="hidden max-h-full max-w-full object-contain" alt="">
+                            <span id="team-monogram" class="text-sm font-bold">MVP</span>
+                        </div>
+                        <div class="min-w-0">
+                            <h1 id="team-name" class="truncate text-lg font-bold leading-tight">Draft de Valorant</h1>
+                            <p id="team-championship" class="mt-1 text-xs text-white/80">Carregando time...</p>
+                        </div>
+                    </div>
+                    <p id="team-ranking" class="shrink-0 text-xl font-bold">--</p>
+                </div>
+
+                <div class="painel-controles mt-2 grid grid-cols-2 gap-2">
+                    <button id="btn-outro-time" type="button" onclick="rerollOutroTime()" class="rounded-md border border-white/10 bg-[#51474e] px-3 py-2 text-sm font-medium text-white transition hover:bg-[#665b63] focus:outline-none focus:ring-2 focus:ring-emerald-400">Outro Time</button>
+                    <button id="btn-outro-ano" type="button" onclick="rerollMesmoTimeOutroAno()" class="rounded-md border border-white/10 bg-[#51474e] px-3 py-2 text-sm font-medium text-white transition hover:bg-[#665b63] focus:outline-none focus:ring-2 focus:ring-emerald-400">Outro Ano</button>
+                </div>
+
+                <div class="mt-3 overflow-hidden rounded-md border border-white/10 bg-black/10">
+                    <div class="flex items-center justify-between border-b border-white/10 px-3 py-2 text-[11px] font-medium uppercase tracking-wider text-white/45">
+                        <span>Jogadores disponíveis</span>
+                        <span>Overall</span>
+                    </div>
+                    <div id="container-jogadores" class="divide-y divide-white/10" aria-live="polite">
+                        <p class="px-3 py-4 text-sm text-white/50">Conectando ao draft...</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="hidden bg-white/15 md:block" aria-hidden="true"></div>
+
+            <section aria-label="Seleção de função e roster" class="min-w-0">
+                <div id="role-picker" class="flex min-h-[126px] flex-col justify-between rounded-lg border border-amber-200/25 bg-[linear-gradient(135deg,#433d32,#4e4b39)] p-4 shadow-lg shadow-black/20" aria-live="polite">
+                    <div>
+                        <h2 id="role-picker-title" class="text-center text-sm font-medium text-white/90">Escolha a função de um jogador</h2>
+                        <p id="role-picker-hint" class="mt-1 text-center text-xs text-white/45">Selecione um atleta na lista</p>
+                    </div>
+                    <div id="role-picker-options" class="mt-3 flex min-h-9 items-center justify-center gap-3" role="group" aria-label="Funções disponíveis">
+                        <span class="text-xs text-white/45">As opções aparecem aqui</span>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex items-center gap-4 px-2 text-[11px] font-medium text-white/75">
+                    <span class="flex items-center gap-1.5"><span class="h-0.5 w-3 bg-rose-500"></span>Ataque</span>
+                    <span class="flex items-center gap-1.5"><span class="h-0.5 w-3 bg-teal-400"></span>Defesa</span>
+                    <span class="ml-auto text-white/40">ROSTER</span>
+                </div>
+                <div id="roster-list" class="mt-2 space-y-1.5" aria-live="polite">
+                    <p class="px-1 py-2 text-sm text-white/45">Escolha jogadores para montar o roster.</p>
+                </div>
+                <p id="roster-summary" class="mt-3 text-right text-xs text-white/45"></p>
+            </section>
+        </main>
+    </div>
+
+    <script src="assets/js/draft.js"></script>
+</body>
+</html>
