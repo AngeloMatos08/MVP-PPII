@@ -131,10 +131,34 @@ function montarTimeHistorico(jogadores, timeId) {
     };
 }
 
+
+// Seleciona aleatoriamente um mapa da lista recebida.
+ function selecionarMapaAleatorio(mapas) {
+    if (!Array.isArray(mapas) || mapas.length === 0) {
+        throw new Error(
+            "Não existem mapas disponíveis para a partida."
+        );
+    }
+
+    const indiceAleatorio = Math.floor(
+        Math.random() * mapas.length
+    );
+
+    const mapaSelecionado = mapas[indiceAleatorio];
+
+    return {
+        id: mapaSelecionado.mapa_id,
+        nome: mapaSelecionado.nome_mapa,
+        ladoFavorecido: mapaSelecionado.lado_favorecido
+    };
+}
+
+
 module.exports = {
     carregarJogadores,
     obterTimesHistoricos,
     selecionarAdversariosAleatorios,
     obterJogadoresDoTime,
-    montarTimeHistorico
+    montarTimeHistorico,
+    selecionarMapaAleatorio
 };

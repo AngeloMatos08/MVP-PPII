@@ -9,7 +9,8 @@ const Campaign = require('./logic/campaign/campaign');
 
 const {
     selecionarAdversariosAleatorios,
-    montarTimeHistorico
+    montarTimeHistorico,
+    selecionarMapaAleatorio
 } = require('./logic/campaign/campaignLogic');
 
 const app = express();
@@ -22,8 +23,29 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.error('Erro na conexão:', err));
 
 // 2. Definir a estrutura dos dados (Schema)
+
+// 'jogadores' é o nome da coleção no Atlas
 const JogadorSchema = new mongoose.Schema({}, { strict: false });
-const Jogador = mongoose.model('Jogador', JogadorSchema, 'jogadores'); // 'jogadores' é o nome da coleção no Atlas
+const Jogador = mongoose.model('Jogador', JogadorSchema, 'jogadores');
+
+// 'mapas' é o nome da coleção no Atlas
+const MapaSchema = new mongoose.Schema({}, { strict: false });
+const Mapa = mongoose.model('Mapa', MapaSchema, 'maps');
+ 
+// Rota temporária para testar a consulta dos mapas
+app.get('/api/mapas', async (req, res) => {
+    try {
+        const mapas = await Mapa.find({});
+        res.json(mapas);
+    } catch (error) {
+        console.error('Erro ao buscar mapas:', error);
+
+        res.status(500).json({
+            erro: 'Erro ao buscar mapas'
+        });
+    }
+});
+
 // 3. Rota para buscar todos os jogadores
 app.get('/api/jogadores', async (req, res) => {
   try {
@@ -76,6 +98,14 @@ app.post('/api/campanha', async (req, res) => {
         });
     }
 
+    const mapasBanco = await Mapa.find({});
+
+    if (mapasBanco.length === 0) {
+        return res.status(404).json({
+            erro: "Nenhum mapa foi encontrado no banco de dados."
+        });
+    }
+
     const adversariosSelecionados =
         selecionarAdversariosAleatorios(jogadoresBanco, 7);
 
@@ -87,11 +117,14 @@ app.post('/api/campanha', async (req, res) => {
     const resultados = [];
 
     for (const adversario of adversarios) {
-      const mapa = {
-          nome: "Ascent",
-          ladoFavorecido: "defesa",
-          ladoInicialTimeA: "ataque"
-      };
+
+        const mapaSorteado = selecionarMapaAleatorio(mapasBanco);
+        const mapa = {
+            id: mapaSorteado.id,
+            nome: mapaSorteado.nome,
+            ladoFavorecido: mapaSorteado.ladoFavorecido,
+            ladoInicialTimeA: "ataque"
+        };
 
       const partida = new Match(
           timeJogador,

@@ -6,23 +6,18 @@ function obterFatoresFuncao(funcao) {
     switch (funcao) {
         case "Duelista":
             return { atkF: 1.40, defF: 1.00 };
-
         case "Iniciador":
             return { atkF: 1.25, defF: 1.15 };
-
         case "Controlador":
             return { atkF: 1.15, defF: 1.25 };
-
         case "Sentinela":
             return { atkF: 1.00, defF: 1.40 };
-
         default:
             return { atkF: 1.00, defF: 1.00 };
     }
 }
 
-
-// CALCULA O ATAQUE DO TIME
+// CALCULAR O ATAQUE DO TIME
 function calcularAtaque(time) {
     let soma = 0;
 
@@ -34,8 +29,7 @@ function calcularAtaque(time) {
     return soma / 5;
 }
 
-
-// CALCULA A DEFESA DO TIME
+// CALCULAR A DEFESA DO TIME
 function calcularDefesa(time) {
     let soma = 0;
 
@@ -47,22 +41,18 @@ function calcularDefesa(time) {
     return soma / 5;
 }
 
-
-// CALCULA A FORÇA GERAL DO TIME
+// CALCULAR A FORÇA GERAL DO TIME
 function calcularForcaTime(ataque, defesa) {
     return (ataque + defesa) / 2;
 }
 
-
-// CALCULA A PROBABILIDADE BASE DE VITÓRIA
+// CALCULAR A PROBABILIDADE BASE DE VITÓRIA
 function calcularProbabilidadeBase(forcaA, forcaB, escala) {
     const diferenca = forcaA - forcaB;
-
     return 1 / (1 + Math.exp(-(diferenca / escala)));
 }
 
-
-// APLICA O BÔNUS DO MAPA À PROBABILIDADE
+// APLICAR BÔNUS DO MAPA
 function aplicarBonusMapa(probabilidade, ladoTime, mapa, bonus) {
     if (ladoTime === mapa.ladoFavorecido) {
         return probabilidade + ((1 - probabilidade) * bonus);
@@ -71,8 +61,7 @@ function aplicarBonusMapa(probabilidade, ladoTime, mapa, bonus) {
     return probabilidade;
 }
 
-
-// CALCULA A PROBABILIDADE DE O TIME A VENCER UMA RODADA
+// CALCULAR A PROBABILIDADE DE VENCER A RODADA
 function calcularProbabilidadeRodada(partida) {
     const escala = 12;
     const bonusMapa = 0.05;
@@ -80,7 +69,6 @@ function calcularProbabilidadeRodada(partida) {
     let forcaA;
     let forcaB;
 
-    // Compara ataque contra defesa conforme os lados atuais
     if (partida.ladoA === "ataque") {
         forcaA = partida.ataqueA;
         forcaB = partida.defesaB;
@@ -89,15 +77,12 @@ function calcularProbabilidadeRodada(partida) {
         forcaB = partida.ataqueB;
     }
 
-    // Calcula a probabilidade inicial
     let probabilidadeA = calcularProbabilidadeBase(
         forcaA,
         forcaB,
         escala
     );
 
-    // Se o mapa favorece o lado do Time A, aplica o bônus.
-    // Se favorece o lado do Time B, aplica o bônus ao rival.
     if (partida.ladoA === partida.mapa.ladoFavorecido) {
         probabilidadeA = aplicarBonusMapa(
             probabilidadeA,
@@ -119,8 +104,7 @@ function calcularProbabilidadeRodada(partida) {
     return probabilidadeA;
 }
 
-
-// TROCA OS LADOS DAS EQUIPES
+// TROCAR OS LADOS DOS TIMES
 function trocarLados(partida) {
     const ladoAnteriorA = partida.ladoA;
 
@@ -128,32 +112,47 @@ function trocarLados(partida) {
     partida.ladoB = ladoAnteriorA;
 }
 
-
-// SIMULA UMA PARTIDA RODADA POR RODADA
+// SIMULAR A PARTIDA
 function simularPartida(partida) {
-    // Impede simular novamente uma partida já encerrada
     if (partida.vencedor !== null) {
         throw new Error("Esta partida já foi simulada.");
     }
 
-    // Continua até haver 13 rodadas e dois pontos de vantagem
     while (
         Math.max(partida.placarA, partida.placarB) < 13 ||
         Math.abs(partida.placarA - partida.placarB) < 2
     ) {
         const probabilidadeA = calcularProbabilidadeRodada(partida);
 
-        // Sorteia o vencedor desta rodada
+        // Guardar os lados usados nesta rodada.
+        const ladoAAtual = partida.ladoA;
+        const ladoBAtual = partida.ladoB;
+
+        let vencedorRodada;
+
+        // Sortear o vencedor e atualizar o placar.
         if (Math.random() < probabilidadeA) {
             partida.placarA++;
+            vencedorRodada = partida.timeA.nome;
         } else {
             partida.placarB++;
+            vencedorRodada = partida.timeB.nome;
         }
 
         partida.rodadasJogadas++;
 
-        // Troca os lados após as primeiras 12 rodadas.
-        // No overtime, troca a cada duas rodadas.
+        // Registrar os dados da rodada no histórico.
+        partida.historicoRodadas.push({
+            numero: partida.rodadasJogadas,
+            vencedor: vencedorRodada,
+            placarA: partida.placarA,
+            placarB: partida.placarB,
+            ladoA: ladoAAtual,
+            ladoB: ladoBAtual
+        });
+
+        // Trocar os lados após a 12ª rodada e, depois,
+        // a cada duas rodadas a partir da 24ª.
         if (
             partida.rodadasJogadas === 12 ||
             (
@@ -165,7 +164,7 @@ function simularPartida(partida) {
         }
     }
 
-    // Define o vencedor com base no placar final
+    // Definir o vencedor da partida.
     if (partida.placarA > partida.placarB) {
         partida.vencedor = partida.timeA;
     } else {
@@ -175,7 +174,7 @@ function simularPartida(partida) {
     return partida;
 }
 
-// EXPORTA AS FUNÇÕES
+// EXPORTAR AS FUNÇÕES
 module.exports = {
     obterFatoresFuncao,
     calcularAtaque,

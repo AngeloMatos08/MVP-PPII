@@ -442,14 +442,57 @@ function jogadorJaFoiEscolhido(nomeJogador) {
     return timeEscolhido.some(jogador => jogador.nome === nomeJogador);
 }
 
-function finalizarDraft() {
-    const somaOverall = timeEscolhido.reduce((soma, jogador) => soma + jogador.overall, 0);
+async function finalizarDraft() {
+    const somaOverall = timeEscolhido.reduce(
+        (soma, jogador) => soma + jogador.overall,
+        0
+    );
+
     const mediaOverall = somaOverall / timeEscolhido.length;
 
     const resumo = document.getElementById('roster-summary');
-    if (resumo) resumo.textContent = `Draft concluído · Overall médio ${mediaOverall.toFixed(1)}`;
-    document.querySelectorAll('.painel-controles button').forEach(botao => { botao.disabled = true; });
+
+    if (resumo) {
+        resumo.textContent =
+            `Draft concluído · Overall médio ${mediaOverall.toFixed(1)}`;
+    }
+
+    document.querySelectorAll('.painel-controles button').forEach(botao => {
+        botao.disabled = true;
+    });
+
+    try {
+        const resposta = await fetch('http://localhost:3000/api/campanha', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                timeJogador: {
+                    nome: 'Meu Time',
+                    jogadores: timeEscolhido
+                }
+            })
+        });
+
+        const resultado = await resposta.json();
+
+        if (!resposta.ok) {
+            throw new Error(
+                resultado.erro || 'Não foi possível iniciar a campanha.'
+            );
+        }
+
+        console.log(
+            'Resultado completo da campanha:',
+            JSON.stringify(resultado, null, 2)
+        );
+
+    } catch (erro) {
+        console.error('Erro ao executar a campanha:', erro);
+    }
 }
+
 // Dev2-> AngeloMatos08: Função de reroll do draft selecionando outro time aleatório criando o botão de reroll
 function carregarTimePorId(timeId) {
     const jogadorExemplo = listaDeJogadores.find(jogador => jogador.time_id === timeId);
