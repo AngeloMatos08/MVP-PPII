@@ -113,6 +113,33 @@ app.post('/api/campanha', async (req, res) => {
         montarTimeHistorico(jogadoresBanco, time.timeId)
     );
 
+    console.log(
+        "Adversários selecionados:",
+        adversarios.map(time => time.nome)
+    );
+
+    console.log(
+        "Quantidade de jogadores por adversário:",
+        adversarios.map(time => ({
+            nome: time.nome,
+            jogadores: time.jogadores.length
+        }))
+    );
+
+    console.log(
+    "Validação dos jogadores adversários:",
+    adversarios.map(time => ({
+        nome: time.nome,
+        jogadoresValidos: time.jogadores.every(jogador =>
+            typeof jogador.nome === "string" &&
+            jogador.nome.trim() !== "" &&
+            typeof jogador.funcao === "string" &&
+            jogador.funcao.trim() !== "" &&
+            Number.isFinite(jogador.overall)
+        )
+    }))
+    );
+
     const campanha = new Campaign(timeJogador, adversarios);
     const resultados = [];
 
@@ -143,7 +170,8 @@ app.post('/api/campanha', async (req, res) => {
           vencedor: partida.vencedor.nome,
           estadoCampanha: campanha.estado,
           vitorias: campanha.vitorias,
-          derrotas: campanha.derrotas
+          derrotas: campanha.derrotas,
+          historicoRodadas: partida.historicoRodadas
       });
 
       if (campanha.estado !== "em andamento") {
