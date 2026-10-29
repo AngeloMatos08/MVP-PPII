@@ -9,6 +9,9 @@ let anoAtual = null;
 let timeEscolhido = [];
 let jogadorEmSelecao = null;
 
+// Contador único de rerolls compartilhados (ex: 5 rerolls totais por partida)
+let rerollsRestantes = 2;
+
 const coresPorTime = {
     loud: { inicio: '13FF00', fim: '13FF00' },
     leviatan: { inicio: '69ABDC', fim: '69ABDC' },
@@ -55,14 +58,52 @@ let funcoesPreenchidas = {
     controlador: 0
 }
 
-// Função atualizada para puxar da API do MongoDB
+function precarregarLogos() {
+    const nomesTimes = [...new Set(listaDeJogadores.map(j => {
+        const nome = j.nome_time || '';
+        return nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '');
+    }))];
+
+    const logosPorTime = {
+        loud: ['Loud.svg', 'loud.svg', 'loud.png'],
+        leviatan: ['Leviatan.svg', 'leviatan.svg', 'LEV.svg', 'lev.svg', 'lev.png', 'Lev.svg', 'Lev.png'],
+        furia: ['furia.svg', 'Furia.svg', 'furia.png'],
+        optic: ['optic.svg', 'Optic.svg', 'optic.png'],
+        edg: ['edward gaming.png', 'edward_gaming.svg', 'Edward_Gaming.svg'],
+        edwardgaming: ['edward gaming.png', 'edward_gaming.svg', 'Edward_Gaming.svg'],
+        paperrex: ['paperrex.svg', 'PaperRex.svg', 'paperrex.png', 'prx.svg'],
+        drx: ['drx.svg', 'DRX.svg', 'drx.png'],
+        zetadivision: ['zetadivision.svg', 'zeta.svg', 'zetadivision.png'],
+        fnatic: ['fnatic.svg', 'Fnatic.svg', 'fnatic.png'],
+        '100thieves': ['100t.svg', '100thieves.svg', '100Thieves.svg', '100thieves.png'],
+        kru: ['kru.svg', 'KRU.svg', 'kru.png'],
+        xerxia: ['xerxia.svg', 'Xerxia.svg', 'xerxia.png'],
+        fpx: ['fpx.svg', 'FPX.svg', 'fpx.png'],
+        teamliquid: ['teamliquid.svg', 'TeamLiquid.svg', 'teamliquid.png'],
+        boomesports: ['boomesports.svg', 'BoomEsports.svg', 'boomesports.png'],
+        sentinels: ['sentinels.svg', 'Sentinels.svg', 'sentinels.png'],
+        nrg: ['nrg.svg', 'NRG.svg', 'nrg.png'],
+        t1: ['t1.svg', 'T1.svg', 't1.png'],
+        navi: ['navi.svg', 'NAVI.svg', 'navi.png'],
+        cloud9: ['cloud9.svg', 'Cloud9.svg', 'cloud9.png']
+    };
+
+    nomesTimes.forEach(nomeNorm => {
+        const arquivos = logosPorTime[nomeNorm] || [`${nomeNorm}.svg`, `${nomeNorm}.png`];
+        arquivos.forEach(arq => {
+            const img = new Image();
+            img.src = `assets/images/logos_times/${arq}`;
+        });
+    });
+}
+
 async function puxarJogadores() {
     try {
-        // Altera a rota do arquivo local para a rota do servidor backend
         const response = await fetch('http://localhost:3000/api/jogadores');
         listaDeJogadores = await response.json();
         console.log('Jogadores carregados do Banco de Dados!', listaDeJogadores);
 
+        precarregarLogos();
         iniciarDraft();
     } catch (error) {
         console.error('Erro ao carregar jogadores do banco:', error);
@@ -70,7 +111,7 @@ async function puxarJogadores() {
 }
 
 function iniciarDraft() {
-    console.log('Iniciando o draft com os jogadores:' + listaDeJogadores.length + ' jogadores.');
+    console.log('Iniciando o draft com ' + listaDeJogadores.length + ' jogadores.');
     if (listaDeJogadores.length > 0) {
         sortear();
     } else {
@@ -78,7 +119,6 @@ function iniciarDraft() {
     }
 }
 
-// Parte do sorteio/draft
 function definirTimeAtual(timeId, ano = null) {
     timeAtual = timeId;
 
@@ -87,16 +127,107 @@ function definirTimeAtual(timeId, ano = null) {
     anoAtual = ano ?? (jogadorExemplo ? jogadorExemplo.ano : null);
 }
 
+// Roleta geral para troca de times
+function rodarRoletaTime(timeDestinoId, aoFinalizar) {
+    const timesDisponiveis = [...new Set(listaDeJogadores.map(jogador => jogador.time_id))];
+    if (timesDisponiveis.length <= 1) {
+        aoFinalizar();
+        return;
+    }
+
+    const destaque = document.getElementById('team-highlight');
+    if (destaque) {
+        destaque.classList.add('scale-[1.02]', 'brightness-110', 'transition-transform', 'duration-150');
+    }
+
+    let passos = 12;
+    let intervalo = 40;
+    let passoAtual = 0;
+
+    function girar() {
+        passoAtual++;
+        const randomTimeId = timesDisponiveis[Math.floor(Math.random() * timesDisponiveis.length)];
+        const jogadorExemplo = listaDeJogadores.find(j => j.time_id === randomTimeId);
+        if (jogadorExemplo) {
+            atualizarDestaqueTime(jogadorExemplo);
+        }
+
+        if (passoAtual < passos) {
+            intervalo += 25;
+            setTimeout(girar, intervalo);
+        } else {
+            const jogadorFinal = listaDeJogadores.find(j => j.time_id === timeDestinoId);
+            if (jogadorFinal) {
+                atualizarDestaqueTime(jogadorFinal);
+            }
+            if (destaque) {
+                destaque.classList.remove('scale-[1.02]', 'brightness-110');
+                destaque.classList.add('animate-pulse');
+                setTimeout(() => destaque.classList.remove('animate-pulse'), 400);
+            }
+            aoFinalizar();
+        }
+    }
+
+    girar();
+}
+
+// Roleta específica apenas entre os anos do MESMO time
+function rodarRoletaAno(nomeTime, anoDestino, aoFinalizar) {
+    const opcoesAno = listaDeJogadores.filter(jogador => jogador.nome_time === nomeTime);
+    const anosDisponiveis = [...new Set(opcoesAno.map(j => j.ano))];
+
+    if (anosDisponiveis.length <= 1) {
+        aoFinalizar();
+        return;
+    }
+
+    const destaque = document.getElementById('team-highlight');
+    if (destaque) {
+        destaque.classList.add('scale-[1.02]', 'brightness-110', 'transition-transform', 'duration-150');
+    }
+
+    let passos = 8;
+    let intervalo = 50;
+    let passoAtual = 0;
+
+    function girarAno() {
+        passoAtual++;
+        const anoAleatorio = anosDisponiveis[Math.floor(Math.random() * anosDisponiveis.length)];
+        const jogadorExemplo = opcoesAno.find(j => j.ano === anoAleatorio);
+        if (jogadorExemplo) {
+            atualizarDestaqueTime(jogadorExemplo);
+        }
+
+        if (passoAtual < passos) {
+            intervalo += 30;
+            setTimeout(girarAno, intervalo);
+        } else {
+            const jogadorFinal = opcoesAno.find(j => j.ano === anoDestino);
+            if (jogadorFinal) {
+                atualizarDestaqueTime(jogadorFinal);
+            }
+            if (destaque) {
+                destaque.classList.remove('scale-[1.02]', 'brightness-110');
+                destaque.classList.add('animate-pulse');
+                setTimeout(() => destaque.classList.remove('animate-pulse'), 400);
+            }
+            aoFinalizar();
+        }
+    }
+
+    girarAno();
+}
+
 function sortear() {
     const timesDisponiveis = [...new Set(listaDeJogadores.map(jogador => jogador.time_id))];
-    console.log('Times disponíveis para sorteio:', timesDisponiveis);
-
     const indiceAleatorio = Math.floor(Math.random() * timesDisponiveis.length);
     const timeSorteado = timesDisponiveis[indiceAleatorio];
-    definirTimeAtual(timeSorteado);
-    console.log('Time sorteado:', timeAtual);
 
-    filtrarJogadoresPorTime();
+    rodarRoletaTime(timeSorteado, () => {
+        definirTimeAtual(timeSorteado);
+        filtrarJogadoresPorTime();
+    });
 }
 
 function filtrarJogadoresPorTime() {
@@ -155,6 +286,39 @@ function obterIconeFuncao(funcao) {
     return nomeArquivo ? `assets/images/roles/${nomeArquivo}.svg` : null;
 }
 
+// Cálculo de Ataque, Defesa e Geral baseado nos fatores das funções
+function calcularEstatisticasRoster() {
+    if (timeEscolhido.length === 0) return { atk: '---', def: '---', geral: '' };
+
+    const fatoresFuncao = {
+        duelista: { atkF: 1.40, defF: 1.00 },
+        iniciador: { atkF: 1.25, defF: 1.15 },
+        controlador: { atkF: 1.15, defF: 1.25 },
+        sentinela: { atkF: 1.00, defF: 1.40 }
+    };
+
+    let somaAtk = 0;
+    let somaDef = 0;
+
+    timeEscolhido.forEach(jogador => {
+        const funcaoNorm = normalizarNomeFuncao(jogador.funcao);
+        const fator = fatoresFuncao[funcaoNorm] || { atkF: 1.00, defF: 1.00 };
+
+        somaAtk += Number(jogador.overall) * fator.atkF;
+        somaDef += Number(jogador.overall) * fator.defF;
+    });
+
+    const ataqueFinal = somaAtk / 5;
+    const defesaFinal = somaDef / 5;
+    const forcaGeral = (ataqueFinal + defesaFinal) / 2;
+
+    return {
+        atk: ataqueFinal.toFixed(1),
+        def: defesaFinal.toFixed(1),
+        geral: `Geral: ${forcaGeral.toFixed(1)}`
+    };
+}
+
 function atualizarDestaqueTime(jogador) {
     if (!jogador) return;
 
@@ -166,6 +330,7 @@ function atualizarDestaqueTime(jogador) {
     const campeonato = document.getElementById('team-championship');
     const ranking = document.getElementById('team-ranking');
     const destaque = document.getElementById('team-highlight');
+    
     const logosPorTime = {
         loud: ['Loud.svg', 'loud.svg', 'loud.png'],
         leviatan: ['Leviatan.svg', 'leviatan.svg', 'LEV.svg', 'lev.svg', 'lev.png', 'Lev.svg', 'Lev.png'],
@@ -182,12 +347,20 @@ function atualizarDestaqueTime(jogador) {
         xerxia: ['xerxia.svg', 'Xerxia.svg', 'xerxia.png'],
         fpx: ['fpx.svg', 'FPX.svg', 'fpx.png'],
         teamliquid: ['teamliquid.svg', 'TeamLiquid.svg', 'teamliquid.png'],
-        boomesports: ['boomesports.svg', 'BoomEsports.svg', 'boomesports.png']
+        boomesports: ['boomesports.svg', 'BoomEsports.svg', 'boomesports.png'],
+        sentinels: ['sentinels.svg', 'Sentinels.svg', 'sentinels.png'],
+        nrg: ['nrg.svg', 'NRG.svg', 'nrg.png'],
+        t1: ['t1.svg', 'T1.svg', 't1.png'],
+        navi: ['navi.svg', 'NAVI.svg', 'navi.png'],
+        cloud9: ['cloud9.svg', 'Cloud9.svg', 'cloud9.png']
     };
     const arquivosLogo = logosPorTime[nomeNormalizado] || [`${nomeNormalizado}.svg`, `${nomeNormalizado}.png`];
 
     if (nomeElemento) nomeElemento.textContent = nome;
     if (campeonato) campeonato.textContent = jogador.ano ? `Champions ${jogador.ano}` : 'Temporada';
+    
+    atualizarBotoesReroll();
+
     if (logo && monograma) {
         let tentativaLogo = 0;
         logo.onerror = () => {
@@ -207,12 +380,26 @@ function atualizarDestaqueTime(jogador) {
         logo.alt = `Logo ${nome}`;
         monograma.textContent = nome.slice(0, 3).toUpperCase();
     }
+    
     if (destaque) {
         const coresDoTime = coresPorTime[nomeNormalizado] || {};
         const corInicio = normalizarCorHex(coresDoTime.inicio || jogador.cor_primaria || jogador.corPrimaria, '#167d38');
         const corFim = normalizarCorHex(coresDoTime.fim || jogador.cor_secundaria || jogador.corSecundaria, '#11d83d');
         destaque.style.setProperty('--team-color-start', corInicio);
         destaque.style.setProperty('--team-color-end', corFim);
+    }
+}
+
+function atualizarBotoesReroll() {
+    const btnOutroTime = document.getElementById('btn-outro-time');
+    const btnOutroAno = document.getElementById('btn-outro-ano');
+
+    if (btnOutroTime) btnOutroTime.textContent = `Outro Time (${rerollsRestantes})`;
+    if (btnOutroAno) btnOutroAno.textContent = `Outro Ano (${rerollsRestantes})`;
+
+    if (rerollsRestantes <= 0) {
+        if (btnOutroTime) btnOutroTime.disabled = true;
+        if (btnOutroAno) btnOutroAno.disabled = true;
     }
 }
 
@@ -231,7 +418,6 @@ function carregarTimePorAno(nomeTime, ano) {
     filtrarJogadoresPorTime();
 }
 
-// Dev2-> AngeloMatos08: Trata funções se forem Array ou String para renderizar o <select>
 function exibirJogadoresNaTela(jogadoresFiltrados) {
     const container = document.getElementById('container-jogadores');
     if (!container) return;
@@ -285,11 +471,11 @@ function exibirJogadoresNaTela(jogadoresFiltrados) {
             itemJogador.append(informacoes, icones);
             itemJogador.appendChild(overall);
             itemJogador.setAttribute('aria-label', `Selecionar ${jogador.nome}, overall ${jogador.overall ?? 'indisponível'}`);
-            itemJogador.addEventListener('click', () => prepararEscolha(jogador.nome, listaFuncoes));
+            itemJogador.addEventListener('click', () => prepararEscolha(jogador.nome, listaFuncoes, itemJogador));
             itemJogador.addEventListener('keydown', evento => {
                 if (evento.key === 'Enter' || evento.key === ' ') {
                     evento.preventDefault();
-                    prepararEscolha(jogador.nome, listaFuncoes);
+                    prepararEscolha(jogador.nome, listaFuncoes, itemJogador);
                 }
             });
         }
@@ -314,11 +500,20 @@ function resetarSeletorFuncao() {
 }
 
 function atualizarSeletorFuncao(nomeJogador, listaFuncoes) {
+    const rolePicker = document.getElementById('role-picker');
     const titulo = document.getElementById('role-picker-title');
     const dica = document.getElementById('role-picker-hint');
     const opcoes = document.getElementById('role-picker-options');
+
+    if (rolePicker) {
+        rolePicker.classList.add('scale-[1.03]', 'shadow-amber-500/30', 'border-amber-300/50', 'transition-all', 'duration-300');
+        setTimeout(() => {
+            rolePicker.classList.remove('scale-[1.03]', 'shadow-amber-500/30');
+        }, 300);
+    }
+
     if (titulo) titulo.textContent = `Escolha a função de ${nomeJogador}`;
-    if (dica) dica.textContent = 'Clique em uma função permitida para adicionar ao roster';
+    if (dica) dica.textContent = 'Clique na função para confirmar e adicionar ao roster';
     if (!opcoes) return;
 
     opcoes.replaceChildren();
@@ -328,7 +523,7 @@ function atualizarSeletorFuncao(nomeJogador, listaFuncoes) {
         const botao = document.createElement('button');
         botao.type = 'button';
         botao.disabled = !permitido;
-        botao.className = `flex min-w-16 flex-col items-center gap-1 rounded-md px-2 py-1.5 text-[10px] transition focus:outline-none focus:ring-2 focus:ring-emerald-300 ${permitido ? 'hover:bg-white/10' : 'cursor-not-allowed opacity-30 grayscale'}`;
+        botao.className = `flex min-w-16 flex-col items-center gap-1 rounded-md px-2 py-1.5 text-[10px] transform transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-amber-300 ${permitido ? 'hover:bg-white/10 hover:scale-105' : 'cursor-not-allowed opacity-30 grayscale'}`;
         botao.setAttribute('aria-label', `${funcao}${permitido ? '' : ', indisponível pelas regras do roster'}`);
         if (iconeSrc) {
             const icone = document.createElement('img');
@@ -342,6 +537,7 @@ function atualizarSeletorFuncao(nomeJogador, listaFuncoes) {
         botao.appendChild(rotulo);
         if (permitido) {
             botao.addEventListener('click', () => {
+                botao.classList.add('bg-amber-400/30', 'scale-90');
                 if (jogadorEmSelecao) escolherJogador(jogadorEmSelecao.nome, funcao);
             });
         }
@@ -352,6 +548,17 @@ function atualizarSeletorFuncao(nomeJogador, listaFuncoes) {
 function atualizarRoster() {
     const container = document.getElementById('roster-list');
     const resumo = document.getElementById('roster-summary');
+    
+    // Atualiza os valores na barra superior de estatísticas (abaixo do card dourado)
+    const statAtk = document.getElementById('stat-atk');
+    const statDef = document.getElementById('stat-def');
+    const statGeral = document.getElementById('stat-geral');
+    const stats = calcularEstatisticasRoster();
+
+    if (statAtk) statAtk.textContent = stats.atk;
+    if (statDef) statDef.textContent = stats.def;
+    if (statGeral) statGeral.textContent = stats.geral;
+
     if (!container) return;
     container.replaceChildren();
 
@@ -362,9 +569,15 @@ function atualizarRoster() {
         container.appendChild(mensagem);
     }
 
-    timeEscolhido.forEach(jogador => {
+    timeEscolhido.forEach((jogador, index) => {
         const linha = document.createElement('div');
-        linha.className = 'flex min-h-8 items-center gap-2 rounded-sm bg-gradient-to-r from-teal-900/90 to-emerald-500 px-2.5 py-1 text-sm shadow-sm';
+        linha.className = 'flex min-h-8 items-center gap-2 rounded-sm bg-gradient-to-r from-teal-900/90 to-emerald-500 px-2.5 py-1 text-sm shadow-md transition-all duration-300 scale-95 opacity-0 animate-[fadeIn_0.3s_forwards]';
+        
+        setTimeout(() => {
+            linha.classList.remove('scale-95', 'opacity-0');
+            linha.classList.add('scale-100', 'opacity-100');
+        }, 10);
+
         const overall = document.createElement('span');
         overall.className = 'w-7 shrink-0 text-right text-[1rem] tabular-nums';
         overall.textContent = jogador.overall;
@@ -388,32 +601,26 @@ function atualizarRoster() {
     });
 
     if (resumo) {
-        const total = timeEscolhido.reduce((soma, jogador) => soma + Number(jogador.overall || 0), 0);
-        resumo.textContent = timeEscolhido.length ? `${timeEscolhido.length}/5 jogadores · Overall médio ${Math.round(total / timeEscolhido.length)}` : '';
+        resumo.textContent = timeEscolhido.length ? `${timeEscolhido.length}/5 jogadores` : '';
     }
 }
 
-// Dev2-> AngeloMatos08: Lê o dropdown com segurança
-function prepararEscolha(nomeJogador, listaFuncoes) {
+function prepararEscolha(nomeJogador, listaFuncoes, elementoLinha) {
     const jogador = listaDeJogadores.find(item => item.nome === nomeJogador && item.time_id === timeAtual);
     if (!jogador || jogadorJaFoiEscolhido(nomeJogador)) return;
 
     const funcoesDisponiveis = listaFuncoes.filter(funcaoPermitida);
     if (funcoesDisponiveis.length === 0) return;
 
-    if (listaFuncoes.length === 1) {
-        const funcao = listaFuncoes[0];
-        if (funcaoPermitida(funcao) && confirm(`Adicionar ${nomeJogador} ao roster como ${funcao}?`)) {
-            escolherJogador(nomeJogador, funcao);
-        }
-        return;
+    if (elementoLinha) {
+        elementoLinha.classList.add('bg-white/10');
+        setTimeout(() => elementoLinha.classList.remove('bg-white/10'), 300);
     }
 
     jogadorEmSelecao = jogador;
     atualizarSeletorFuncao(nomeJogador, listaFuncoes);
 }
 
-// Dev2-> AngeloMatos08: Valida a nova regra de limite (até 2 da mesma função, máximo 1 das restantes)
 function validarEContarFuncao(funcao) {
     const funcaoFormatada = normalizarNomeFuncao(funcao);
     if (!funcaoPermitida(funcao)) return false;
@@ -421,7 +628,6 @@ function validarEContarFuncao(funcao) {
     return true;
 }
 
-// Dev2-> AngeloMatos08: Processa a escolha garantindo que a busca no JSON use 'j.nome'
 function escolherJogador(nomeJogador, funcaoJogador) {
     if (jogadorJaFoiEscolhido(nomeJogador)) {
         alert(`❌ O jogador ${nomeJogador} já foi escolhido em outro ano!`);
@@ -446,7 +652,7 @@ function escolherJogador(nomeJogador, funcaoJogador) {
     if (timeEscolhido.length === 5) {
         finalizarDraft();
     } else {
-        sortear(); // Dev2-> AngeloMatos08: Opcional - Sorteia um novo time após a escolha. Se quiser ficar no mesmo time, mude de volta para 'filtrarJogadoresPorTime()'.
+        sortear();
     }
 }
 
@@ -454,58 +660,17 @@ function jogadorJaFoiEscolhido(nomeJogador) {
     return timeEscolhido.some(jogador => jogador.nome === nomeJogador);
 }
 
-async function finalizarDraft() {
-    const somaOverall = timeEscolhido.reduce(
-        (soma, jogador) => soma + jogador.overall,
-        0
-    );
-
+function finalizarDraft() {
+    const somaOverall = timeEscolhido.reduce((soma, jogador) => soma + jogador.overall, 0);
     const mediaOverall = somaOverall / timeEscolhido.length;
 
     const resumo = document.getElementById('roster-summary');
-
     if (resumo) {
-        resumo.textContent =
-            `Draft concluído · Overall médio ${mediaOverall.toFixed(1)}`;
+        resumo.textContent = `Draft concluído · Overall médio ${mediaOverall.toFixed(1)}`;
     }
-
-    document.querySelectorAll('.painel-controles button').forEach(botao => {
-        botao.disabled = true;
-    });
-
-    try {
-        const resposta = await fetch('http://localhost:3000/api/campanha', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                timeJogador: {
-                    nome: 'Meu Time',
-                    jogadores: timeEscolhido
-                }
-            })
-        });
-
-        const resultado = await resposta.json();
-
-        if (!resposta.ok) {
-            throw new Error(
-                resultado.erro || 'Não foi possível iniciar a campanha.'
-            );
-        }
-
-        console.log(
-            'Resultado completo da campanha:',
-            JSON.stringify(resultado, null, 2)
-        );
-
-    } catch (erro) {
-        console.error('Erro ao executar a campanha:', erro);
-    }
+    document.querySelectorAll('.painel-controles button').forEach(botao => { botao.disabled = true; });
 }
 
-// Dev2-> AngeloMatos08: Função de reroll do draft selecionando outro time aleatório criando o botão de reroll
 function carregarTimePorId(timeId) {
     const jogadorExemplo = listaDeJogadores.find(jogador => jogador.time_id === timeId);
 
@@ -514,11 +679,18 @@ function carregarTimePorId(timeId) {
         return;
     }
 
-    definirTimeAtual(timeId, jogadorExemplo.ano);
-    filtrarJogadoresPorTime();
+    rodarRoletaTime(timeId, () => {
+        definirTimeAtual(timeId, jogadorExemplo.ano);
+        filtrarJogadoresPorTime();
+    });
 }
 
 function rerollOutroTime() {
+    if (rerollsRestantes <= 0) {
+        alert('❌ Você esgotou seus rerolls!');
+        return;
+    }
+
     const timesDisponiveis = [...new Set(listaDeJogadores.map(jogador => jogador.time_id))]
         .filter(timeId => timeId !== timeAtual);
 
@@ -527,6 +699,7 @@ function rerollOutroTime() {
         return;
     }
 
+    rerollsRestantes--;
     const indiceAleatorio = Math.floor(Math.random() * timesDisponiveis.length);
     const novoTimeId = timesDisponiveis[indiceAleatorio];
 
@@ -534,10 +707,15 @@ function rerollOutroTime() {
 }
 
 function rerollMesmoTimeOutroAno() {
+    if (rerollsRestantes <= 0) {
+        alert('❌ Você esgotou seus rerolls!');
+        return;
+    }
+
     const nomeTimeRef = nomeTimeAtual || (listaDeJogadores.find(jogador => jogador.time_id === timeAtual)?.nome_time ?? null);
 
     if (!nomeTimeRef) {
-        alert('⚠️ Não foi possível identificar o time atual.');
+        alert('❌ Não foi possível identificar o time atual.');
         return;
     }
 
@@ -548,10 +726,13 @@ function rerollMesmoTimeOutroAno() {
         return;
     }
 
+    rerollsRestantes--;
     const anosDisponiveis = [...new Set(opcoesAno.map(jogador => jogador.ano))];
     const anoSorteado = anosDisponiveis[Math.floor(Math.random() * anosDisponiveis.length)];
 
-    carregarTimePorAno(nomeTimeRef, anoSorteado);
+    rodarRoletaAno(nomeTimeRef, anoSorteado, () => {
+        carregarTimePorAno(nomeTimeRef, anoSorteado);
+    });
 }
 
 puxarJogadores();
