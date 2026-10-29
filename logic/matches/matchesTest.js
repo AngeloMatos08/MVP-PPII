@@ -122,6 +122,28 @@ executarTeste("Simulação e placar de vitória", () => {
     assert.equal(partida.placarA, 13);
     assert.equal(partida.placarB, 0);
     assert.equal(partida.rodadasJogadas, 13);
+    console.log("Rodadas registradas:", partida.historicoRodadas.length);
+
+    // Verifica o histórico de rodadas.
+    assert.equal(partida.historicoRodadas.length, 13);
+
+    assert.deepEqual(partida.historicoRodadas[0], {
+        numero: 1,
+        vencedor: "LOUD",
+        placarA: 1,
+        placarB: 0,
+        ladoA: "ataque",
+        ladoB: "defesa"
+    });
+
+    assert.deepEqual(partida.historicoRodadas[12], {
+        numero: 13,
+        vencedor: "LOUD",
+        placarA: 13,
+        placarB: 0,
+        ladoA: "defesa",
+        ladoB: "ataque"
+    });
 });
 
 // TESTE 5: OVERTIME

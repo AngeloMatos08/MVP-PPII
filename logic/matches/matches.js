@@ -46,6 +46,9 @@ class Match {
         // QUANTIDADE TOTAL DE RODADAS JOGADAS
         this.rodadasJogadas = 0;
 
+        // HISTÓRICO DE RODADAS
+        this.historicoRodadas = [];
+
         // VENCEDOR DA PARTIDA
         this.vencedor = null;
     }
