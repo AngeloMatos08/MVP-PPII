@@ -436,17 +436,19 @@ function exibirJogadoresNaTela(jogadoresFiltrados) {
         nome.textContent = jogador.nome;
         informacoes.appendChild(nome);
 
-        if (jaFoiEscolhido || !podeSerEscolhido) {
-            itemJogador.classList.add('opacity-40');
-            itemJogador.tabIndex = -1;
-            itemJogador.setAttribute('aria-disabled', 'true');
-            if (jaFoiEscolhido) nome.classList.add('line-through');
-            const aviso = document.createElement('p');
-            aviso.className = 'text-[11px] text-white/50';
-            aviso.textContent = jaFoiEscolhido ? 'Já escolhido' : 'Sem funções disponíveis';
-            informacoes.appendChild(aviso);
-            itemJogador.appendChild(informacoes);
-        } else {
+if (jaFoiEscolhido || !podeSerEscolhido) {
+    itemJogador.classList.add('opacity-40');
+    itemJogador.tabIndex = -1;
+    itemJogador.setAttribute('aria-disabled', 'true');
+
+    // Risca o nome e deixa o jogador visualmente apagado
+    nome.classList.add('line-through', 'text-gray-400');
+
+    const aviso = document.createElement('p');
+    aviso.className = 'text-[11px] text-white/50';
+    informacoes.appendChild(aviso);
+    itemJogador.appendChild(informacoes);
+    } else {
             itemJogador.tabIndex = 0;
             itemJogador.setAttribute('aria-disabled', 'false');
             const listaFuncoes = obterListaFuncoes(jogador);
