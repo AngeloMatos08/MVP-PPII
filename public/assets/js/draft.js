@@ -288,7 +288,7 @@ function obterIconeFuncao(funcao) {
 
 // Cálculo de Ataque, Defesa e Geral baseado nos fatores das funções
 function calcularEstatisticasRoster() {
-    if (timeEscolhido.length === 0) return { atk: '---', def: '---', geral: '' };
+    if (timeEscolhido.length === 0) return { atk: '—', def: '—', geral: '' };
 
     const fatoresFuncao = {
         duelista: { atkF: 1.40, defF: 1.00 },
@@ -318,7 +318,6 @@ function calcularEstatisticasRoster() {
         geral: `Geral: ${forcaGeral.toFixed(1)}`
     };
 }
-
 function atualizarDestaqueTime(jogador) {
     if (!jogador) return;
 
