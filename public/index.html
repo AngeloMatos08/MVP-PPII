@@ -4,36 +4,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teste - Draft Valorant</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <meta name="theme-color" content="#211820">
+    <title>MVP | Draft Valorant</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
 
+    <!-- CSS Base do seu projeto -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/destaque.css">
 </head>
 
-<body>
+<body class="min-h-screen bg-[#211820] text-white antialiased flex flex-col justify-between">
 
-    <header>Painel de Teste do Draft</header>
-    <main>
-        <p>Abra o Console do navegador (F12) para ver os dados.</p>
+    <!-- NAVBAR (Estilo Constellarium com as cores do MVP) -->
+    <header class="sticky top-0 z-50 border-b border-white/10 bg-[#211820]/90 backdrop-blur-md">
+        <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+            <!-- Logo MVP -->
+            <a href="index.html" class="flex items-center gap-3 text-xl font-medium tracking-wide text-[#f5f2ed] transition hover:opacity-80" aria-label="MVP, início">
+                <span class="grid h-8 w-8 place-items-center text-[#f5f2ed]" aria-hidden="true">
+                    <svg viewBox="0 0 40 40" class="h-full w-full" fill="currentColor">
+                        <path d="M20 2 37 12v16L20 38 3 28V12L20 2Zm0 5L8 14v12l12 7 12-7V14L20 7Z" />
+                        <path d="m11 16 9 5 9-5-9 15-9-15Z" />
+                    </svg>
+                </span>
+                <span class="font-bold tracking-widest">MVP</span>
+            </a>
 
-        <!-- Dev2-> AngeloMatos08: Local onde os jogadores filtrados vão aparecer dinamicamente -->
-        <div id="container-jogadores"></div>
-        <div class="painel-controles">
-            <button class="btn-remake" id="btn-outro-time" onclick="rerollOutroTime()">Outro Time</button>
-            <button class="btn-remake" id="btn-outro-ano" onclick="rerollMesmoTimeOutroAno()">Outro Ano</button>
+            <!-- Menu de Navegação -->
+            <nav class="hidden items-center gap-8 text-sm text-white/70 sm:flex">
+                <a href="#inicio" class="text-white font-medium transition hover:text-emerald-400">Início</a>
+                <a href="#como-jogar" class="transition hover:text-white">Como jogar</a>
+                <a href="#sobre" class="transition hover:text-white">Sobre o projeto</a>
+            </nav>
+
+            <!-- Botão Jogar / Ir para o Draft -->
+            <a href="draft.html" class="inline-flex items-center gap-2 rounded-md border border-emerald-500/40 bg-emerald-500/20 px-4 py-2 text-xs font-semibold text-emerald-300 transition hover:bg-emerald-500/30">
+                <span>Jogar</span>
+                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+            </a>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL (LANDING PAGE ESTILO CONSTELLARIUM) -->
+    <main id="inicio" class="mx-auto w-full max-w-6xl px-6 py-12 sm:py-20">
+        
+        <!-- SEÇÃO HERO -->
+        <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center">
+            
+            <!-- Texto Hero Left -->
+            <div class="lg:col-span-7">
+                <div class="flex items-center gap-2 text-xs font-mono tracking-widest text-emerald-400 uppercase">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+                    <span>E-sports & Estatísticas</span>
+                </div>
+
+                <h1 class="mt-4 text-4xl font-bold tracking-tight text-white sm:text-6xl">
+                    MVP Draft<span class="text-emerald-400">.</span>
+                </h1>
+
+                <p class="mt-6 text-base leading-relaxed text-white/70 sm:text-lg">
+                    Monte elencos lendários do e-sport, selecione atletas por época, alinhe ataque e defesa e teste o conhecimento dos seus times do VCT.
+                </p>
+
+                <div class="mt-8 flex flex-wrap items-center gap-4">
+                    <a href="draft.html" class="inline-flex items-center gap-2 rounded-md bg-emerald-400 px-5 py-3 text-sm font-semibold text-[#211820] shadow-lg transition hover:bg-emerald-300">
+                        <span>Começar o Draft</span>
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </a>
+                    <a href="#como-jogar" class="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/5 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/10">
+                        <span>Descobrir como funciona →</span>
+                    </a>
+                </div>
+
+                <div class="mt-12 flex items-center gap-3 text-xs font-mono text-white/40 uppercase tracking-wider">
+                    <span>Um simulador de roster</span>
+                    <span>—</span>
+                    <span>Feito para fãs de Valorant</span>
+                </div>
+            </div>
+
+            <!-- Card Visual Right (Preview Estilo Constellarium com Ícones) -->
+            <div class="lg:col-span-5">
+                <div class="team-highlight rounded-xl p-6 shadow-2xl" style="--team-color-start:#DBD595; --team-color-end:#DBD595">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                        <span class="text-xs font-mono text-white/60">SIMULAÇÃO DE TEAM</span>
+                        <span class="rounded bg-emerald-500/20 px-2 py-0.5 font-mono text-xs font-bold text-emerald-400">VCT CHAMPIONS</span>
+                    </div>
+
+                    <div class="mt-6 space-y-3">
+                        <!-- Duelista -->
+                        <div class="flex items-center justify-between rounded-md border border-white/10 bg-black/20 p-3">
+                            <div class="flex items-center gap-2.5">
+                                <img src="assets/images/roles/duelista.svg" alt="Duelista" class="h-5 w-5">
+                                <span class="text-sm font-medium">Aspas 22</span>
+                            </div>
+                            <span class="font-mono text-sm font-bold text-emerald-400">98 OVERALL</span>
+                        </div>
+
+                        <!-- 2 DUELIST -->
+                        <div class="flex items-center justify-between rounded-md border border-white/10 bg-black/20 p-3">
+                            <div class="flex items-center gap-2.5">
+                                <img src="assets/images/roles/duelista.svg" alt="Duelista" class="h-5 w-5">
+                                <span class="text-sm font-medium">Jawgemo 25</span>
+                            </div>
+                            <span class="font-mono text-sm font-bold text-emerald-400">92 OVERALL</span>
+                        </div>
+
+                        <!-- Iniciador -->
+                        <div class="flex items-center justify-between rounded-md border border-white/10 bg-black/20 p-3">
+                            <div class="flex items-center gap-2.5">
+                                <img src="assets/images/roles/iniciador.svg" alt="Iniciador" class="h-5 w-5">
+                                <span class="text-sm font-medium">Chronicle 23</span>
+                            </div>
+                            <span class="font-mono text-sm font-bold text-teal-400">94 OVERALL</span>
+                        </div>
+
+                        <!-- Controlador -->
+                        <div class="flex items-center justify-between rounded-md border border-white/10 bg-black/20 p-3">
+                            <div class="flex items-center gap-2.5">
+                                <img src="assets/images/roles/controlador.svg" alt="Controlador" class="h-5 w-5">
+                                <span class="text-sm font-medium">f0rsakeN 24</span>
+                            </div>
+                            <span class="font-mono text-sm font-bold text-emerald-400">95 OVERALL</span>
+                        </div>
+
+                        <!-- Sentinela -->
+                        <div class="flex items-center justify-between rounded-md border border-white/10 bg-black/20 p-3">
+                            <div class="flex items-center gap-2.5">
+                                <img src="assets/images/roles/sentinela.svg" alt="Sentinela" class="h-5 w-5">
+                                <span class="text-sm font-medium">Less 22</span>
+                            </div>
+                            <span class="font-mono text-sm font-bold text-emerald-400">96 OVERALL</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 border-t border-white/10 pt-4 text-center">
+                        <span class="text-xs font-mono text-white/50">SELEÇÕES DINÂMICAS POR ANO E TIME</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
+        <!-- DIVISOR -->
+        <hr class="my-16 border-white/10" />
+
+        <!-- SEÇÃO COMO JOGAR -->
+        <section id="como-jogar" class="scroll-mt-24">
+            <div class="mb-8">
+                <span class="text-xs font-mono tracking-widest text-emerald-400 uppercase">Ataque. Defesa. Roster.</span>
+                <h2 class="mt-2 text-2xl font-bold sm:text-3xl">Como funciona o Draft</h2>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                
+                <!-- Passo 1 -->
+                <div class="rounded-lg border border-white/10 bg-black/20 p-6">
+                    <div class="flex items-center justify-between text-xs font-mono text-white/40">
+                        <span>01</span>
+                        <span class="text-emerald-400">✦</span>
+                    </div>
+                    <h3 class="mt-4 text-lg font-medium">Sorteie a Equipe</h3>
+                    <p class="mt-2 text-sm leading-relaxed text-white/60">
+                        Receba um time e um ano histórico do circuito profissional do Valorant.
+                    </p>
+                </div>
+
+                <!-- Passo 2 -->
+                <div class="rounded-lg border border-white/10 bg-black/20 p-6">
+                    <div class="flex items-center justify-between text-xs font-mono text-white/40">
+                        <span>02</span>
+                        <span class="text-emerald-400">✦</span>
+                    </div>
+                    <h3 class="mt-4 text-lg font-medium">Escolha a Função</h3>
+                    <p class="mt-2 text-sm leading-relaxed text-white/60">
+                        Filtre os pro-players disponíveis e selecione o papel perfeito no ataque ou defesa.
+                    </p>
+                </div>
+
+                <!-- Passo 3 -->
+                <div class="rounded-lg border border-white/10 bg-black/20 p-6">
+                    <div class="flex items-center justify-between text-xs font-mono text-white/40">
+                        <span>03</span>
+                        <span class="text-emerald-400">✦</span>
+                    </div>
+                    <h3 class="mt-4 text-lg font-medium">Monte o Roster Ideal</h3>
+                    <p class="mt-2 text-sm leading-relaxed text-white/60">
+                        Complete as 5 posições, equilibre o Overall total e crie a seu time perfeito.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEÇÃO SOBRE -->
+        <section id="sobre" class="mt-20 scroll-mt-24 rounded-xl border border-white/10 bg-[#281A24] p-8 sm:p-12">
+            <div class="grid grid-cols-1 gap-8 md:grid-cols-2 md:items-center">
+                <div>
+                    <span class="text-xs font-mono tracking-widest text-emerald-400 uppercase">Sobre o projeto</span>
+                    <h2 class="mt-2 text-2xl font-bold sm:text-3xl">Uma nova forma de viver os drafts.</h2>
+                </div>
+                <div>
+                    <p class="text-sm leading-relaxed text-white/70">
+                        O MVP é uma ferramenta educativa e recreativa desenvolvida para simular e testar combinações de equipes do cenário competitivo. O projeto integra dados históricos e estatísticas de atletas para proporcionando um desafio diário de lógica e estratégia.
+                    </p>
+                    <div class="mt-6">
+                        <a href="draft.html" class="inline-flex items-center gap-2 text-sm font-medium text-emerald-400 transition hover:underline">
+                            Ir para o Draft agora →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
 
     </main>
 
-    <!-- Chamada dos arquivos JavaScript -->
-    <script src="assets/js/draft.js"></script>
-    <script src="assets/js/index.js"></script>
+    <!-- FOOTER -->
+    <footer class="border-t border-white/10 bg-[#1b131a] py-6 text-xs text-white/50">
+        <div class="mx-auto flex max-w-6xl items-center justify-between px-6">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-white">MVP</span>
+                <span>— Projeto MVP Draft</span>
+            </div>
+            <a href="#inicio" class="hover:text-white">Voltar ao topo ↑</a>
+        </div>
+    </footer>
 
+    <!-- Scripts da aplicação -->
+    <script src="assets/js/index.js"></script>
 </body>
 
 </html>

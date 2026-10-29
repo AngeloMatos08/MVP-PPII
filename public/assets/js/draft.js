@@ -45,6 +45,7 @@ const coresPorTime = {
     keydstars: { inicio: '5C2A82', fim: '3A0C66' },
     fullsense: { inicio: 'FD7B01', fim: 'FD7B01' },
     crazyraccoon: { inicio: 'F30614', fim: '000000' },
+    envy: { inicio: '1179F4', fim: 'B7B7B7' },
 };
 
 let funcoesPreenchidas = {
