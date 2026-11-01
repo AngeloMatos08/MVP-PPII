@@ -1,4 +1,3 @@
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -19,13 +18,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 1. Configuração da conexão com o MongoDB Atlas
-
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('Conectado ao MongoDB Atlas!'))
-    .catch(error => console.error('Erro na conexão com MongoDB:', error));
-
-// 2. Definição dos modelos do banco de dados
+// 1. Definição dos modelos do banco de dados
 
 const JogadorSchema = new mongoose.Schema({}, { strict: false });
 const Jogador = mongoose.model('Jogador', JogadorSchema, 'jogadores');
@@ -33,11 +26,12 @@ const Jogador = mongoose.model('Jogador', JogadorSchema, 'jogadores');
 const MapaSchema = new mongoose.Schema({}, { strict: false });
 const Mapa = mongoose.model('Mapa', MapaSchema, 'maps');
 
-// 3. Rota para buscar todos os jogadores
+// 2. Rota para buscar todos os jogadores
 
 app.get('/api/jogadores', async (req, res) => {
     try {
         const jogadores = await Jogador.find({});
+
         return res.status(200).json(jogadores);
 
     } catch (error) {
@@ -49,7 +43,7 @@ app.get('/api/jogadores', async (req, res) => {
     }
 });
 
-// 4. Rota para iniciar uma campanha
+// 3. Rota para iniciar uma campanha
 
 app.post('/api/campanha', async (req, res) => {
 
@@ -196,10 +190,24 @@ app.post('/api/campanha', async (req, res) => {
     }
 });
 
-// 5. Inicialização do servidor
+// 4. Inicialização do servidor após conectar ao MongoDB
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
+async function iniciarServidor() {
+    try {
+        await mongoose.connect(process.env.MONGO_URI);
+
+        console.log('Conectado ao MongoDB Atlas!');
+
+        app.listen(PORT, () => {
+            console.log(`Servidor rodando em http://localhost:${PORT}`);
+        });
+
+    } catch (error) {
+        console.error('Erro ao conectar ao MongoDB:', error);
+        process.exit(1);
+    }
+}
+
+iniciarServidor();
