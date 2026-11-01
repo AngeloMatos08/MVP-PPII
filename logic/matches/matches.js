@@ -1,4 +1,3 @@
-
 const {
     calcularAtaque,
     calcularDefesa,

@@ -1,4 +1,3 @@
-
 const API_URL = "http://localhost:3000/api/jogadores";
 
 // Busca os jogadores pela API conectada ao MongoDB Atlas
@@ -31,8 +30,7 @@ function obterTimesHistoricos(jogadores) {
     return Array.from(times.values());
 }
 
-
- // Seleciona adversários históricos aleatoriamente
+// Seleciona adversários históricos aleatoriamente
 function selecionarAdversariosAleatorios(
     jogadores,
     quantidade = 7,
@@ -51,15 +49,11 @@ function selecionarAdversariosAleatorios(
             time.timeId
         );
 
-        return jogadoresDoTime.length === 5
-            && !idsExcluidos.has(time.timeId);
+        return (
+            jogadoresDoTime.length === 5 &&
+            !idsExcluidos.has(time.timeId)
+        );
     });
-
-// Diagnóstico temporário
-console.log("Total de jogadores recebidos:", jogadores.length);
-console.log("Total de times históricos:", timesHistoricos.length);
-console.log("Times excluídos:", timesExcluidos);
-console.log("Times válidos para sorteio:", timesValidos.length);
 
     if (timesValidos.length < quantidade) {
         throw new Error(
@@ -86,7 +80,6 @@ console.log("Times válidos para sorteio:", timesValidos.length);
     // Retorna somente a quantidade solicitada
     return timesEmbaralhados.slice(0, quantidade);
 }
-
 
 // Busca os jogadores pertencentes a um time
 function obterJogadoresDoTime(jogadores, timeId) {
@@ -131,9 +124,8 @@ function montarTimeHistorico(jogadores, timeId) {
     };
 }
 
-
-// Seleciona aleatoriamente um mapa da lista recebida.
- function selecionarMapaAleatorio(mapas) {
+// Seleciona aleatoriamente um mapa da lista recebida
+function selecionarMapaAleatorio(mapas) {
     if (!Array.isArray(mapas) || mapas.length === 0) {
         throw new Error(
             "Não existem mapas disponíveis para a partida."
@@ -152,7 +144,6 @@ function montarTimeHistorico(jogadores, timeId) {
         ladoFavorecido: mapaSelecionado.lado_favorecido
     };
 }
-
 
 module.exports = {
     carregarJogadores,
