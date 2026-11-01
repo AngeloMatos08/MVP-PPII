@@ -1,4 +1,3 @@
-
 class Campaign {
     constructor(timeJogador, adversarios) {
         this.timeJogador = timeJogador;

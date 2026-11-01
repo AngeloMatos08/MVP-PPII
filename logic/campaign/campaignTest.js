@@ -7,6 +7,7 @@ const {
     carregarJogadores,
     obterTimesHistoricos,
     selecionarAdversariosAleatorios,
+    obterJogadoresDoTime,
     montarTimeHistorico
 } = require("./campaignLogic");
 
@@ -33,6 +34,380 @@ const timeJogador = new Time(
 );
 
 
+// TESTES ISOLADOS DA CLASSE CAMPAIGN
+function testarRegrasCampaign() {
+    console.log("\n===== TESTES DAS REGRAS DA CAMPANHA =====");
+
+    let testesAprovados = 0;
+    let testesExecutados = 0;
+
+    function verificar(condicao, descricao) {
+        testesExecutados++;
+
+        if (condicao) {
+            testesAprovados++;
+            console.log(`[PASSOU] ${descricao}`);
+        } else {
+            console.error(`[FALHOU] ${descricao}`);
+        }
+    }
+
+    // TESTE 1: ESTADO INICIAL
+    const campanhaInicial = new Campaign(timeJogador, []);
+
+    verificar(
+        campanhaInicial.vitorias === 0
+        && campanhaInicial.derrotas === 0
+        && campanhaInicial.estado === "em andamento",
+        "Inicialização correta da campanha"
+    );
+
+    // TESTE 2: REGISTRO DE UMA VITÓRIA
+    const campanhaVitoria = new Campaign(timeJogador, []);
+
+    campanhaVitoria.registrarResultado({
+        vencedor: { nome: timeJogador.nome }
+    });
+
+    verificar(
+        campanhaVitoria.vitorias === 1
+        && campanhaVitoria.derrotas === 0
+        && campanhaVitoria.estado === "em andamento",
+        "Vitória contabilizada corretamente"
+    );
+
+    // TESTE 3: REGISTRO DE UMA DERROTA
+    const campanhaDerrota = new Campaign(timeJogador, []);
+
+    campanhaDerrota.registrarResultado({
+        vencedor: { nome: "Time Rival" }
+    });
+
+    verificar(
+        campanhaDerrota.vitorias === 0
+        && campanhaDerrota.derrotas === 1
+        && campanhaDerrota.estado === "eliminado",
+        "Derrota provoca eliminação imediata"
+    );
+
+    // TESTE 4: SETE VITÓRIAS CONSECUTIVAS
+    const campanhaCampea = new Campaign(timeJogador, []);
+
+    for (let i = 0; i < 7; i++) {
+        campanhaCampea.registrarResultado({
+            vencedor: { nome: timeJogador.nome }
+        });
+    }
+
+    verificar(
+        campanhaCampea.vitorias === 7
+        && campanhaCampea.derrotas === 0
+        && campanhaCampea.estado === "campeão",
+        "Sete vitórias garantem o título"
+    );
+
+    // TESTE 5: BLOQUEIO APÓS ELIMINAÇÃO
+    let bloqueioDerrota = false;
+
+    try {
+        campanhaDerrota.registrarResultado({
+            vencedor: { nome: timeJogador.nome }
+        });
+    } catch (erro) {
+        bloqueioDerrota = true;
+    }
+
+    verificar(
+        bloqueioDerrota,
+        "Campanha eliminada não aceita novos resultados"
+    );
+
+    // TESTE 6: BLOQUEIO APÓS CONQUISTAR O TÍTULO
+    let bloqueioTitulo = false;
+
+    try {
+        campanhaCampea.registrarResultado({
+            vencedor: { nome: timeJogador.nome }
+        });
+    } catch (erro) {
+        bloqueioTitulo = true;
+    }
+
+    verificar(
+        bloqueioTitulo,
+        "Campanha campeã não aceita novos resultados"
+    );
+
+    // TESTE 7: BLOQUEIO DE PARTIDA SEM VENCEDOR
+    let bloqueioSemVencedor = false;
+
+    try {
+        campanhaInicial.registrarResultado({
+            vencedor: null
+        });
+    } catch (erro) {
+        bloqueioSemVencedor = true;
+    }
+
+    verificar(
+        bloqueioSemVencedor,
+        "Partida sem vencedor não é contabilizada"
+    );
+
+    // RESUMO DOS TESTES
+    console.log("\n===== RESUMO DOS TESTES =====");
+    console.log("Testes executados:", testesExecutados);
+    console.log("Testes aprovados:", testesAprovados);
+    console.log("Testes reprovados:", testesExecutados - testesAprovados);
+
+    if (testesAprovados !== testesExecutados) {
+        throw new Error(
+            "Existem testes reprovados nas regras da campanha."
+        );
+    }
+}
+
+
+// TESTES DA PROGRESSÃO DA CAMPANHA
+function testarProgressaoCampaign() {
+    console.log("\n===== TESTES DA PROGRESSÃO DA CAMPANHA =====");
+
+    let testesAprovados = 0;
+    let testesExecutados = 0;
+
+    function verificar(condicao, descricao) {
+        testesExecutados++;
+
+        if (condicao) {
+            testesAprovados++;
+            console.log(`[PASSOU] ${descricao}`);
+        } else {
+            console.error(`[FALHOU] ${descricao}`);
+        }
+    }
+
+    // TESTE 1: TRÊS VITÓRIAS SEGUIDAS DE UMA DERROTA
+    const campanhaDerrota = new Campaign(timeJogador, []);
+
+    for (let i = 0; i < 3; i++) {
+        campanhaDerrota.registrarResultado({
+            vencedor: { nome: timeJogador.nome }
+        });
+    }
+
+    campanhaDerrota.registrarResultado({
+        vencedor: { nome: "Time Rival" }
+    });
+
+    verificar(
+        campanhaDerrota.vitorias === 3
+        && campanhaDerrota.derrotas === 1
+        && campanhaDerrota.estado === "eliminado",
+        "Três vitórias seguidas de uma derrota encerram a campanha corretamente"
+    );
+
+    // TESTE 2: SEIS VITÓRIAS SEGUIDAS DE MAIS UMA VITÓRIA
+    const campanhaTitulo = new Campaign(timeJogador, []);
+
+    for (let i = 0; i < 6; i++) {
+        campanhaTitulo.registrarResultado({
+            vencedor: { nome: timeJogador.nome }
+        });
+    }
+
+    campanhaTitulo.registrarResultado({
+        vencedor: { nome: timeJogador.nome }
+    });
+
+    verificar(
+        campanhaTitulo.vitorias === 7
+        && campanhaTitulo.derrotas === 0
+        && campanhaTitulo.estado === "campeão",
+        "Sétima vitória encerra a campanha com o título"
+    );
+
+    // TESTE 3: TENTATIVA DE REGISTRAR RESULTADO APÓS ELIMINAÇÃO
+    let erroAposEliminacao = false;
+
+    try {
+        campanhaDerrota.registrarResultado({
+            vencedor: { nome: timeJogador.nome }
+        });
+    } catch (erro) {
+        erroAposEliminacao = true;
+    }
+
+    verificar(
+        erroAposEliminacao
+        && campanhaDerrota.vitorias === 3
+        && campanhaDerrota.derrotas === 1
+        && campanhaDerrota.estado === "eliminado",
+        "Resultado posterior à eliminação é bloqueado sem alterar os contadores"
+    );
+
+    // TESTE 4: TENTATIVA DE REGISTRAR RESULTADO APÓS O TÍTULO
+    let erroAposTitulo = false;
+
+    try {
+        campanhaTitulo.registrarResultado({
+            vencedor: { nome: "Time Rival" }
+        });
+    } catch (erro) {
+        erroAposTitulo = true;
+    }
+
+    verificar(
+        erroAposTitulo
+        && campanhaTitulo.vitorias === 7
+        && campanhaTitulo.derrotas === 0
+        && campanhaTitulo.estado === "campeão",
+        "Resultado posterior ao título é bloqueado sem alterar os contadores"
+    );
+
+    // RESUMO DOS TESTES
+    console.log("\n===== RESUMO DA PROGRESSÃO =====");
+    console.log("Testes executados:", testesExecutados);
+    console.log("Testes aprovados:", testesAprovados);
+    console.log("Testes reprovados:", testesExecutados - testesAprovados);
+
+    if (testesAprovados !== testesExecutados) {
+        throw new Error(
+            "Existem testes reprovados na progressão da campanha."
+        );
+    }
+}
+
+
+// TESTES DA SELEÇÃO DOS ADVERSÁRIOS
+function testarSelecaoAdversarios(jogadores) {
+    console.log("\n===== TESTES DA SELEÇÃO DE ADVERSÁRIOS =====");
+
+    let testesAprovados = 0;
+    let testesExecutados = 0;
+
+    function verificar(condicao, descricao) {
+        testesExecutados++;
+
+        if (condicao) {
+            testesAprovados++;
+            console.log(`[PASSOU] ${descricao}`);
+        } else {
+            console.error(`[FALHOU] ${descricao}`);
+        }
+    }
+
+    // TESTE 1: IDENTIFICAÇÃO DOS TIMES HISTÓRICOS
+    const timesHistoricos = obterTimesHistoricos(jogadores);
+
+    const idsHistoricos = timesHistoricos.map(
+        time => time.timeId
+    );
+
+    verificar(
+        idsHistoricos.length === new Set(idsHistoricos).size,
+        "Identificação dos times sem IDs repetidos"
+    );
+
+    // TESTE 2: SELEÇÃO DE EXATAMENTE SETE ADVERSÁRIOS
+    const adversarios = selecionarAdversariosAleatorios(
+        jogadores,
+        7
+    );
+
+    verificar(
+        adversarios.length === 7,
+        "Seleção de exatamente sete adversários"
+    );
+
+    // TESTE 3: AUSÊNCIA DE ADVERSÁRIOS REPETIDOS
+    const idsAdversarios = adversarios.map(
+        adversario => adversario.timeId
+    );
+
+    verificar(
+        idsAdversarios.length === new Set(idsAdversarios).size,
+        "Nenhum adversário selecionado mais de uma vez"
+    );
+
+    // TESTE 4: TODOS OS ADVERSÁRIOS POSSUEM CINCO JOGADORES
+    const todosCompletos = adversarios.every(adversario => {
+        const jogadoresDoTime = obterJogadoresDoTime(
+            jogadores,
+            adversario.timeId
+        );
+
+        return jogadoresDoTime.length === 5;
+    });
+
+    verificar(
+        todosCompletos,
+        "Todos os adversários possuem exatamente cinco jogadores"
+    );
+
+    // TESTE 5: EXCLUSÃO DE TIMES INFORMADOS
+    const idsExcluidos = [adversarios[0].timeId];
+
+    const adversariosSemExcluidos =
+        selecionarAdversariosAleatorios(
+            jogadores,
+            7,
+            idsExcluidos
+        );
+
+    verificar(
+        !adversariosSemExcluidos.some(
+            adversario => idsExcluidos.includes(adversario.timeId)
+        ),
+        "Times excluídos não aparecem na seleção"
+    );
+
+    // TESTE 6: QUANTIDADE INSUFICIENTE DE TIMES
+    let erroQuantidadeInsuficiente = false;
+
+    try {
+        selecionarAdversariosAleatorios(
+            jogadores,
+            1000
+        );
+    } catch (erro) {
+        erroQuantidadeInsuficiente = true;
+    }
+
+    verificar(
+        erroQuantidadeInsuficiente,
+        "Erro quando não existem adversários suficientes"
+    );
+
+    // TESTE 7: MONTAGEM DE UM TIME HISTÓRICO
+    const timeMontado = montarTimeHistorico(
+        jogadores,
+        adversarios[0].timeId
+    );
+
+    verificar(
+        timeMontado.jogadores.length === 5
+        && timeMontado.jogadores.every(jogador =>
+            typeof jogador.nome === "string"
+            && typeof jogador.funcao === "string"
+            && typeof jogador.overall === "number"
+        ),
+        "Montagem correta dos jogadores do time histórico"
+    );
+
+    // RESUMO DOS TESTES
+    console.log("\n===== RESUMO DA SELEÇÃO =====");
+    console.log("Testes executados:", testesExecutados);
+    console.log("Testes aprovados:", testesAprovados);
+    console.log("Testes reprovados:", testesExecutados - testesAprovados);
+
+    if (testesAprovados !== testesExecutados) {
+        throw new Error(
+            "Existem testes reprovados na seleção dos adversários."
+        );
+    }
+}
+
+
 // CONFIGURAÇÃO DO MAPA DE TESTE
 const mapaTeste = {
     nome: "Ascent",
@@ -45,15 +420,21 @@ const mapaTeste = {
 async function executarTestes() {
     console.log("===== TESTE DA CAMPANHA COMPLETA =====\n");
 
-    // 1. CARREGA OS JOGADORES DO BANCO
+    // 1. TESTA AS REGRAS DA CAMPANHA
+    testarRegrasCampaign();
+
+    // 2. TESTA A PROGRESSÃO DA CAMPANHA
+    testarProgressaoCampaign();
+
+    // 3. CARREGA OS JOGADORES DO BANCO
     const jogadoresBanco = await carregarJogadores();
 
     console.log(
-        "Total de jogadores recebidos do banco:",
+        "\nTotal de jogadores recebidos do banco:",
         jogadoresBanco.length
     );
 
-    // 2. IDENTIFICA OS TIMES HISTÓRICOS
+    // 4. IDENTIFICA OS TIMES HISTÓRICOS
     const timesHistoricos = obterTimesHistoricos(jogadoresBanco);
 
     console.log(
@@ -61,7 +442,10 @@ async function executarTestes() {
         timesHistoricos.length
     );
 
-    // 3. SORTEIA OS SETE ADVERSÁRIOS
+    // 5. TESTA A SELEÇÃO DOS ADVERSÁRIOS
+    testarSelecaoAdversarios(jogadoresBanco);
+
+    // 6. SORTEIA OS SETE ADVERSÁRIOS PARA A CAMPANHA
     const adversariosSelecionados =
         selecionarAdversariosAleatorios(jogadoresBanco);
 
@@ -79,7 +463,7 @@ async function executarTestes() {
         adversariosSelecionados.length
     );
 
-    // 4. CRIA A CAMPANHA
+    // 7. CRIA A CAMPANHA
     const campanhaTeste = new Campaign(
         timeJogador,
         adversariosSelecionados
@@ -90,10 +474,11 @@ async function executarTestes() {
     console.log("Derrotas:", campanhaTeste.derrotas);
     console.log("Estado:", campanhaTeste.estado);
 
-    // 5. ENFRENTA OS ADVERSÁRIOS EM SEQUÊNCIA
+    // 8. ENFRENTA OS ADVERSÁRIOS EM SEQUÊNCIA
     let numeroPartida = 0;
 
     for (const adversario of adversariosSelecionados) {
+
         // Não continua se a campanha já tiver terminado
         if (campanhaTeste.estado !== "em andamento") {
             break;
@@ -163,7 +548,7 @@ async function executarTestes() {
         }
     }
 
-    // 6. EXIBE O RESULTADO FINAL
+    // 9. EXIBE O RESULTADO FINAL
     console.log("\n===== RESULTADO FINAL DA CAMPANHA =====");
     console.log("Partidas disputadas:", numeroPartida);
     console.log("Vitórias:", campanhaTeste.vitorias);
