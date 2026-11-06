@@ -9,48 +9,6 @@ let anoAtual = null;
 let timeEscolhido = [];
 let jogadorEmSelecao = null;
 
-// Contador único de rerolls compartilhados (ex: 5 rerolls totais por partida)
-let rerollsRestantes = 2;
-
-const coresPorTime = {
-    loud: { inicio: '13FF00', fim: '13FF00' },
-    leviatan: { inicio: '69ABDC', fim: '69ABDC' },
-    furia: { inicio: '000000', fim: 'EEEEEE' },
-    optic: { inicio: '92C950', fim: '92C950' },
-    edg: { inicio: 'FF0000', fim: 'FF0000' },
-    edwardgaming: { inicio: 'FF0000', fim: 'FF0000' },
-    paperrex: { inicio: 'FF07CD', fim: 'FF07CD' },
-    drx: { inicio: '0D0282', fim: '0D0282' },
-    zetadivision: { inicio: 'EEEEEE', fim: '000000' },
-    fnatic: { inicio: 'FF5900', fim: 'FF5900' },
-    '100thieves': { inicio: 'F23535', fim: 'F23535' },
-    kru: { inicio: 'FF198F', fim: 'FF198F' },
-    xerxia: { inicio: 'FF198F', fim: 'FF198F' },
-    fpx: { inicio: 'FF0600', fim: 'FF0600' },
-    teamliquid: { inicio: 'EEEEEE', fim: '001538' },
-    boomesports: { inicio: '515761', fim: 'B30314' },
-    xset: { inicio: 'F40F30', fim: 'F40F30' },
-    evilgeniuses: { inicio: '202D5A', fim: '202D5A' },
-    bilibiligaming: { inicio: 'FF198F', fim: '36D0F4' },
-    nrg: { inicio: 'F73D0A', fim: 'F73D0A' },
-    futesports: { inicio: 'ED1A3A', fim: '121824' },
-    giantsgaming: { inicio: 'EEEEEE', fim: '000000' },
-    t1: { inicio: 'E2012D', fim: 'E2012D' },
-    navi: { inicio: 'FFED00', fim: 'FFED00' },
-    "cloud9": { inicio: '26ACE2', fim: '26ACE2' },
-    acend: { inicio: '6738EC', fim: '6738EC' },
-    gambit: { inicio: 'E4002B', fim: 'E4002B' },
-    teamsecret: { inicio: 'EEEEEE', fim: 'EEEEEE' },
-    "x10esports": { inicio: 'D2D1D2', fim: 'D2D1D2' },
-    teamvikings: { inicio: 'DBD595', fim: 'DBD595' },
-    visionstrikers: { inicio: 'D40080', fim: 'D40080' },
-    sentinels: { inicio: 'CE0037', fim: 'CE0037' },
-    keydstars: { inicio: '5C2A82', fim: '3A0C66' },
-    fullsense: { inicio: 'FD7B01', fim: 'FD7B01' },
-    crazyraccoon: { inicio: 'F30614', fim: '000000' },
-    envy: { inicio: '1179F4', fim: 'B7B7B7' },
-};
-
 let funcoesPreenchidas = {
     duelista: 0,
     sentinela: 0,
@@ -58,38 +16,55 @@ let funcoesPreenchidas = {
     controlador: 0
 }
 
+// Contador único de rerolls compartilhados (ex: 5 rerolls totais por partida)
+let rerollsRestantes = 100;
+
+const coresPorTime = {
+    '100thieves': { inicio: 'F23535', fim: 'F23535' },
+    acend: { inicio: '6738EC', fim: '6738EC' },
+    bilibiligaming: { inicio: 'FF198F', fim: '36D0F4' },
+    boomesports: { inicio: '515761', fim: 'B30314' },
+    cloud9: { inicio: '26ACE2', fim: '26ACE2' },
+    crazyraccoon: { inicio: 'F30614', fim: '000000' },
+    drx: { inicio: '0D0282', fim: '0D0282' },
+    edwardgaming: { inicio: 'FF0000', fim: 'FF0000' },
+    envy: { inicio: '1179F4', fim: 'B7B7B7' },
+    evilgeniuses: { inicio: '202D5A', fim: '202D5A' },
+    fnatic: { inicio: 'FF5900', fim: 'FF5900' },
+    fpx: { inicio: 'FF0600', fim: 'FF0600' },
+    fullsense: { inicio: 'FD7B01', fim: 'FD7B01' },
+    furia: { inicio: '000000', fim: 'EEEEEE' },
+    futesports: { inicio: 'ED1A3A', fim: '121824' },
+    gambit: { inicio: 'E4002B', fim: 'E4002B' },
+    giantsgaming: { inicio: 'EEEEEE', fim: '000000' },
+    keydstars: { inicio: '5C2A82', fim: '5C2A82' },
+    kru: { inicio: 'FF198F', fim: 'FF198F' },
+    leviatan: { inicio: '69ABDC', fim: '69ABDC' },
+    loud: { inicio: '13FF00', fim: '13FF00' },
+    navi: { inicio: 'FFED00', fim: 'FFED00' },
+    nrg: { inicio: 'F73D0A', fim: 'F73D0A' },
+    optic: { inicio: '92C950', fim: '92C950' },
+    paperrex: { inicio: 'FF07CD', fim: 'FF07CD' },
+    sentinels: { inicio: 'CE0037', fim: 'CE0037' },
+    t1: { inicio: 'E2012D', fim: 'E2012D' },
+    teamliquid: { inicio: 'EEEEEE', fim: '001538' },
+    teamsecret: { inicio: 'EEEEEE', fim: 'EEEEEE' },
+    teamvikings: { inicio: 'DBD595', fim: 'DBD595' },
+    visionstrikers: { inicio: 'D40080', fim: 'D40080' },
+    x10esports: { inicio: 'D2D1D2', fim: 'D2D1D2' },
+    xerxia: { inicio: 'FF198F', fim: 'FF198F' },
+    xset: { inicio: 'F40F30', fim: 'F40F30' },
+    zetadivision: { inicio: 'EEEEEE', fim: '000000' }
+};
+
 function precarregarLogos() {
     const nomesTimes = [...new Set(listaDeJogadores.map(j => {
         const nome = j.nome_time || '';
         return nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '');
     }))];
 
-    const logosPorTime = {
-        loud: ['Loud.svg', 'loud.svg', 'loud.png'],
-        leviatan: ['Leviatan.svg', 'leviatan.svg', 'LEV.svg', 'lev.svg', 'lev.png', 'Lev.svg', 'Lev.png'],
-        furia: ['furia.svg', 'Furia.svg', 'furia.png'],
-        optic: ['optic.svg', 'Optic.svg', 'optic.png'],
-        edg: ['edward gaming.png', 'edward_gaming.svg', 'Edward_Gaming.svg'],
-        edwardgaming: ['edward gaming.png', 'edward_gaming.svg', 'Edward_Gaming.svg'],
-        paperrex: ['paperrex.svg', 'PaperRex.svg', 'paperrex.png', 'prx.svg'],
-        drx: ['drx.svg', 'DRX.svg', 'drx.png'],
-        zetadivision: ['zetadivision.svg', 'zeta.svg', 'zetadivision.png'],
-        fnatic: ['fnatic.svg', 'Fnatic.svg', 'fnatic.png'],
-        '100thieves': ['100t.svg', '100thieves.svg', '100Thieves.svg', '100thieves.png'],
-        kru: ['kru.svg', 'KRU.svg', 'kru.png'],
-        xerxia: ['xerxia.svg', 'Xerxia.svg', 'xerxia.png'],
-        fpx: ['fpx.svg', 'FPX.svg', 'fpx.png'],
-        teamliquid: ['teamliquid.svg', 'TeamLiquid.svg', 'teamliquid.png'],
-        boomesports: ['boomesports.svg', 'BoomEsports.svg', 'boomesports.png'],
-        sentinels: ['sentinels.svg', 'Sentinels.svg', 'sentinels.png'],
-        nrg: ['nrg.svg', 'NRG.svg', 'nrg.png'],
-        t1: ['t1.svg', 'T1.svg', 't1.png'],
-        navi: ['navi.svg', 'NAVI.svg', 'navi.png'],
-        cloud9: ['cloud9.svg', 'Cloud9.svg', 'cloud9.png']
-    };
-
     nomesTimes.forEach(nomeNorm => {
-        const arquivos = logosPorTime[nomeNorm] || [`${nomeNorm}.svg`, `${nomeNorm}.png`];
+        const arquivos = [`${nomeNorm}.png`, `${nomeNorm}.svg`];
         arquivos.forEach(arq => {
             const img = new Image();
             img.src = `assets/images/logos_times/${arq}`;
@@ -318,6 +293,7 @@ function calcularEstatisticasRoster() {
         geral: `Geral: ${forcaGeral.toFixed(1)}`
     };
 }
+
 function atualizarDestaqueTime(jogador) {
     if (!jogador) return;
 
@@ -329,35 +305,11 @@ function atualizarDestaqueTime(jogador) {
     const campeonato = document.getElementById('team-championship');
     const ranking = document.getElementById('team-ranking');
     const destaque = document.getElementById('team-highlight');
-    
-    const logosPorTime = {
-        loud: ['Loud.svg', 'loud.svg', 'loud.png'],
-        leviatan: ['Leviatan.svg', 'leviatan.svg', 'LEV.svg', 'lev.svg', 'lev.png', 'Lev.svg', 'Lev.png'],
-        furia: ['furia.svg', 'Furia.svg', 'furia.png'],
-        optic: ['optic.svg', 'Optic.svg', 'optic.png'],
-        edg: ['edward gaming.png', 'edward_gaming.svg', 'Edward_Gaming.svg'],
-        edwardgaming: ['edward gaming.png', 'edward_gaming.svg', 'Edward_Gaming.svg'],
-        paperrex: ['paperrex.svg', 'PaperRex.svg', 'paperrex.png', 'prx.svg'],
-        drx: ['drx.svg', 'DRX.svg', 'drx.png'],
-        zetadivision: ['zetadivision.svg', 'zeta.svg', 'zetadivision.png'],
-        fnatic: ['fnatic.svg', 'Fnatic.svg', 'fnatic.png'],
-        '100thieves': ['100t.svg', '100thieves.svg', '100Thieves.svg', '100thieves.png'],
-        kru: ['kru.svg', 'KRU.svg', 'kru.png'],
-        xerxia: ['xerxia.svg', 'Xerxia.svg', 'xerxia.png'],
-        fpx: ['fpx.svg', 'FPX.svg', 'fpx.png'],
-        teamliquid: ['teamliquid.svg', 'TeamLiquid.svg', 'teamliquid.png'],
-        boomesports: ['boomesports.svg', 'BoomEsports.svg', 'boomesports.png'],
-        sentinels: ['sentinels.svg', 'Sentinels.svg', 'sentinels.png'],
-        nrg: ['nrg.svg', 'NRG.svg', 'nrg.png'],
-        t1: ['t1.svg', 'T1.svg', 't1.png'],
-        navi: ['navi.svg', 'NAVI.svg', 'navi.png'],
-        cloud9: ['cloud9.svg', 'Cloud9.svg', 'cloud9.png']
-    };
-    const arquivosLogo = logosPorTime[nomeNormalizado] || [`${nomeNormalizado}.svg`, `${nomeNormalizado}.png`];
+    const arquivosLogo = [`${nomeNormalizado}.png`, `${nomeNormalizado}.svg`];
 
     if (nomeElemento) nomeElemento.textContent = nome;
     if (campeonato) campeonato.textContent = jogador.ano ? `Champions ${jogador.ano}` : 'Temporada';
-    
+
     atualizarBotoesReroll();
 
     if (logo && monograma) {
@@ -379,7 +331,7 @@ function atualizarDestaqueTime(jogador) {
         logo.alt = `Logo ${nome}`;
         monograma.textContent = nome.slice(0, 3).toUpperCase();
     }
-    
+
     if (destaque) {
         const coresDoTime = coresPorTime[nomeNormalizado] || {};
         const corInicio = normalizarCorHex(coresDoTime.inicio || jogador.cor_primaria || jogador.corPrimaria, '#167d38');
@@ -436,19 +388,19 @@ function exibirJogadoresNaTela(jogadoresFiltrados) {
         nome.textContent = jogador.nome;
         informacoes.appendChild(nome);
 
-if (jaFoiEscolhido || !podeSerEscolhido) {
-    itemJogador.classList.add('opacity-40');
-    itemJogador.tabIndex = -1;
-    itemJogador.setAttribute('aria-disabled', 'true');
+        if (jaFoiEscolhido || !podeSerEscolhido) {
+            itemJogador.classList.add('opacity-40');
+            itemJogador.tabIndex = -1;
+            itemJogador.setAttribute('aria-disabled', 'true');
 
-    // Risca o nome e deixa o jogador visualmente apagado
-    nome.classList.add('line-through', 'text-gray-400');
+            // Risca o nome e deixa o jogador visualmente apagado
+            nome.classList.add('line-through', 'text-gray-400');
 
-    const aviso = document.createElement('p');
-    aviso.className = 'text-[11px] text-white/50';
-    informacoes.appendChild(aviso);
-    itemJogador.appendChild(informacoes);
-    } else {
+            const aviso = document.createElement('p');
+            aviso.className = 'text-[11px] text-white/50';
+            informacoes.appendChild(aviso);
+            itemJogador.appendChild(informacoes);
+        } else {
             itemJogador.tabIndex = 0;
             itemJogador.setAttribute('aria-disabled', 'false');
             const listaFuncoes = obterListaFuncoes(jogador);
@@ -549,7 +501,7 @@ function atualizarSeletorFuncao(nomeJogador, listaFuncoes) {
 function atualizarRoster() {
     const container = document.getElementById('roster-list');
     const resumo = document.getElementById('roster-summary');
-    
+
     // Atualiza os valores na barra superior de estatísticas (abaixo do card dourado)
     const statAtk = document.getElementById('stat-atk');
     const statDef = document.getElementById('stat-def');
@@ -573,7 +525,7 @@ function atualizarRoster() {
     timeEscolhido.forEach((jogador, index) => {
         const linha = document.createElement('div');
         linha.className = 'flex min-h-8 items-center gap-2 rounded-sm bg-gradient-to-r from-teal-900/90 to-emerald-500 px-2.5 py-1 text-sm shadow-md transition-all duration-300 scale-95 opacity-0 animate-[fadeIn_0.3s_forwards]';
-        
+
         setTimeout(() => {
             linha.classList.remove('scale-95', 'opacity-0');
             linha.classList.add('scale-100', 'opacity-100');
