@@ -112,7 +112,7 @@ function rodarRoletaTime(timeDestinoId, aoFinalizar) {
 
     const destaque = document.getElementById('team-highlight');
     if (destaque) {
-        destaque.classList.add('scale-[1.02]', 'brightness-110', 'transition-transform', 'duration-150');
+        destaque.classList.add('highlight-animating');
     }
 
     let passos = 12;
@@ -136,9 +136,9 @@ function rodarRoletaTime(timeDestinoId, aoFinalizar) {
                 atualizarDestaqueTime(jogadorFinal);
             }
             if (destaque) {
-                destaque.classList.remove('scale-[1.02]', 'brightness-110');
-                destaque.classList.add('animate-pulse');
-                setTimeout(() => destaque.classList.remove('animate-pulse'), 400);
+                destaque.classList.remove('highlight-animating');
+                destaque.classList.add('highlight-pulse');
+                setTimeout(() => destaque.classList.remove('highlight-pulse'), 400);
             }
             aoFinalizar();
         }
@@ -159,7 +159,7 @@ function rodarRoletaAno(nomeTime, anoDestino, aoFinalizar) {
 
     const destaque = document.getElementById('team-highlight');
     if (destaque) {
-        destaque.classList.add('scale-[1.02]', 'brightness-110', 'transition-transform', 'duration-150');
+        destaque.classList.add('highlight-animating');
     }
 
     let passos = 8;
@@ -183,9 +183,9 @@ function rodarRoletaAno(nomeTime, anoDestino, aoFinalizar) {
                 atualizarDestaqueTime(jogadorFinal);
             }
             if (destaque) {
-                destaque.classList.remove('scale-[1.02]', 'brightness-110');
-                destaque.classList.add('animate-pulse');
-                setTimeout(() => destaque.classList.remove('animate-pulse'), 400);
+                destaque.classList.remove('highlight-animating');
+                destaque.classList.add('highlight-pulse');
+                setTimeout(() => destaque.classList.remove('highlight-pulse'), 400);
             }
             aoFinalizar();
         }
@@ -376,13 +376,14 @@ function exibirJogadoresNaTela(jogadoresFiltrados) {
 
     jogadoresFiltrados.forEach((jogador) => {
         const itemJogador = document.createElement('div');
-        itemJogador.className = 'player-row flex min-h-12 cursor-pointer items-center gap-2 px-3 py-2 transition-colors hover:bg-white/5 focus:outline-none focus:ring-1 focus:ring-inset focus:ring-emerald-400';
+        itemJogador.className = 'player-row';
         itemJogador.setAttribute('role', 'button');
 
         const jaFoiEscolhido = timeEscolhido.some(j => j.nome === jogador.nome);
         const podeSerEscolhido = jogadorPodeSerEscolhido(jogador);
         const informacoes = document.createElement('div');
-        informacoes.className = 'min-w-0 flex-1';
+        informacoes.className = 'min-w-0 flex-1 flex items-center gap-3';
+        
         const nome = document.createElement('p');
         nome.className = 'truncate text-sm font-medium';
         nome.textContent = jogador.nome;
@@ -393,12 +394,7 @@ function exibirJogadoresNaTela(jogadoresFiltrados) {
             itemJogador.tabIndex = -1;
             itemJogador.setAttribute('aria-disabled', 'true');
 
-            // Risca o nome e deixa o jogador visualmente apagado
             nome.classList.add('line-through', 'text-gray-400');
-
-            const aviso = document.createElement('p');
-            aviso.className = 'text-[11px] text-white/50';
-            informacoes.appendChild(aviso);
             itemJogador.appendChild(informacoes);
         } else {
             itemJogador.tabIndex = 0;
@@ -413,16 +409,17 @@ function exibirJogadoresNaTela(jogadoresFiltrados) {
                 icone.src = caminhoIcone;
                 icone.alt = String(funcao);
                 icone.title = String(funcao);
-                icone.className = 'h-4 w-4';
+                icone.className = 'role-icon-small';
                 icones.appendChild(icone);
             });
+
+            informacoes.appendChild(icones);
 
             const overall = document.createElement('span');
             overall.className = 'w-7 shrink-0 text-right text-xs font-bold tabular-nums';
             overall.textContent = jogador.overall ?? '--';
 
-            itemJogador.append(informacoes, icones);
-            itemJogador.appendChild(overall);
+            itemJogador.append(informacoes, overall);
             itemJogador.setAttribute('aria-label', `Selecionar ${jogador.nome}, overall ${jogador.overall ?? 'indisponível'}`);
             itemJogador.addEventListener('click', () => prepararEscolha(jogador.nome, listaFuncoes, itemJogador));
             itemJogador.addEventListener('keydown', evento => {
@@ -459,9 +456,9 @@ function atualizarSeletorFuncao(nomeJogador, listaFuncoes) {
     const opcoes = document.getElementById('role-picker-options');
 
     if (rolePicker) {
-        rolePicker.classList.add('scale-[1.03]', 'shadow-amber-500/30', 'border-amber-300/50', 'transition-all', 'duration-300');
+        rolePicker.classList.add('role-picker-active');
         setTimeout(() => {
-            rolePicker.classList.remove('scale-[1.03]', 'shadow-amber-500/30');
+            rolePicker.classList.remove('role-picker-active');
         }, 300);
     }
 
@@ -476,13 +473,13 @@ function atualizarSeletorFuncao(nomeJogador, listaFuncoes) {
         const botao = document.createElement('button');
         botao.type = 'button';
         botao.disabled = !permitido;
-        botao.className = `flex min-w-16 flex-col items-center gap-1 rounded-md px-2 py-1.5 text-[10px] transform transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-amber-300 ${permitido ? 'hover:bg-white/10 hover:scale-105' : 'cursor-not-allowed opacity-30 grayscale'}`;
+        botao.className = `role-btn ${permitido ? '' : 'disabled'}`;
         botao.setAttribute('aria-label', `${funcao}${permitido ? '' : ', indisponível pelas regras do roster'}`);
         if (iconeSrc) {
             const icone = document.createElement('img');
             icone.src = iconeSrc;
             icone.alt = '';
-            icone.className = 'h-9 w-9';
+            icone.className = 'role-picker-icon';
             botao.appendChild(icone);
         }
         const rotulo = document.createElement('span');
@@ -490,7 +487,7 @@ function atualizarSeletorFuncao(nomeJogador, listaFuncoes) {
         botao.appendChild(rotulo);
         if (permitido) {
             botao.addEventListener('click', () => {
-                botao.classList.add('bg-amber-400/30', 'scale-90');
+                botao.classList.add('role-btn-selected');
                 if (jogadorEmSelecao) escolherJogador(jogadorEmSelecao.nome, funcao);
             });
         }
@@ -502,7 +499,6 @@ function atualizarRoster() {
     const container = document.getElementById('roster-list');
     const resumo = document.getElementById('roster-summary');
 
-    // Atualiza os valores na barra superior de estatísticas (abaixo do card dourado)
     const statAtk = document.getElementById('stat-atk');
     const statDef = document.getElementById('stat-def');
     const statGeral = document.getElementById('stat-geral');
@@ -524,28 +520,30 @@ function atualizarRoster() {
 
     timeEscolhido.forEach((jogador, index) => {
         const linha = document.createElement('div');
-        linha.className = 'flex min-h-8 items-center gap-2 rounded-sm bg-gradient-to-r from-teal-900/90 to-emerald-500 px-2.5 py-1 text-sm shadow-md transition-all duration-300 scale-95 opacity-0 animate-[fadeIn_0.3s_forwards]';
+        linha.className = 'roster-row';
 
         setTimeout(() => {
-            linha.classList.remove('scale-95', 'opacity-0');
-            linha.classList.add('scale-100', 'opacity-100');
+            linha.classList.add('active');
         }, 10);
 
         const overall = document.createElement('span');
-        overall.className = 'w-7 shrink-0 text-right text-[1rem] tabular-nums';
+        overall.className = 'w-7 shrink-0 text-right text-[1rem] tabular-nums font-bold';
         overall.textContent = jogador.overall;
+        
         const nome = document.createElement('span');
         nome.className = 'min-w-0 flex-1 truncate';
         nome.textContent = jogador.nome;
+        
         const funcao = document.createElement('span');
         funcao.className = 'shrink-0 rounded bg-black/15 px-1.5 py-0.5 text-[10px] uppercase';
         funcao.textContent = jogador.funcao;
+        
         const iconeSrc = obterIconeFuncao(jogador.funcao);
         if (iconeSrc) {
             const icone = document.createElement('img');
             icone.src = iconeSrc;
             icone.alt = String(jogador.funcao);
-            icone.className = 'h-5 w-5 shrink-0';
+            icone.className = 'roster-icon';
             linha.append(overall, nome, funcao, icone);
         } else {
             linha.append(overall, nome, funcao);
@@ -566,8 +564,8 @@ function prepararEscolha(nomeJogador, listaFuncoes, elementoLinha) {
     if (funcoesDisponiveis.length === 0) return;
 
     if (elementoLinha) {
-        elementoLinha.classList.add('bg-white/10');
-        setTimeout(() => elementoLinha.classList.remove('bg-white/10'), 300);
+        elementoLinha.classList.add('player-row-selected');
+        setTimeout(() => elementoLinha.classList.remove('player-row-selected'), 300);
     }
 
     jogadorEmSelecao = jogador;
@@ -672,7 +670,7 @@ function rerollMesmoTimeOutroAno() {
         return;
     }
 
-    const opcoesAno = listaDeJogadores.filter(jogador => jogador.nome_time === nomeTimeRef && jogador.ano !== anoAtual);
+    opcoesAno = listaDeJogadores.filter(jogador => jogador.nome_time === nomeTimeRef && jogador.ano !== anoAtual);
 
     if (opcoesAno.length === 0) {
         alert('Este time não possui outras temporadas cadastradas.');
