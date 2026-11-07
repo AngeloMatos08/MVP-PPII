@@ -370,7 +370,7 @@ function carregarTimePorAno(nomeTime, ano) {
 }
 
 function exibirJogadoresNaTela(jogadoresFiltrados) {
-    const container = document.getElementById('container-jogadores');
+    const container = document.getElementById('players-wrapper');
     if (!container) return;
     container.replaceChildren();
 

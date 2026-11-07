@@ -33,35 +33,35 @@
         </header>
 
         <main class="draft-main">
-            <section aria-label="Jogadores disponíveis" class="draft-section-left">
+            <section aria-label="Seção de draft da esquerda" class="draft-section-left">
                 <div id="team-highlight" class="team-highlight"
-                    style="--team-color-start:#167d38; --team-color-end:#11d83d">
+                    style="--team-color-start: #7d1616; --team-color-end: #d81111;">
                     <div class="team-info-group">
                         <div id="team-logo-wrap" class="team-logo-wrap">
                             <img id="team-logo" class="team-logo-img hidden" alt="">
                             <span id="team-monogram" class="team-monogram">MVP</span>
                         </div>
                         <div class="team-text-wrap">
-                            <h1 id="team-name" class="team-name">Draft de Valorant</h1>
-                            <p id="team-championship" class="team-championship">Carregando time...</p>
+                            <h1 id="team-name" class="team-name">Carregando time...</h1>
+                            <p id="team-championship" class="team-championship"></p>
                         </div>
                     </div>
                     <p id="team-ranking" class="team-ranking">--</p>
                 </div>
 
-                <div class="controls-panel">
+                <div class="reroll-panel">
                     <button id="btn-outro-time" type="button" onclick="rerollOutroTime()" class="btn-secondary">Outro
                         Time</button>
                     <button id="btn-outro-ano" type="button" onclick="rerollMesmoTimeOutroAno()"
                         class="btn-secondary">Outro Ano</button>
                 </div>
 
-                <div class="players-card">
-                    <div class="players-card-header">
+                <div class="players-container">
+                    <div class="players-container-header">
                         <span>Jogadores disponíveis</span>
                         <span>Overall</span>
                     </div>
-                    <div id="container-jogadores" class="players-container" aria-live="polite">
+                    <div id="players-wrapper" class="players-wrapper" aria-live="polite">
                         <p>Conectando ao draft...</p>
                     </div>
                 </div>

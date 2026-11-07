@@ -58,29 +58,24 @@
     min-width: 0;
 }
 
-/* Controls Panel */
-.controls-panel {
+/*Reroll btns*/
+.reroll-panel {
     margin-top: 0.5rem;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.5rem;
 }
 
-.controls-panel .btn-secondary {
-    width: 100%;
-    justify-content: center;
-}
-
 /* Players Card & Container */
-.players-card {
+.players-container {
     margin-top: 0.75rem;
     overflow: hidden;
     border-radius: 0.375rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
-.players-card-header {
+.players-container-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -90,14 +85,14 @@
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: rgba(255, 255, 255, 0.45);
+    color: rgba(255, 255, 255, 0.5);
 }
 
-#container-jogadores {
+#players-wrapper {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    padding: 0.5rem;
+    padding: .5rem;
     background: transparent;
     border: none;
 }
