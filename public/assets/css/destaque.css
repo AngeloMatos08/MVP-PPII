@@ -7,10 +7,8 @@ body {
 }
 
 .team-highlight {
-    border: 2px solid transparent;
-    background:
-        linear-gradient(105deg, #151615 8%, color-mix(in srgb, var(--team-color-start, #167d38) 14%, #211820) 58%, color-mix(in srgb, var(--team-color-end, #11d83d) 38%, #211820)) padding-box,
-        linear-gradient(105deg, color-mix(in srgb, var(--team-color-start, #167d38) 76%, transparent), color-mix(in srgb, var(--team-color-end, #11d83d) 88%, transparent)) border-box;
+    border: 2px solid var(--team-color-start, #167d38);
+    background: linear-gradient(135deg, #151615 0%, var(--team-color-start, #167d38) 100%);
+    position: relative;
+    overflow: hidden;
 }
-
-
