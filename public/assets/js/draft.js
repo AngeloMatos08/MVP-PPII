@@ -16,7 +16,7 @@ let funcoesPreenchidas = {
     controlador: 0
 }
 
-// Contador único de rerolls compartilhados (ex: 5 rerolls totais por partida)
+// Contador único de rerolls compartilhados
 let rerollsRestantes = 100;
 
 const coresPorTime = {
@@ -383,7 +383,7 @@ function exibirJogadoresNaTela(jogadoresFiltrados) {
         const podeSerEscolhido = jogadorPodeSerEscolhido(jogador);
         const informacoes = document.createElement('div');
         informacoes.className = 'min-w-0 flex-1 flex items-center gap-3';
-        
+
         const nome = document.createElement('p');
         nome.className = 'truncate text-sm font-medium';
         nome.textContent = jogador.nome;
@@ -529,15 +529,15 @@ function atualizarRoster() {
         const overall = document.createElement('span');
         overall.className = 'w-7 shrink-0 text-right text-[1rem] tabular-nums font-bold';
         overall.textContent = jogador.overall;
-        
+
         const nome = document.createElement('span');
         nome.className = 'min-w-0 flex-1 truncate';
         nome.textContent = jogador.nome;
-        
+
         const funcao = document.createElement('span');
         funcao.className = 'shrink-0 rounded bg-black/15 px-1.5 py-0.5 text-[10px] uppercase';
         funcao.textContent = jogador.funcao;
-        
+
         const iconeSrc = obterIconeFuncao(jogador.funcao);
         if (iconeSrc) {
             const icone = document.createElement('img');
@@ -670,7 +670,7 @@ function rerollMesmoTimeOutroAno() {
         return;
     }
 
-    opcoesAno = listaDeJogadores.filter(jogador => jogador.nome_time === nomeTimeRef && jogador.ano !== anoAtual);
+    const opcoesAno = listaDeJogadores.filter(jogador => jogador.nome_time === nomeTimeRef && jogador.ano !== anoAtual);
 
     if (opcoesAno.length === 0) {
         alert('Este time não possui outras temporadas cadastradas.');
