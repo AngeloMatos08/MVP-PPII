@@ -26,7 +26,7 @@ const coresPorTime = {
     boomesports: { inicio: '515761', fim: 'B30314' },
     cloud9: { inicio: '26ACE2', fim: '26ACE2' },
     crazyraccoon: { inicio: 'F30614', fim: '000000' },
-    drx: { inicio: '0D0282', fim: '0D0282' },
+    drx: { inicio: '2307FF', fim: '2307FF' },
     edwardgaming: { inicio: 'FF0000', fim: 'FF0000' },
     envy: { inicio: '1179F4', fim: 'B7B7B7' },
     evilgeniuses: { inicio: '202D5A', fim: '202D5A' },

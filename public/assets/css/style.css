@@ -1,32 +1,817 @@
 :root {
-    --bg: #281A24;
+    --bg: #211820;
     --atk: #FF413A;
+    --atklight: #FF6B6B;
     --def: #00FFC4;
+    --tema: var(--atk)
 }
 
-body {
+* {
+    box-sizing: border-box;
+}
+
+body{
+    min-height: 100vh;
     background-color: var(--bg);
-    color: white;
+    color: #ffffff;
     font-family: 'Ubuntu', sans-serif;
     font-size: 1rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    -webkit-font-smoothing: antialiased;
 }
 
+/* Navbar */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
 
-.btn-remake {
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    text-transform: uppercase;
+.nav-container {
+    max-width: 72rem;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.875rem;
+    font-weight: 500;
+    letter-spacing: 0.025em;
     color: #fff;
-    background-color: rgba(255, 255, 255, 0.2);
-    margin: 0 5px;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-family: 'Ubuntu', sans-serif;
+    text-decoration: none;
+}
+
+@media (min-width: 640px) {
+    .logo-link {
+        font-size: 2.25rem;
+    }
+}
+
+.logo-img {
+    height: 2.25rem;
+    width: 2.25rem;
+    object-fit: contain;
+}
+
+.nav-menu {
+    display: none;
+    align-items: center;
+    gap: 2rem;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+@media (min-width: 640px) {
+    .nav-menu {
+        display: flex;
+    }
+}
+
+.nav-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.nav-link.active {
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    color: var(--atk);
+}
+
+.icon-arrow {
+    height: 0.875rem;
+    width: 0.875rem;
+}
+
+/* Main Content */
+.main-content {
+    max-width: 72rem;
+    width: 100%;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+}
+
+@media (min-width: 640px) {
+    .main-content {
+        padding: 5rem 1.5rem;
+    }
+}
+
+/* Hero Section */
+.intro-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+}
+
+@media (min-width: 1024px) {
+    .intro-grid {
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        align-items: center;
+    }
+    .intro-text {
+        grid-column: span 7 / span 7;
+    }
+    .intro-card-wrapper {
+        grid-column: span 5 / span 5;
+    }
+}
+
+.intro-splashtext {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--atk);
+    text-transform: uppercase;
+}
+
+.intro-title {
+    margin-top: 1rem;
+    font-size: 2.25rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: #fff;
+    line-height: 1.1;
+}
+
+@media (min-width: 640px) {
+    .intro-title {
+        font-size: 3.75rem;
+    }
+}
+
+
+
+.intro-description {
+    margin-top: 1.5rem;
     font-size: 1rem;
-
+    line-height: 1.625;
+    color: rgba(255, 255, 255, 0.7);
 }
 
-.btn-remake:hover {
-    background-color: rgba(255, 255, 255, 0.4);
+@media (min-width: 640px) {
+    .intro-description {
+        font-size: 1.125rem;
+    }
 }
 
+.intro-actions {
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.375rem;
+    background-color: var(--atk);
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--bg);
+    text-decoration: none;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #fca5a5;
+}
+
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.375rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.intro-footer-text {
+    margin-top: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Preview Card */
+.preview-card {
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    background-color: #281A24;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+}
+
+.card-subtitle {
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.badge-vct {
+    border-radius: 0.25rem;
+    background-color: rgba(239, 68, 68, 0.2);
+    padding: 0.125rem 0.5rem;
+    font-family: monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #f87171;
+}
+
+.card-roster {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.roster-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 0.375rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 0.75rem;
+}
+
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.role-icon {
+    height: 1.25rem;
+    width: 1.25rem;
+}
+
+.player-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.player-overall {
+    font-family: monospace;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #f87171;
+}
+
+.card-footer {
+    margin-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+    text-align: center;
+}
+
+.card-footer-text {
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Divider */
+.divider {
+    margin: 4rem 0;
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Como Jogar Section */
+.section-como-jogar {
+    scroll-margin-top: 6rem;
+}
+
+.section-header {
+    margin-bottom: 2rem;
+}
+
+.section-tag {
+    font-family: monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--atk);
+    text-transform: uppercase;
+}
+
+.section-title {
+    margin-top: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+@media (min-width: 640px) {
+    .section-title {
+        font-size: 1.875rem;
+    }
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .steps-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.step-card {
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 1.5rem;
+}
+
+.step-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.step-star {
+    color: var(--atk);
+    font-size: 1.5rem;
+}
+
+.step-title {
+    margin-top: 1rem;
+    font-size: 1.125rem;
+    font-weight: 500;
+}
+
+.step-desc {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.625;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Sobre Section */
+.section-sobre {
+    margin-top: 5rem;
+    scroll-margin-top: 6rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: #281A24;
+    padding: 2rem;
+}
+
+@media (min-width: 640px) {
+    .section-sobre {
+        padding: 3rem;
+    }
+}
+
+.sobre-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .sobre-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: center;
+    }
+}
+
+.sobre-text {
+    font-size: 0.875rem;
+    line-height: 1.625;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.sobre-action {
+    margin-top: 1.5rem;
+}
+
+.sobre-link {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #f87171;
+    text-decoration: none;
+    transition: text-decoration 0.2s ease;
+}
+
+.sobre-link:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+.site-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: #1b131a;
+    padding: 1.5rem 0;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.footer-container {
+    max-width: 72rem;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.footer-title {
+    font-weight: 700;
+    color: #fff;
+}
+
+.footer-top-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.footer-top-link:hover {
+    color: #fff;
+}
+
+/* ==========================================
+   ESTILOS ESPECÍFICOS DA PÁGINA DE DRAFT
+   ========================================== */
+
+.draft-container {
+    max-width: 64rem;
+    width: 100%;
+    margin: 0 auto;
+    min-height: 100vh;
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Alinha todos os filhos ao topo */
+}
+
+@media (min-width: 640px) {
+    .draft-container {
+        padding: 1.25rem 2rem;
+    }
+}
+
+.draft-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(33, 24, 32, 0.9);
+    backdrop-filter: blur(12px);
+    margin-bottom: 0.75rem; /* Reduzido de 1.5rem para colar mais o conteúdo */
+}
+
+.draft-main {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+    .draft-main {
+        grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+        gap: 1.25rem;
+    }
+}
+
+.draft-divider {
+    display: none;
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+@media (min-width: 768px) {
+    .draft-divider {
+        display: block;
+    }
+}
+
+.draft-section-left,
+.draft-section-right {
+    min-width: 0;
+}
+
+/* Team Highlight Card */
+.team-highlight {
+    display: flex;
+    min-height: 110px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, var(--team-color-start, #167d38), var(--team-color-end, #11d83d));
+}
+
+.team-info-group {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.team-logo-wrap {
+    display: grid;
+    height: 3rem;
+    width: 3rem;
+    flex-shrink: 0;
+    place-items: center;
+}
+
+.team-logo-img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.team-logo-img.hidden {
+    display: none;
+}
+
+.team-monogram {
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+.team-text-wrap {
+    min-width: 0;
+}
+
+.team-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0;
+}
+
+.team-championship {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.team-ranking {
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Controls Panel */
+.controls-panel {
+    margin-top: 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+}
+
+.controls-panel .btn-secondary {
+    width: 100%;
+    justify-content: center;
+}
+
+/* Players Card */
+.players-card {
+    margin-top: 0.75rem;
+    overflow: hidden;
+    border-radius: 0.375rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.players-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 0.75rem;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.players-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.players-container > * + * {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.players-container p {
+    padding: 1rem 0.75rem;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+}
+
+/* Role Picker */
+.role-picker {
+    display: flex;
+    min-height: 126px;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(254, 243, 199, 0.25);
+    background: linear-gradient(135deg, #433d32, #4e4b39);
+    padding: 1rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+}
+
+.role-picker-title {
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+}
+
+.role-picker-hint {
+    margin-top: 0.25rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: 0;
+}
+
+.role-picker-options {
+    margin-top: 0.75rem;
+    display: flex;
+    min-height: 2.25rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.role-picker-options span {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+/* Roster Stats & List */
+.roster-stats-bar {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 0.5rem;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.roster-stats-bar .stat-atk {
+    color: #f87171;
+}
+
+.roster-stats-bar .stat-def {
+    color: #2dd4bf;
+}
+
+.roster-stats-bar .stat-geral {
+    color: #fbbf24;
+    font-weight: 700;
+}
+
+.roster-stats-bar .roster-label {
+    margin-left: auto;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.roster-list {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+/* Remove a regra anterior que empilhava os itens um em cima do outro */
+.roster-list > * + * {
+    margin-top: 0 !important;
+}
+
+/* Garante que os cards/itens dentro da roster list fiquem bem distribuídos ao lado um do outro */
+.roster-list > * {
+    flex: 1 1 calc(20% - 0.5rem); /* Se forem 5 jogadores, tenta acomodar em linha */
+    min-width: 140px;
+}
+
+.roster-summary {
+    margin-top: 0.75rem;
+    text-align: right;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.role-picker-options {
+    margin-top: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+}
+
+/* Faz com que cada item do role picker empilhe o ícone e o texto verticalmente */
+.role-picker-options button,
+.role-picker-options .role-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    font-size: 0.75rem;
+}
+
+/* Define exatamente 2.5rem (40px) para os ícones do role picker */
+.role-picker-options img,
+.role-picker-options svg {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    object-fit: contain;
+}
+
+/* Limita e padroniza o tamanho dos ícones dentro do roster */
+.roster-list img,
+#roster-list img {
+    width: 1.25rem !important;  /* Equivalente a 20px */
+    height: 1.25rem !important; /* Equivalente a 20px */
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+/* Força o tamanho correto dos ícones na lista de jogadores disponíveis */
+#container-jogadores img {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    max-width: 1.25rem !important;
+    max-height: 1.25rem !important;
+    object-fit: contain !important;
+    flex-shrink: 0 !important;
+}
 
