@@ -2,7 +2,8 @@
     --bg: #211820;
     --atk: #FF413A;
     --atklight: #FF6B6B;
-    --def: #00FFC4;
+    --def: #00ffc3;
+    --gold: #fbbf24;
     --tema: var(--atk)
 }
 
@@ -19,7 +20,6 @@ body{
     margin: 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -32,11 +32,13 @@ body{
 
 .nav-container {
     max-width: 72rem;
-    margin: 0 auto;
+    margin: 1rem auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem 1.5rem;
+    padding: 0 1.5rem;
+    background-color: rgba(33, 24, 32, 0.8);
+    backdrop-filter: blur(5px);
 }
 
 .logo-link {

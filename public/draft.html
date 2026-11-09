@@ -16,22 +16,22 @@
 </head>
 
 <body>
-    <div class="draft-container">
 
-        <header class="draft-navbar">
-            <div class="nav-container">
-                <!-- Logo MVP -->
-                <a class="logo-link" href="index.html" aria-label="MVP, início">
-                    <img src="assets/images/mvp.svg" class="logo-img">
-                    <span>MVP</span>
-                </a>
+    <header class="draft-navbar">
+        <div class="nav-container">
+            <!-- Logo MVP -->
+            <a class="logo-link" href="index.html" aria-label="MVP, início">
+                <img src="assets/images/mvp.svg" class="logo-img">
+                <span>MVP</span>
+            </a>
 
-                <a href="index.html" class="btn-secondary">
-                    <span>Voltar</span>
-                </a>
-            </div>
-        </header>
-
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-link active" style="margin-right: 2rem;">Início</a>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="main-content">
         <main class="draft-main">
             <section aria-label="Seção de draft da esquerda" class="draft-section-left">
                 <div id="team-highlight" class="team-highlight"
@@ -46,7 +46,7 @@
                             <p id="team-championship" class="team-championship"></p>
                         </div>
                     </div>
-                    <p id="team-ranking" class="team-ranking">--</p>
+                    <p id="team-ranking" class="team-ranking">—</p>
                 </div>
 
                 <div class="reroll-panel">
@@ -77,17 +77,17 @@
                     </div>
                     <div id="role-picker-options" class="role-picker-options" role="group"
                         aria-label="Funções disponíveis">
-                        <span>As opções aparecem aqui</span>
+                        <span></span>
                     </div>
                 </div>
                 <div class="roster-stats-bar">
-                    <span>Atk <strong id="stat-atk" class="stat-atk">—</strong></span>
-                    <span>Def <strong id="stat-def" class="stat-def">—</strong></span>
-                    <span id="stat-geral" class="stat-geral"></span>
-                    <span class="roster-label">ROSTER</span>
+                    <span><strong id="stat-atk" class="stat-atk">—</strong> Ataque</span>
+                    <span><strong id="stat-def" class="stat-def">—</strong> Defesa</span>
+                    <span><strong id="stat-geral" class="stat-geral">—</strong> Geral</span>
+                    <span class="roster-label">SUA EQUIPE</span>
                 </div>
                 <div id="roster-list" class="roster-list" aria-live="polite">
-                    <p>Escolha jogadores para montar o roster.</p>
+                    <p class="roster-empty-message">Escolha jogadores para montar a sua equipe.</p>
                 </div>
                 <p id="roster-summary" class="roster-summary"></p>
             </section>
