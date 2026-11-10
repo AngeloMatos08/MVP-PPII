@@ -510,11 +510,11 @@ function atualizarRoster() {
     container.replaceChildren();
 
     timeEscolhido.forEach((jogador, index) => {
-        const linha = document.createElement('div');
-        linha.className = 'roster-item';
+        const item = document.createElement('div');
+        item.className = 'roster-item';
 
         setTimeout(() => {
-            linha.classList.add('active');
+            item.classList.add('active');
         }, 10);
 
         const overall = document.createElement('span');
@@ -535,11 +535,11 @@ function atualizarRoster() {
             icone.src = iconeSrc;
             icone.alt = String(jogador.funcao);
             icone.className = 'roster-icon';
-            linha.append(nome, icone, overall);
+            item.append(nome, icone, overall);
         } else {
-            linha.append(nome, funcao, overall);
+            item.append(nome, funcao, overall);
         }
-        container.appendChild(linha);
+        container.appendChild(item);
     });
 
     if (resumo) {
