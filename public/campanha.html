@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#211820">
+    <title>MVP | Campanha</title>
+    <link rel="icon" href="assets/images/mvp.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/campanha.css">
+</head>
+
+<body class="campaign-page">
+    <header class="navbar">
+        <div class="nav-container">
+            <a class="logo-link" href="index.html" aria-label="Voltar ao início">
+                <img src="assets/images/mvp.svg" class="logo-img">
+                <span>MVP</span>
+            </a>
+            <nav class="nav-menu" aria-label="Navegação principal">
+                <a class="nav-link" href="draft.html">Draft</a>
+                <a class="nav-link active" href="campanha.html" aria-current="page">Campanha</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content campaign-shell">
+        <section class="campaign-panel campaign-summary-panel">
+            <div class="campaign-status-row">
+                <span id="campaign-status" class="status-pill">Preparando campanha...</span>
+                <div class="campaign-record">
+                    <span id="campaign-record-wins" class="record-pill wins">0V</span>
+                    <span id="campaign-record-losses" class="record-pill losses">0D</span>
+                </div>
+            </div>
+
+            <div class="campaign-title-wrap">
+                <div>
+                    <p class="eyebrow">Próximo confronto</p>
+                    <h1 id="campaign-title">Carregando...</h1>
+                </div>
+                <div class="campaign-progress-box">
+                    <span id="progress-caption" class="progress-caption">Título · 4 vitórias</span>
+                    <strong id="campaign-progress-text">0 / 4 vitórias</strong>
+                </div>
+            </div>
+
+            <div class="campaign-progress">
+                <div id="campaign-progress-fill" class="campaign-progress-fill"></div>
+            </div>
+        </section>
+
+        <section class="campaign-panel match-panel">
+            <div class="match-header">
+                <div class="team-card player-team">
+                    <span class="team-label">Meu time</span>
+                    <strong id="player-team-name">Time jogador</strong>
+                    <small id="player-team-side">Lado inicial: —</small>
+                </div>
+
+                <div class="score-block">
+                    <div class="score-row">
+                        <span id="score-player" class="score-value">0</span>
+                        <span class="score-separator">:</span>
+                        <span id="score-opponent" class="score-value">0</span>
+                    </div>
+                    <div id="match-round" class="match-round">Round 0</div>
+                </div>
+
+                <div class="team-card opponent-team">
+                    <span class="team-label">Adversário</span>
+                    <strong id="opponent-team-name">Carregando...</strong>
+                    <small id="opponent-team-side">Lado inicial: —</small>
+                </div>
+            </div>
+
+            <div class="match-meta">
+                <span id="match-number">Confronto —</span>
+                <span id="map-name">Mapa: —</span>
+                <span id="map-side">Lado favorecido: —</span>
+            </div>
+
+            <div class="rosters-panel">
+                <div class="roster-block">
+                    <h3>Seu time</h3>
+                    <ul id="player-roster-list" class="roster-list-compact"></ul>
+                </div>
+                <div class="roster-block">
+                    <h3 id="opponent-roster-title">Adversário</h3>
+                    <ul id="opponent-roster-list" class="roster-list-compact"></ul>
+                </div>
+            </div>
+
+            <div class="feed-box">
+                <div class="feed-header">
+                    <span>Eventos</span>
+                    <span id="feed-status" class="feed-status">Aguardando início</span>
+                </div>
+                <ul id="feed-list" class="feed-list"></ul>
+            </div>
+        </section>
+
+        <section id="campaign-action-panel" class="campaign-panel action-panel hidden">
+            <div class="result-box" id="result-box">
+                <h2 id="result-title">Resultado da partida</h2>
+                <p id="result-message">Aguardando atualização.</p>
+                <button id="next-match-button" class="btn-primary hidden" type="button">Próximo confronto</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="assets/js/campanha.js"></script>
+</body>
+
+</html>

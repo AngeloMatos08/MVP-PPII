@@ -1,0 +1,617 @@
+:root {
+    --campaign-bg: var(--bg);
+    --campaign-panel: #281A24;
+    --campaign-panel-border: rgba(255, 255, 255, 0.1);
+    --campaign-text: #ffffff;
+    --campaign-muted: rgba(255, 255, 255, 0.65);
+    --campaign-accent: var(--atk);
+    --campaign-accent-strong: var(--atklight);
+    --campaign-success: var(--def);
+    --campaign-danger: var(--atk);
+    --campaign-surface: rgba(0, 0, 0, 0.2);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body.campaign-page {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--campaign-text);
+}
+
+.campaign-header-bar {
+    width: min(1200px, calc(100% - 2rem));
+    margin: 0 auto;
+    padding: 1rem 0 0;
+}
+
+.campaign-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--campaign-panel-border);
+    border-radius: 18px;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(8px);
+}
+
+.logo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.logo-img {
+    width: 28px;
+    height: 28px;
+}
+
+.campaign-tag {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    color: var(--campaign-muted);
+    text-transform: uppercase;
+}
+
+.campaign-shell {
+    width: min(1200px, calc(100% - 2rem));
+    margin: 1.5rem auto 2rem;
+    display: grid;
+    gap: 1.25rem;
+}
+
+.campaign-panel {
+    background: var(--campaign-panel);
+    border: 1px solid var(--campaign-panel-border);
+    border-radius: 22px;
+    box-shadow: 0 24px 80px rgba(2, 6, 23, 0.45);
+    overflow: hidden;
+}
+
+.campaign-summary-panel {
+    padding: 1.25rem 1.25rem 0.85rem;
+}
+
+.campaign-status-row,
+.campaign-title-wrap,
+.match-meta,
+.feed-header,
+.match-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.status-pill,
+.record-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-pill {
+    padding: 0.43rem 0.8rem;
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    color: #fcd34d;
+}
+
+.campaign-record {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.record-pill {
+    min-width: 58px;
+    padding: 0.4rem 0.65rem;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    background: rgba(15, 23, 42, 0.7);
+}
+
+.record-pill.wins {
+    color: #86efac;
+}
+
+.record-pill.losses {
+    color: #fca5a5;
+}
+
+.campaign-title-wrap {
+    margin-top: 1rem;
+    align-items: flex-end;
+}
+
+.eyebrow {
+    margin: 0 0 0.35rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--campaign-muted);
+}
+
+#campaign-title {
+    margin: 0;
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+}
+
+.campaign-progress-box {
+    text-align: right;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.7);
+}
+
+.progress-caption {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--campaign-muted);
+}
+
+#campaign-progress-text {
+    color: #f8fafc;
+    font-size: 0.9rem;
+}
+
+.campaign-progress {
+    position: relative;
+    width: 100%;
+    height: 11px;
+    margin-top: 1rem;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.18);
+    overflow: hidden;
+}
+
+.campaign-progress-fill {
+    width: 0%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #fbbf24, #f97316);
+    transition: width 0.45s ease;
+}
+
+.match-panel {
+    padding: 1.25rem;
+}
+
+.match-header {
+    align-items: stretch;
+}
+
+.team-card {
+    flex: 1;
+    min-width: 0;
+    padding: 1rem 1rem 0.85rem;
+    border-radius: 16px;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    background: rgba(15, 23, 42, 0.7);
+}
+
+.team-card strong {
+    display: block;
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    margin-top: 0.25rem;
+    overflow-wrap: anywhere;
+}
+
+.team-card small {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--campaign-muted);
+}
+
+.team-label {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--campaign-muted);
+}
+
+.score-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 140px;
+    padding: 0.5rem 1rem;
+}
+
+.score-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 700;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+}
+
+.score-separator {
+    color: var(--campaign-muted);
+}
+
+.match-round {
+    margin-top: 0.3rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--campaign-accent);
+}
+
+.match-meta {
+    margin-top: 1rem;
+    padding: 0.9rem 1rem;
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.56);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    font-size: 0.85rem;
+    color: var(--campaign-muted);
+    flex-wrap: wrap;
+}
+
+.rosters-panel {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.roster-block {
+    padding: 1rem;
+    border-radius: 16px;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.roster-block h3 {
+    margin: 0 0 0.8rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--campaign-muted);
+}
+
+.roster-list-compact {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.roster-list-compact li {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 0.55rem;
+    align-items: center;
+    padding: 0.45rem 0.6rem;
+    border-radius: 10px;
+    background: rgba(148, 163, 184, 0.06);
+    color: var(--campaign-text);
+    font-size: 0.9rem;
+}
+
+.roster-list-compact .player-role {
+    color: var(--campaign-muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.roster-list-compact .player-overall {
+    font-weight: 700;
+    color: var(--campaign-accent);
+}
+
+.feed-box {
+    margin-top: 1rem;
+    background: rgba(2, 6, 23, 0.46);
+    border-radius: 16px;
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    overflow: hidden;
+}
+
+.feed-header {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--campaign-muted);
+}
+
+.feed-status {
+    color: #fcd34d;
+}
+
+.feed-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0;
+    max-height: 320px;
+    overflow: auto;
+}
+
+.feed-list li {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 0.8rem;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+    color: var(--campaign-text);
+}
+
+.feed-list li:last-child {
+    border-bottom: none;
+}
+
+.feed-round {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--campaign-accent-strong);
+    font-weight: 700;
+}
+
+.feed-message {
+    color: var(--campaign-text);
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.action-panel {
+    padding: 1rem 1.25rem 1.25rem;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.result-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 1.1rem;
+    border-radius: 16px;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    background: rgba(15, 23, 42, 0.7);
+}
+
+#result-title {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+#result-message {
+    margin: 0;
+    line-height: 1.6;
+    color: var(--campaign-muted);
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem 1.15rem;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #111827;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.04);
+}
+
+@media (max-width: 720px) {
+    .campaign-status-row,
+    .campaign-title-wrap,
+    .match-header,
+    .match-meta,
+    .feed-header,
+    .rosters-panel {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .rosters-panel {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .score-block {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .team-card {
+        width: 100%;
+    }
+}
+
+.campaign-panel {
+    border-radius: 0.75rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.campaign-shell {
+    width: 100%;
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+}
+
+.campaign-title-wrap {
+    align-items: flex-end;
+}
+
+#campaign-title {
+    font-size: 2rem;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+}
+
+.campaign-progress-box,
+.team-card,
+.roster-block,
+.result-box {
+    border-radius: 0.5rem;
+    border-color: var(--campaign-panel-border);
+    background: var(--campaign-surface);
+}
+
+.status-pill {
+    background: rgba(255, 65, 58, 0.12);
+    border-color: rgba(255, 65, 58, 0.4);
+    color: var(--atklight);
+}
+
+.status-pill[data-tone="success"] {
+    background: rgba(0, 255, 195, 0.1);
+    border-color: rgba(0, 255, 195, 0.35);
+    color: var(--def);
+}
+
+.status-pill[data-tone="danger"] {
+    background: rgba(255, 65, 58, 0.12);
+    border-color: rgba(255, 65, 58, 0.4);
+    color: var(--atklight);
+}
+
+.status-pill[data-tone="neutral"] {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.16);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.record-pill.wins,
+.feed-status {
+    color: var(--def);
+}
+
+.record-pill.losses {
+    color: var(--atklight);
+}
+
+.campaign-progress-fill {
+    background: var(--atk);
+}
+
+.eyebrow,
+.progress-caption,
+.match-round {
+    color: var(--atklight);
+}
+
+.campaign-progress {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.match-meta,
+.feed-box {
+    border-color: var(--campaign-panel-border);
+    background: var(--campaign-surface);
+}
+
+.feed-header,
+.feed-list li {
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.record-pill {
+    border-color: var(--campaign-panel-border);
+    background: var(--campaign-surface);
+}
+
+.team-card strong {
+    font-size: 1.25rem;
+}
+
+.score-row {
+    font-size: 2.5rem;
+}
+
+.roster-list-compact .player-overall,
+.feed-round {
+    color: var(--atklight);
+}
+
+.btn-primary {
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.375rem;
+    background: var(--atk);
+    color: var(--bg);
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: var(--atklight);
+    transform: none;
+    filter: none;
+}
+
+.campaign-summary-panel,
+.match-panel {
+    animation: campaign-enter 0.35s ease both;
+}
+
+.feed-list li {
+    animation: feed-enter 0.2s ease both;
+}
+
+@keyframes campaign-enter {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes feed-enter {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@media (max-width: 720px) {
+    .campaign-shell {
+        padding-top: 2rem;
+    }
+
+    #campaign-title {
+        font-size: 1.5rem;
+    }
+
+    .score-row {
+        font-size: 2rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+}

@@ -7,21 +7,33 @@ require('dotenv').config();
 const Match = require('./logic/matches/matches');
 const { simularPartida } = require('./logic/matches/matchesLogic');
 const Campaign = require('./logic/campaign/campaign');
+const { VITORIAS_PARA_TITULO } = Campaign;
 
 const {
     selecionarAdversariosAleatorios,
     montarTimeHistorico,
-    selecionarMapaAleatorio
+    selecionarMapaAleatorio,
+    criarPRNG,
+    gerarSeedCampanha
 } = require('./logic/campaign/campaignLogic');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static('public'));
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Servidor rodando em http://localhost:${PORT}`);
+});
 
 // 1. Configuração da conexão com o MongoDB Atlas
 
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, {
+    serverSelectionTimeoutMS: 5000
+})
     .then(() => console.log('Conectado ao MongoDB Atlas!'))
     .catch(error => console.error('Erro na conexão com MongoDB:', error));
 
@@ -53,11 +65,28 @@ app.get('/api/jogadores', async (req, res) => {
 
 app.post('/api/campanha', async (req, res) => {
 
-    const { timeJogador } = req.body;
+    const { timeJogador, seed: seedRecebida } = req.body;
+    const seedCampanha = typeof seedRecebida === 'string' && seedRecebida.trim() !== ''
+        ? seedRecebida.trim()
+        : gerarSeedCampanha();
+    const rng = criarPRNG(seedCampanha);
+
+    const timeJogadorNormalizado = {
+        nome: typeof timeJogador?.nome === 'string' && timeJogador.nome.trim() !== ''
+            ? timeJogador.nome.trim()
+            : 'Meu Time',
+        jogadores: Array.isArray(timeJogador?.jogadores)
+            ? timeJogador.jogadores.map((jogador) => ({
+                nome: typeof jogador?.nome === 'string' ? jogador.nome.trim() : '',
+                funcao: typeof jogador?.funcao === 'string' ? jogador.funcao.trim() : '',
+                overall: Number(jogador?.overall)
+            }))
+            : []
+    };
 
     // Validação da estrutura do time
 
-    if (!timeJogador || !Array.isArray(timeJogador.jogadores)) {
+    if (!timeJogadorNormalizado || !Array.isArray(timeJogadorNormalizado.jogadores)) {
         return res.status(400).json({
             erro: 'Os dados do time do jogador são inválidos.'
         });
@@ -65,7 +94,7 @@ app.post('/api/campanha', async (req, res) => {
 
     // Validação da quantidade de jogadores
 
-    if (timeJogador.jogadores.length !== 5) {
+    if (timeJogadorNormalizado.jogadores.length !== 5) {
         return res.status(400).json({
             erro: 'O time do jogador deve possuir exatamente 5 jogadores.'
         });
@@ -73,7 +102,7 @@ app.post('/api/campanha', async (req, res) => {
 
     // Validação dos dados individuais dos jogadores
 
-    const jogadorInvalido = timeJogador.jogadores.some(jogador => {
+    const jogadorInvalido = timeJogadorNormalizado.jogadores.some(jogador => {
         return (
             !jogador ||
             typeof jogador.nome !== 'string' ||
@@ -110,63 +139,91 @@ app.post('/api/campanha', async (req, res) => {
             });
         }
 
-        // Seleção dos sete adversários históricos
+        const mapasOrdenados = [...mapasBanco].sort((mapaA, mapaB) =>
+            String(mapaA.mapa_id).localeCompare(String(mapaB.mapa_id))
+        );
+
+        // Seleção dos sete adversários históricos determinística por seed
 
         const adversariosSelecionados =
-            selecionarAdversariosAleatorios(jogadoresBanco, 7);
+            selecionarAdversariosAleatorios(
+                jogadoresBanco,
+                VITORIAS_PARA_TITULO,
+                [],
+                {
+                    timeJogador: timeJogadorNormalizado,
+                    mapas: mapasOrdenados,
+                    seed: seedCampanha,
+                    rng
+                }
+            );
 
-        const adversarios = adversariosSelecionados.map(time =>
-            montarTimeHistorico(jogadoresBanco, time.timeId)
-        );
+        const adversarios = adversariosSelecionados.map(time => {
+            const timeHistorico = montarTimeHistorico(jogadoresBanco, time.timeId);
+            timeHistorico.timeId = time.timeId;
+            timeHistorico.ano = time.ano;
+            timeHistorico.probabilidadeVitoriaEstimada = time.probabilidadeVitoriaEstimada;
+            return timeHistorico;
+        });
 
         // Inicialização da campanha
 
-        const campanha = new Campaign(timeJogador, adversarios);
+        const campanha = new Campaign(timeJogadorNormalizado, adversarios);
         const resultados = [];
 
         // Simulação das partidas da campanha
 
         for (const adversario of adversarios) {
 
-            const mapaSorteado = selecionarMapaAleatorio(mapasBanco);
+            const mapaSorteado = selecionarMapaAleatorio(mapasOrdenados, rng);
 
             const mapa = {
                 id: mapaSorteado.id,
                 nome: mapaSorteado.nome,
                 ladoFavorecido: mapaSorteado.ladoFavorecido,
-                ladoInicialTimeA: Math.random() < 0.5
-                    ? 'ataque'
-                    : 'defesa'
+                ladoInicialTimeA: rng() < 0.5 ? 'ataque' : 'defesa'
             };
 
             const partida = new Match(
-                timeJogador,
+                { ...timeJogadorNormalizado, jogadores: timeJogadorNormalizado.jogadores },
                 adversario,
                 mapa
             );
 
-            simularPartida(partida);
+            simularPartida(partida, rng);
 
             campanha.registrarResultado(partida);
 
             // Registro do resultado da partida
 
             resultados.push({
+                numeroConfronto: resultados.length + 1,
                 adversario: adversario.nome,
-
+                adversarioNome: adversario.nome,
+                adversarioAno: adversario.ano ?? null,
+                probabilidadeEstimadaVitoria: adversario.probabilidadeVitoriaEstimada ?? null,
+                adversarioDetalhes: {
+                    nome: adversario.nome,
+                    ano: adversario.ano ?? null,
+                    time_id: adversario.timeId ?? null,
+                    jogadores: Array.isArray(adversario.jogadores)
+                        ? adversario.jogadores.map(jogador => ({
+                            nome: jogador.nome,
+                            funcao: jogador.funcao,
+                            overall: Number(jogador.overall)
+                        }))
+                        : []
+                },
                 mapa: partida.mapa.nome,
+                mapaNome: partida.mapa.nome,
                 ladoFavorecido: partida.mapa.ladoFavorecido,
-
                 ladoInicialTimeJogador: partida.ladoA,
                 ladoInicialAdversario: partida.ladoB,
-
                 placar: `${partida.placarA} x ${partida.placarB}`,
                 vencedor: partida.vencedor.nome,
-
                 estadoCampanha: campanha.estado,
                 vitorias: campanha.vitorias,
                 derrotas: campanha.derrotas,
-
                 historicoRodadas: partida.historicoRodadas
             });
 
@@ -180,7 +237,19 @@ app.post('/api/campanha', async (req, res) => {
         // Resposta enviada ao frontend
 
         return res.status(200).json({
+            seed: seedCampanha,
+            versaoCampanha: 'campanha-seed-v3',
+            vitoriasNecessarias: VITORIAS_PARA_TITULO,
             timeJogador: campanha.timeJogador.nome,
+            timeJogadorDetalhes: {
+                nome: campanha.timeJogador.nome,
+                jogadores: campanha.timeJogador.jogadores.map(jogador => ({
+                    nome: jogador.nome,
+                    funcao: jogador.funcao,
+                    overall: Number(jogador.overall)
+                }))
+            },
+            timeJogadorCompleto: campanha.timeJogador,
             estado: campanha.estado,
             vitorias: campanha.vitorias,
             derrotas: campanha.derrotas,
@@ -197,9 +266,3 @@ app.post('/api/campanha', async (req, res) => {
 });
 
 // 5. Inicialização do servidor
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
