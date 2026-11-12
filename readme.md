@@ -87,7 +87,6 @@ Para executar o projeto você precisará de:
 ### Linguagens & Estilização
 
 - **HTML5**
-- **Tailwind CSS**
 - **JavaScript (ES6+)**
 
 ### Backend & Servidor
