@@ -208,6 +208,29 @@
     border: 2px solid white;
 }
 
+/* Estado desativado do player-item mantendo a estrutura normal */
+.player-item.player-item-disabled {
+    background: linear-gradient(to right, rgba(100, 100, 100, 0), rgba(100, 100, 100, 0.4)) !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+    cursor: default !important;
+    pointer-events: none !important; /* Desativa totalmente a interatividade de clique */
+    box-shadow: none !important;
+}
+
+.player-item.player-item-disabled:hover {
+    border-color: transparent !important;
+}
+
+.player-item.player-item-disabled .jogador-overall {
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.player-item.player-item-disabled img {
+    opacity: 0.4;
+    filter: grayscale(1);
+}
+
 .jogador-direita {
     display: flex;
     align-items: center;

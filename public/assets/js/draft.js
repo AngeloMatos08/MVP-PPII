@@ -17,7 +17,7 @@ let funcoesPreenchidas = {
 }
 
 // Contador único de rerolls compartilhados
-let rerollsRestantes = 100;
+let rerollsRestantes = 2;
 
 const coresPorTime = {
     '100thieves': { inicio: 'F23535', fim: 'F23535' },
@@ -360,7 +360,7 @@ function carregarTimePorAno(nomeTime, ano) {
     if (!jogadoresDoTime.length) {
         alert(`⚠️ Não foi possível encontrar o time ${nomeTime} no ano ${ano}.`);
         return;
-    }
+    }''
 
     timeAtual = jogadoresDoTime[0].time_id;
     nomeTimeAtual = nomeTime;
@@ -377,7 +377,6 @@ function exibirJogadoresNaTela(jogadoresFiltrados) {
     jogadoresFiltrados.forEach((jogador) => {
         const itemJogador = document.createElement('div');
         itemJogador.className = 'player-item';
-        itemJogador.setAttribute('role', 'button');
 
         const jaFoiEscolhido = timeEscolhido.some(j => j.nome === jogador.nome);
         const podeSerEscolhido = jogadorPodeSerEscolhido(jogador);
@@ -389,44 +388,42 @@ function exibirJogadoresNaTela(jogadoresFiltrados) {
         const direita = document.createElement('div');
         direita.className = 'jogador-direita';
 
+        // Renderiza os ícones e o overall independentemente de estar disponível ou não, para manter a aparência igual
+        const listaFuncoes = obterListaFuncoes(jogador);
+        const icones = document.createElement('div');
+        icones.className = 'role-icons-wrapper';
+        
+        listaFuncoes.forEach(funcao => {
+            const caminhoIcone = obterIconeFuncao(funcao);
+            if (!caminhoIcone) return;
+            const icone = document.createElement('img');
+            icone.src = caminhoIcone;
+            icone.alt = String(funcao);
+            icone.title = String(funcao);
+            icone.className = 'role-icon-small';
+            icones.appendChild(icone);
+        });
+
+        const overall = document.createElement('span');
+        overall.className = 'jogador-overall';
+        overall.textContent = jogador.overall ?? '—';
+
+        direita.appendChild(icones);
+        direita.appendChild(overall);
+        itemJogador.append(nome, direita);
+
+        // Se o jogador NÃO puder ser escolhido, aplicamos a classe de desativado e não adicionamos eventos de clique
         if (jaFoiEscolhido || !podeSerEscolhido) {
-            itemJogador.classList.add('opacity-40');
+            itemJogador.classList.add('player-item-disabled');
             itemJogador.tabIndex = -1;
             itemJogador.setAttribute('aria-disabled', 'true');
-
-            // Correção: usar .add em vez de .set
-            nome.classList.add('line-through', 'text-gray-400');
-            itemJogador.appendChild(nome);
         } else {
+            // Se estiver disponível, comporta-se normalmente como botão
+            itemJogador.setAttribute('role', 'button');
             itemJogador.tabIndex = 0;
             itemJogador.setAttribute('aria-disabled', 'false');
-            
-            const listaFuncoes = obterListaFuncoes(jogador);
-            const icones = document.createElement('div');
-            icones.className = 'role-icons-wrapper';
-            
-            listaFuncoes.forEach(funcao => {
-                const caminhoIcone = obterIconeFuncao(funcao);
-                if (!caminhoIcone) return;
-                const icone = document.createElement('img');
-                icone.src = caminhoIcone;
-                icone.alt = String(funcao);
-                icone.title = String(funcao);
-                icone.className = 'role-icon-small';
-                icones.appendChild(icone);
-            });
-
-            const overall = document.createElement('span');
-            overall.className = 'jogador-overall';
-            overall.textContent = jogador.overall ?? '—';
-
-            direita.appendChild(icones);
-            direita.appendChild(overall);
-
-            // Adiciona diretamente o nome à esquerda e o bloco da direita no card principal
-            itemJogador.append(nome, direita);
-
             itemJogador.setAttribute('aria-label', `Selecionar ${jogador.nome}, overall ${jogador.overall ?? 'indisponível'}`);
+            
             itemJogador.addEventListener('click', () => prepararEscolha(jogador.nome, listaFuncoes, itemJogador));
             itemJogador.addEventListener('keydown', evento => {
                 if (evento.key === 'Enter' || evento.key === ' ') {
