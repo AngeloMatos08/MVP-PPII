@@ -16,7 +16,7 @@ let funcoesPreenchidas = {
     controlador: 0
 }
 
-// Contador único de rerolls compartilhados (ex: 5 rerolls totais por partida)
+// Contador único de rerolls compartilhados
 let rerollsRestantes = 100;
 
 const coresPorTime = {
@@ -263,7 +263,7 @@ function obterIconeFuncao(funcao) {
 
 // Cálculo de Ataque, Defesa e Geral baseado nos fatores das funções
 function calcularEstatisticasRoster() {
-    if (timeEscolhido.length === 0) return { atk: '—', def: '—', geral: '' };
+    if (timeEscolhido.length === 0) return { atk: '—', def: '—', geral: '—'};
 
     const fatoresFuncao = {
         duelista: { atkF: 1.40, defF: 1.00 },
@@ -290,7 +290,7 @@ function calcularEstatisticasRoster() {
     return {
         atk: ataqueFinal.toFixed(1),
         def: defesaFinal.toFixed(1),
-        geral: `Geral: ${forcaGeral.toFixed(1)}`
+        geral: forcaGeral.toFixed(1),
     };
 }
 
@@ -370,22 +370,22 @@ function carregarTimePorAno(nomeTime, ano) {
 }
 
 function exibirJogadoresNaTela(jogadoresFiltrados) {
-    const container = document.getElementById('container-jogadores');
+    const container = document.getElementById('players-wrapper');
     if (!container) return;
     container.replaceChildren();
 
     jogadoresFiltrados.forEach((jogador) => {
         const itemJogador = document.createElement('div');
-        itemJogador.className = 'player-row';
+        itemJogador.className = 'player-item';
         itemJogador.setAttribute('role', 'button');
 
         const jaFoiEscolhido = timeEscolhido.some(j => j.nome === jogador.nome);
         const podeSerEscolhido = jogadorPodeSerEscolhido(jogador);
         const informacoes = document.createElement('div');
-        informacoes.className = 'min-w-0 flex-1 flex items-center gap-3';
-        
+        informacoes.className = 'jogador-info-wrapper';
+
         const nome = document.createElement('p');
-        nome.className = 'truncate text-sm font-medium';
+        nome.className = 'jogador-nome';
         nome.textContent = jogador.nome;
         informacoes.appendChild(nome);
 
@@ -394,14 +394,14 @@ function exibirJogadoresNaTela(jogadoresFiltrados) {
             itemJogador.tabIndex = -1;
             itemJogador.setAttribute('aria-disabled', 'true');
 
-            nome.classList.add('line-through', 'text-gray-400');
+            nome.classList.set('line-through', 'text-gray-400');
             itemJogador.appendChild(informacoes);
         } else {
             itemJogador.tabIndex = 0;
             itemJogador.setAttribute('aria-disabled', 'false');
             const listaFuncoes = obterListaFuncoes(jogador);
             const icones = document.createElement('div');
-            icones.className = 'flex shrink-0 items-center gap-1';
+            icones.className = 'role-icons-wrapper';
             listaFuncoes.forEach(funcao => {
                 const caminhoIcone = obterIconeFuncao(funcao);
                 if (!caminhoIcone) return;
@@ -416,8 +416,8 @@ function exibirJogadoresNaTela(jogadoresFiltrados) {
             informacoes.appendChild(icones);
 
             const overall = document.createElement('span');
-            overall.className = 'w-7 shrink-0 text-right text-xs font-bold tabular-nums';
-            overall.textContent = jogador.overall ?? '--';
+            overall.className = 'jogador-overall';
+            overall.textContent = jogador.overall ?? '—';
 
             itemJogador.append(informacoes, overall);
             itemJogador.setAttribute('aria-label', `Selecionar ${jogador.nome}, overall ${jogador.overall ?? 'indisponível'}`);
@@ -444,8 +444,6 @@ function resetarSeletorFuncao() {
 
     opcoes.replaceChildren();
     const instrucao = document.createElement('span');
-    instrucao.className = 'text-xs text-white/45';
-    instrucao.textContent = 'As opções aparecem aqui';
     opcoes.appendChild(instrucao);
 }
 
@@ -463,7 +461,7 @@ function atualizarSeletorFuncao(nomeJogador, listaFuncoes) {
     }
 
     if (titulo) titulo.textContent = `Escolha a função de ${nomeJogador}`;
-    if (dica) dica.textContent = 'Clique na função para confirmar e adicionar ao roster';
+    if (dica) dica.textContent = 'Clique na função para confirmar e adicionar à sua equipe';
     if (!opcoes) return;
 
     opcoes.replaceChildren();
@@ -511,48 +509,41 @@ function atualizarRoster() {
     if (!container) return;
     container.replaceChildren();
 
-    if (timeEscolhido.length === 0) {
-        const mensagem = document.createElement('p');
-        mensagem.className = 'px-1 py-2 text-sm text-white/45';
-        mensagem.textContent = 'Escolha jogadores para montar o roster.';
-        container.appendChild(mensagem);
-    }
-
     timeEscolhido.forEach((jogador, index) => {
-        const linha = document.createElement('div');
-        linha.className = 'roster-row';
+        const item = document.createElement('div');
+        item.className = 'roster-item';
 
         setTimeout(() => {
-            linha.classList.add('active');
+            item.classList.add('active');
         }, 10);
 
         const overall = document.createElement('span');
-        overall.className = 'w-7 shrink-0 text-right text-[1rem] tabular-nums font-bold';
+        overall.className = 'jogador-overall';
         overall.textContent = jogador.overall;
-        
+
         const nome = document.createElement('span');
-        nome.className = 'min-w-0 flex-1 truncate';
+        nome.className = 'jogador-nome';
         nome.textContent = jogador.nome;
-        
+
         const funcao = document.createElement('span');
-        funcao.className = 'shrink-0 rounded bg-black/15 px-1.5 py-0.5 text-[10px] uppercase';
+        funcao.className = 'funcao-nome';
         funcao.textContent = jogador.funcao;
-        
+
         const iconeSrc = obterIconeFuncao(jogador.funcao);
         if (iconeSrc) {
             const icone = document.createElement('img');
             icone.src = iconeSrc;
             icone.alt = String(jogador.funcao);
             icone.className = 'roster-icon';
-            linha.append(overall, nome, funcao, icone);
+            item.append(nome, icone, overall);
         } else {
-            linha.append(overall, nome, funcao);
+            item.append(nome, funcao, overall);
         }
-        container.appendChild(linha);
+        container.appendChild(item);
     });
 
     if (resumo) {
-        resumo.textContent = timeEscolhido.length ? `${timeEscolhido.length}/5 jogadores` : '';
+        resumo.textContent = timeEscolhido.length ? `${timeEscolhido.length}/5 JOGADORES` : '';
     }
 }
 
@@ -564,8 +555,8 @@ function prepararEscolha(nomeJogador, listaFuncoes, elementoLinha) {
     if (funcoesDisponiveis.length === 0) return;
 
     if (elementoLinha) {
-        elementoLinha.classList.add('player-row-selected');
-        setTimeout(() => elementoLinha.classList.remove('player-row-selected'), 300);
+        elementoLinha.classList.add('player-item-selected');
+        setTimeout(() => elementoLinha.classList.remove('player-item-selected'), 300);
     }
 
     jogadorEmSelecao = jogador;
@@ -617,7 +608,7 @@ function finalizarDraft() {
 
     const resumo = document.getElementById('roster-summary');
     if (resumo) {
-        resumo.textContent = `Draft concluído · Overall médio ${mediaOverall.toFixed(1)}`;
+        resumo.textContent = `Draft concluído`;
     }
     document.querySelectorAll('.painel-controles button').forEach(botao => { botao.disabled = true; });
 }
@@ -670,7 +661,7 @@ function rerollMesmoTimeOutroAno() {
         return;
     }
 
-    opcoesAno = listaDeJogadores.filter(jogador => jogador.nome_time === nomeTimeRef && jogador.ano !== anoAtual);
+    const opcoesAno = listaDeJogadores.filter(jogador => jogador.nome_time === nomeTimeRef && jogador.ano !== anoAtual);
 
     if (opcoesAno.length === 0) {
         alert('Este time não possui outras temporadas cadastradas.');

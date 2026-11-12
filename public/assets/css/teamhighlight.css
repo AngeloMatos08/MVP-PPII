@@ -1,0 +1,98 @@
+:root {
+    color-scheme: dark;
+}
+
+body {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.team-highlight {
+    display: flex;
+    min-height: 110px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    border: 2px solid transparent;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    background:
+        linear-gradient(105deg, #151615 8%, color-mix(in srgb, var(--team-color-start) 50%, #211820) 58%, color-mix(in srgb, var(--team-color-end) 38%, #211820)) padding-box,
+        linear-gradient(105deg, color-mix(in srgb, var(--team-color-start) 76%, transparent), color-mix(in srgb, var(--team-color-end, #11d83d) 88%, transparent)) border-box;
+}
+
+.team-info-group {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.team-logo-wrap {
+    display: grid;
+    height: 3rem;
+    width: 3rem;
+    flex-shrink: 0;
+    place-items: center;
+}
+
+.team-logo-img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.team-logo-img.hidden {
+    display: none;
+}
+
+.team-monogram {
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+.team-monogram.hidden {
+    display: none;
+}
+
+.team-text-wrap {
+    min-width: 0;
+}
+
+.team-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0;
+}
+
+.team-championship {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.team-ranking {
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.highlight-animating {
+    transform: scale(1.02);
+    filter: brightness(1.1);
+    transition: transform 0.2s ease, filter 0.15s ease;
+}
+
+.highlight-pulse {
+    animation: pulseAnim 0.4s ease;
+}
+
+@keyframes pulseAnim {
+    0%,100% {opacity: 1;}
+    50% {opacity: 0.7;}
+}
