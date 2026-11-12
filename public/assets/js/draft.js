@@ -17,7 +17,7 @@ let funcoesPreenchidas = {
 }
 
 // Contador único de rerolls compartilhados
-let rerollsRestantes = 100;
+let rerollsRestantes = 2;
 
 const coresPorTime = {
     '100thieves': { inicio: 'F23535', fim: 'F23535' },
@@ -263,7 +263,7 @@ function obterIconeFuncao(funcao) {
 
 // Cálculo de Ataque, Defesa e Geral baseado nos fatores das funções
 function calcularEstatisticasRoster() {
-    if (timeEscolhido.length === 0) return { atk: '—', def: '—', geral: '—'};
+    if (timeEscolhido.length === 0) return { atk: '—', def: '—', geral: '—' };
 
     const fatoresFuncao = {
         duelista: { atkF: 1.40, defF: 1.00 },
@@ -360,7 +360,7 @@ function carregarTimePorAno(nomeTime, ano) {
     if (!jogadoresDoTime.length) {
         alert(`⚠️ Não foi possível encontrar o time ${nomeTime} no ano ${ano}.`);
         return;
-    }
+    }''
 
     timeAtual = jogadoresDoTime[0].time_id;
     nomeTimeAtual = nomeTime;
@@ -370,57 +370,60 @@ function carregarTimePorAno(nomeTime, ano) {
 }
 
 function exibirJogadoresNaTela(jogadoresFiltrados) {
-    const container = document.getElementById('players-wrapper');
+    const container = document.getElementById('players-wrapper') || document.getElementById('container-jogadores');
     if (!container) return;
     container.replaceChildren();
 
     jogadoresFiltrados.forEach((jogador) => {
         const itemJogador = document.createElement('div');
         itemJogador.className = 'player-item';
-        itemJogador.setAttribute('role', 'button');
 
         const jaFoiEscolhido = timeEscolhido.some(j => j.nome === jogador.nome);
         const podeSerEscolhido = jogadorPodeSerEscolhido(jogador);
-        const informacoes = document.createElement('div');
-        informacoes.className = 'jogador-info-wrapper';
 
         const nome = document.createElement('p');
         nome.className = 'jogador-nome';
         nome.textContent = jogador.nome;
-        informacoes.appendChild(nome);
 
+        const direita = document.createElement('div');
+        direita.className = 'jogador-direita';
+
+        // Renderiza os ícones e o overall independentemente de estar disponível ou não, para manter a aparência igual
+        const listaFuncoes = obterListaFuncoes(jogador);
+        const icones = document.createElement('div');
+        icones.className = 'role-icons-wrapper';
+        
+        listaFuncoes.forEach(funcao => {
+            const caminhoIcone = obterIconeFuncao(funcao);
+            if (!caminhoIcone) return;
+            const icone = document.createElement('img');
+            icone.src = caminhoIcone;
+            icone.alt = String(funcao);
+            icone.title = String(funcao);
+            icone.className = 'role-icon-small';
+            icones.appendChild(icone);
+        });
+
+        const overall = document.createElement('span');
+        overall.className = 'jogador-overall';
+        overall.textContent = jogador.overall ?? '—';
+
+        direita.appendChild(icones);
+        direita.appendChild(overall);
+        itemJogador.append(nome, direita);
+
+        // Se o jogador NÃO puder ser escolhido, aplicamos a classe de desativado e não adicionamos eventos de clique
         if (jaFoiEscolhido || !podeSerEscolhido) {
-            itemJogador.classList.add('opacity-40');
+            itemJogador.classList.add('player-item-disabled');
             itemJogador.tabIndex = -1;
             itemJogador.setAttribute('aria-disabled', 'true');
-
-            nome.classList.set('line-through', 'text-gray-400');
-            itemJogador.appendChild(informacoes);
         } else {
+            // Se estiver disponível, comporta-se normalmente como botão
+            itemJogador.setAttribute('role', 'button');
             itemJogador.tabIndex = 0;
             itemJogador.setAttribute('aria-disabled', 'false');
-            const listaFuncoes = obterListaFuncoes(jogador);
-            const icones = document.createElement('div');
-            icones.className = 'role-icons-wrapper';
-            listaFuncoes.forEach(funcao => {
-                const caminhoIcone = obterIconeFuncao(funcao);
-                if (!caminhoIcone) return;
-                const icone = document.createElement('img');
-                icone.src = caminhoIcone;
-                icone.alt = String(funcao);
-                icone.title = String(funcao);
-                icone.className = 'role-icon-small';
-                icones.appendChild(icone);
-            });
-
-            informacoes.appendChild(icones);
-
-            const overall = document.createElement('span');
-            overall.className = 'jogador-overall';
-            overall.textContent = jogador.overall ?? '—';
-
-            itemJogador.append(informacoes, overall);
             itemJogador.setAttribute('aria-label', `Selecionar ${jogador.nome}, overall ${jogador.overall ?? 'indisponível'}`);
+            
             itemJogador.addEventListener('click', () => prepararEscolha(jogador.nome, listaFuncoes, itemJogador));
             itemJogador.addEventListener('keydown', evento => {
                 if (evento.key === 'Enter' || evento.key === ' ') {
@@ -481,6 +484,7 @@ function atualizarSeletorFuncao(nomeJogador, listaFuncoes) {
             botao.appendChild(icone);
         }
         const rotulo = document.createElement('span');
+        rotulo.className = 'role-btn-label';
         rotulo.textContent = funcao;
         botao.appendChild(rotulo);
         if (permitido) {
@@ -529,15 +533,23 @@ function atualizarRoster() {
         funcao.className = 'funcao-nome';
         funcao.textContent = jogador.funcao;
 
+        const direita = document.createElement('span');
+        direita.className = 'roster-right';
+
         const iconeSrc = obterIconeFuncao(jogador.funcao);
+
         if (iconeSrc) {
             const icone = document.createElement('img');
+            direita.appendChild(icone);
+            direita.appendChild(overall);
             icone.src = iconeSrc;
             icone.alt = String(jogador.funcao);
             icone.className = 'roster-icon';
-            item.append(nome, icone, overall);
+            item.append(nome, direita);
         } else {
-            item.append(nome, funcao, overall);
+            direita.appendChild(funcao);
+            direita.appendChild(overall);
+            item.append(nome, direita);
         }
         container.appendChild(item);
     });
@@ -555,8 +567,12 @@ function prepararEscolha(nomeJogador, listaFuncoes, elementoLinha) {
     if (funcoesDisponiveis.length === 0) return;
 
     if (elementoLinha) {
+        document.querySelectorAll('.player-item').forEach(item => {
+            item.classList.remove('player-item-selected');
+        });
+        elementoLinha.classList.add('player-item-pressed');
         elementoLinha.classList.add('player-item-selected');
-        setTimeout(() => elementoLinha.classList.remove('player-item-selected'), 300);
+        setTimeout(() => elementoLinha.classList.remove('player-item-pressed'), 300);
     }
 
     jogadorEmSelecao = jogador;
