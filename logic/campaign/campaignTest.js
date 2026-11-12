@@ -2,6 +2,7 @@
 const Match = require("../matches/matches");
 const { simularPartida } = require("../matches/matchesLogic");
 const Campaign = require("./campaign");
+const { VITORIAS_PARA_TITULO } = Campaign;
 
 const {
     carregarJogadores,
@@ -90,20 +91,20 @@ function testarRegrasCampaign() {
         "Derrota provoca eliminação imediata"
     );
 
-    // TESTE 4: SETE VITÓRIAS CONSECUTIVAS
+    // TESTE 4: QUATRO VITÓRIAS CONSECUTIVAS
     const campanhaCampea = new Campaign(timeJogador, []);
 
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < VITORIAS_PARA_TITULO; i++) {
         campanhaCampea.registrarResultado({
             vencedor: { nome: timeJogador.nome }
         });
     }
 
     verificar(
-        campanhaCampea.vitorias === 7
+        campanhaCampea.vitorias === VITORIAS_PARA_TITULO
         && campanhaCampea.derrotas === 0
         && campanhaCampea.estado === "campeão",
-        "Sete vitórias garantem o título"
+        "Quatro vitórias garantem o título"
     );
 
     // TESTE 5: BLOQUEIO APÓS ELIMINAÇÃO
@@ -206,10 +207,10 @@ function testarProgressaoCampaign() {
         "Três vitórias seguidas de uma derrota encerram a campanha corretamente"
     );
 
-    // TESTE 2: SEIS VITÓRIAS SEGUIDAS DE MAIS UMA VITÓRIA
+    // TESTE 2: TRÊS VITÓRIAS SEGUIDAS DE MAIS UMA VITÓRIA
     const campanhaTitulo = new Campaign(timeJogador, []);
 
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < VITORIAS_PARA_TITULO - 1; i++) {
         campanhaTitulo.registrarResultado({
             vencedor: { nome: timeJogador.nome }
         });
@@ -220,10 +221,10 @@ function testarProgressaoCampaign() {
     });
 
     verificar(
-        campanhaTitulo.vitorias === 7
+        campanhaTitulo.vitorias === VITORIAS_PARA_TITULO
         && campanhaTitulo.derrotas === 0
         && campanhaTitulo.estado === "campeão",
-        "Sétima vitória encerra a campanha com o título"
+        "Quarta vitória encerra a campanha com o título"
     );
 
     // TESTE 3: TENTATIVA DE REGISTRAR RESULTADO APÓS ELIMINAÇÃO
@@ -258,7 +259,7 @@ function testarProgressaoCampaign() {
 
     verificar(
         erroAposTitulo
-        && campanhaTitulo.vitorias === 7
+        && campanhaTitulo.vitorias === VITORIAS_PARA_TITULO
         && campanhaTitulo.derrotas === 0
         && campanhaTitulo.estado === "campeão",
         "Resultado posterior ao título é bloqueado sem alterar os contadores"
@@ -316,7 +317,7 @@ function testarSelecaoAdversarios(jogadores) {
 
     verificar(
         adversarios.length === 7,
-        "Seleção de exatamente sete adversários"
+        "A seleção aceita a quantidade solicitada de adversários"
     );
 
     // TESTE 3: AUSÊNCIA DE ADVERSÁRIOS REPETIDOS
@@ -445,7 +446,7 @@ async function executarTestes() {
     // 5. TESTA A SELEÇÃO DOS ADVERSÁRIOS
     testarSelecaoAdversarios(jogadoresBanco);
 
-    // 6. SORTEIA OS SETE ADVERSÁRIOS PARA A CAMPANHA
+    // 6. SORTEIA OS ADVERSÁRIOS NECESSÁRIOS PARA A CAMPANHA
     const adversariosSelecionados =
         selecionarAdversariosAleatorios(jogadoresBanco);
 
@@ -541,7 +542,7 @@ async function executarTestes() {
             break;
         }
 
-        // Sete vitórias garantem o título
+        // Quatro vitórias garantem o título
         if (campanhaTeste.estado === "campeão") {
             console.log("\nO Time Frankenstein conquistou o título!");
             break;

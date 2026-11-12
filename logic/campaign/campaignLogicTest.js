@@ -1,5 +1,6 @@
 
 const Campaign = require("./campaign");
+const { VITORIAS_PARA_TITULO } = Campaign;
 
 // Times fictícios para testar as regras sem depender do banco.
 const timeJogador = {
@@ -19,25 +20,25 @@ function criarPartida(vencedor) {
 function executarTestes() {
     console.log("===== TESTES DAS REGRAS DA CAMPANHA =====");
 
-    // TESTE 1: sete vitórias devem tornar o time campeão.
+    // TESTE 1: quatro vitórias devem tornar o time campeão.
     const campanhaCampea = new Campaign(
         timeJogador,
         adversarios
     );
 
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < VITORIAS_PARA_TITULO; i++) {
         campanhaCampea.registrarResultado(
             criarPartida(timeJogador)
         );
     }
 
-    console.log("\n--- Teste 1: sete vitórias ---");
+    console.log("\n--- Teste 1: quatro vitórias ---");
     console.log("Vitórias:", campanhaCampea.vitorias);
     console.log("Derrotas:", campanhaCampea.derrotas);
     console.log("Estado:", campanhaCampea.estado);
 
     if (
-        campanhaCampea.vitorias === 7 &&
+        campanhaCampea.vitorias === VITORIAS_PARA_TITULO &&
         campanhaCampea.estado === "campeão"
     ) {
         console.log("RESULTADO: PASSOU");

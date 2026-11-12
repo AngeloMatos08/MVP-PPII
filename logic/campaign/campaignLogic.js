@@ -1,4 +1,95 @@
 const API_URL = "http://localhost:3000/api/jogadores";
+const {
+    calcularAtaque,
+    calcularDefesa,
+    calcularForcaTime
+} = require("../matches/matchesLogic");
+const Match = require("../matches/matches");
+const { simularPartida } = require("../matches/matchesLogic");
+const { VITORIAS_PARA_TITULO } = require("./campaign");
+
+const CHANCES_ALVO_FORTES = [0.78, 0.78, 0.65, 0.65];
+const CHANCES_ALVO_FRACOS = [0.45, 0.45, 0.37, 0.37];
+const AMOSTRAS_POR_MAPA_LADO = 4;
+const TOLERANCIA_CHANCE = 0.06;
+const PESO_MINIMO_ADVERSARIO = 0.005;
+
+function criarPRNG(seed) {
+    const valorSeed = `${seed ?? ""}`;
+    let h = 2166136261;
+
+    for (let i = 0; i < valorSeed.length; i++) {
+        h ^= valorSeed.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+    }
+
+    return function rand() {
+        h += 0x6D2B79F5;
+        let t = h;
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+}
+
+function gerarSeedCampanha() {
+    return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function calcularForcaDetalhada(time) {
+    if (!Array.isArray(time) || time.length === 0) {
+        return { ataque: 0, defesa: 0, forca: 0 };
+    }
+
+    const ataque = calcularAtaque(time);
+    const defesa = calcularDefesa(time);
+
+    return {
+        ataque,
+        defesa,
+        forca: calcularForcaTime(ataque, defesa)
+    };
+}
+
+function estimarProbabilidadeVitoria(timeJogador, adversario, mapas, seed) {
+    const mapasValidos = Array.isArray(mapas) && mapas.length > 0
+        ? mapas
+        : [{ nome_mapa: "sem-mapa", lado_favorecido: null }];
+    const ladosIniciais = ["ataque", "defesa"];
+    let vitorias = 0;
+    let partidas = 0;
+
+    mapasValidos.forEach((mapa, indiceMapa) => {
+        ladosIniciais.forEach(ladoInicial => {
+            for (let amostra = 0; amostra < AMOSTRAS_POR_MAPA_LADO; amostra++) {
+                const nomeMapa = mapa.nome_mapa ?? mapa.nome ?? `mapa-${indiceMapa}`;
+                const idMapa = mapa.mapa_id ?? mapa.id ?? nomeMapa;
+                const partida = new Match(
+                    timeJogador,
+                    adversario,
+                    {
+                        nome: nomeMapa,
+                        ladoFavorecido: mapa.lado_favorecido
+                            ?? mapa.ladoFavorecido
+                            ?? null,
+                        ladoInicialTimeA: ladoInicial
+                    }
+                );
+                const rng = criarPRNG(
+                    `${seed}|estimativa-v2|${adversario.timeId}|${idMapa}|${ladoInicial}|${amostra}`
+                );
+
+                simularPartida(partida, rng);
+                if (partida.vencedor.nome === timeJogador.nome) {
+                    vitorias++;
+                }
+                partidas++;
+            }
+        });
+    });
+
+    return vitorias / partidas;
+}
 
 // Busca os jogadores pela API conectada ao MongoDB Atlas
 async function carregarJogadores() {
@@ -33,16 +124,18 @@ function obterTimesHistoricos(jogadores) {
 // Seleciona adversários históricos aleatoriamente
 function selecionarAdversariosAleatorios(
     jogadores,
-    quantidade = 7,
-    timesExcluidos = []
+    quantidade = VITORIAS_PARA_TITULO,
+    timesExcluidos = [],
+    opcoes = {}
 ) {
-    // Identifica todos os times históricos cadastrados
+    const {
+        timeJogador = null,
+        faseInicial = 0,
+        rng = criarPRNG(gerarSeedCampanha())
+    } = opcoes;
+
     const timesHistoricos = obterTimesHistoricos(jogadores);
-
-    // Cria um conjunto com os IDs que não podem ser selecionados
     const idsExcluidos = new Set(timesExcluidos);
-
-    // Mantém somente times completos e não excluídos
     const timesValidos = timesHistoricos.filter(time => {
         const jogadoresDoTime = obterJogadoresDoTime(
             jogadores,
@@ -53,7 +146,9 @@ function selecionarAdversariosAleatorios(
             jogadoresDoTime.length === 5 &&
             !idsExcluidos.has(time.timeId)
         );
-    });
+    }).sort((timeA, timeB) =>
+        String(timeA.timeId).localeCompare(String(timeB.timeId))
+    );
 
     if (timesValidos.length < quantidade) {
         throw new Error(
@@ -61,24 +156,102 @@ function selecionarAdversariosAleatorios(
         );
     }
 
-    // Cria uma cópia para não alterar a lista original
-    const timesEmbaralhados = [...timesValidos];
+    const pools = timesValidos.map(time => {
+        const timeFormatado = montarTimeHistorico(jogadores, time.timeId);
+        const forca = calcularForcaDetalhada(timeFormatado.jogadores).forca;
 
-    // Embaralha os times usando o algoritmo Fisher-Yates
-    for (let i = timesEmbaralhados.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+        return {
+            ...time,
+            jogadores: timeFormatado.jogadores,
+            forca
+        };
+    });
 
-        [
-            timesEmbaralhados[i],
-            timesEmbaralhados[j]
-        ] = [
-            timesEmbaralhados[j],
-            timesEmbaralhados[i]
-        ];
+    if (timeJogador && Array.isArray(timeJogador.jogadores)) {
+        const forcaJogador = calcularForcaDetalhada(timeJogador.jogadores).forca;
+        const abaixo = pools.filter(time => time.forca < forcaJogador).length;
+        const igual = pools.filter(time => time.forca === forcaJogador).length;
+        const posicao = igual > 0 ? abaixo + (igual - 1) / 2 : abaixo;
+        const qualidade = pools.length < 2
+            ? 0.5
+            : Math.max(0, Math.min(1, posicao / (pools.length - 1)));
+
+        pools.forEach(time => {
+            time.probabilidadeVitoriaEstimada = estimarProbabilidadeVitoria(
+                timeJogador,
+                { nome: time.nome, timeId: time.timeId, jogadores: time.jogadores },
+                opcoes.mapas,
+                opcoes.seed ?? "selecao-campanha"
+            );
+        });
+
+        pools.forEach(time => {
+            time.qualidadeJogador = qualidade;
+        });
     }
 
-    // Retorna somente a quantidade solicitada
-    return timesEmbaralhados.slice(0, quantidade);
+    const selecionados = [];
+    const disponiveis = [...pools];
+
+    for (let indice = 0; indice < quantidade; indice++) {
+        const fase = Math.max(0, faseInicial + indice);
+        const faseAlvo = Math.min(fase, CHANCES_ALVO_FORTES.length - 1);
+
+        let totalPeso = 0;
+        const ponderados = disponiveis.map(time => {
+            if (time.probabilidadeVitoriaEstimada !== undefined) {
+                const qualidade = time.qualidadeJogador ?? 0.5;
+                const chanceAlvo = CHANCES_ALVO_FRACOS[faseAlvo]
+                    + qualidade * (
+                        CHANCES_ALVO_FORTES[faseAlvo]
+                        - CHANCES_ALVO_FRACOS[faseAlvo]
+                    );
+                const diferenca = time.probabilidadeVitoriaEstimada - chanceAlvo;
+                const peso = Math.max(
+                    PESO_MINIMO_ADVERSARIO,
+                    Math.exp(
+                        -(diferenca * diferenca)
+                        / (2 * TOLERANCIA_CHANCE * TOLERANCIA_CHANCE)
+                    )
+                );
+                totalPeso += peso;
+                return { time, peso };
+            }
+
+            const peso = 1;
+            totalPeso += peso;
+            return { time, peso };
+        });
+
+        const sorteio = rng() * totalPeso;
+        let acumulado = 0;
+        let escolhido = disponiveis[0];
+
+        for (const item of ponderados) {
+            acumulado += item.peso;
+            if (sorteio <= acumulado) {
+                escolhido = item.time;
+                break;
+            }
+        }
+
+        selecionados.push({
+            timeId: escolhido.timeId,
+            nome: escolhido.nome,
+            ano: escolhido.ano,
+            probabilidadeVitoriaEstimada: escolhido.probabilidadeVitoriaEstimada
+        });
+
+        const indiceRemovido = disponiveis.findIndex(
+            time => time.timeId === escolhido.timeId
+        );
+
+        if (indiceRemovido >= 0) {
+            disponiveis.splice(indiceRemovido, 1);
+        }
+    }
+
+    return selecionados;
 }
 
 // Busca os jogadores pertencentes a um time
@@ -125,7 +298,7 @@ function montarTimeHistorico(jogadores, timeId) {
 }
 
 // Seleciona aleatoriamente um mapa da lista recebida
-function selecionarMapaAleatorio(mapas) {
+function selecionarMapaAleatorio(mapas, rng = Math.random) {
     if (!Array.isArray(mapas) || mapas.length === 0) {
         throw new Error(
             "Não existem mapas disponíveis para a partida."
@@ -133,7 +306,7 @@ function selecionarMapaAleatorio(mapas) {
     }
 
     const indiceAleatorio = Math.floor(
-        Math.random() * mapas.length
+        rng() * mapas.length
     );
 
     const mapaSelecionado = mapas[indiceAleatorio];
@@ -146,6 +319,10 @@ function selecionarMapaAleatorio(mapas) {
 }
 
 module.exports = {
+    criarPRNG,
+    gerarSeedCampanha,
+    calcularForcaDetalhada,
+    estimarProbabilidadeVitoria,
     carregarJogadores,
     obterTimesHistoricos,
     selecionarAdversariosAleatorios,

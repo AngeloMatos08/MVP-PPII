@@ -1,3 +1,5 @@
+const VITORIAS_PARA_TITULO = 4;
+
 class Campaign {
     constructor(timeJogador, adversarios) {
         this.timeJogador = timeJogador;
@@ -26,8 +28,7 @@ class Campaign {
         if (partida.vencedor.nome === this.timeJogador.nome) {
             this.vitorias++;
 
-            // Sete vitórias encerram a campanha com título
-            if (this.vitorias === 7) {
+            if (this.vitorias === VITORIAS_PARA_TITULO) {
                 this.estado = "campeão";
             }
         } else {
@@ -39,3 +40,4 @@ class Campaign {
 }
 
 module.exports = Campaign;
+module.exports.VITORIAS_PARA_TITULO = VITORIAS_PARA_TITULO;

@@ -610,6 +610,47 @@ function finalizarDraft() {
     if (resumo) {
         resumo.textContent = `Draft concluído`;
     }
+
+    const containerAcoes = document.querySelector('.draft-section-right');
+    if (containerAcoes) {
+        let blocoAcoes = document.getElementById('draft-actions');
+
+        if (!blocoAcoes) {
+            blocoAcoes = document.createElement('div');
+            blocoAcoes.id = 'draft-actions';
+            blocoAcoes.className = 'draft-actions';
+            containerAcoes.appendChild(blocoAcoes);
+        }
+
+        blocoAcoes.replaceChildren();
+
+        const botaoCampanha = document.createElement('button');
+        botaoCampanha.type = 'button';
+        botaoCampanha.className = 'btn-primary btn-campaign';
+        botaoCampanha.textContent = 'Começar campanha';
+
+        botaoCampanha.addEventListener('click', () => {
+            if (botaoCampanha.dataset.busy === 'true') return;
+
+            botaoCampanha.dataset.busy = 'true';
+            botaoCampanha.textContent = 'Preparando campanha...';
+
+            const timeJogador = {
+                nome: 'Meu Time',
+                jogadores: timeEscolhido.map(jogador => ({
+                    nome: jogador.nome,
+                    funcao: jogador.funcao,
+                    overall: Number(jogador.overall)
+                }))
+            };
+
+            sessionStorage.setItem('mvpDraftTime', JSON.stringify(timeJogador));
+            window.location.href = 'campanha.html';
+        });
+
+        blocoAcoes.appendChild(botaoCampanha);
+    }
+
     document.querySelectorAll('.painel-controles button').forEach(botao => { botao.disabled = true; });
 }
 

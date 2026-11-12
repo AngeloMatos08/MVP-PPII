@@ -113,7 +113,7 @@ function trocarLados(partida) {
 }
 
 // SIMULAR A PARTIDA
-function simularPartida(partida) {
+function simularPartida(partida, rng = Math.random) {
     if (partida.vencedor !== null) {
         throw new Error("Esta partida já foi simulada.");
     }
@@ -131,7 +131,7 @@ function simularPartida(partida) {
         let vencedorRodada;
 
         // Sortear o vencedor e atualizar o placar.
-        if (Math.random() < probabilidadeA) {
+        if (rng() < probabilidadeA) {
             partida.placarA++;
             vencedorRodada = partida.timeA.nome;
         } else {

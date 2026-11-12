@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "node ./logic/rounds/roundsTest.js && node ./logic/matches/matchesTest.js"  
+    "test": "node ./logic/rounds/roundsTest.js && node ./logic/matches/matchesTest.js && node ./logic/campaign/campaignLogicTest.js && node ./logic/campaign/campaignBalanceTest.js"
   },
   "keywords": [],
   "author": "",
