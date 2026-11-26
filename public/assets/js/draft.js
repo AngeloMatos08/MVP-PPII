@@ -17,7 +17,7 @@ let funcoesPreenchidas = {
 }
 
 // Contador único de rerolls compartilhados
-let rerollsRestantes = 100;
+let rerollsRestantes = 2;
 
 const coresPorTime = {
     '100thieves': { inicio: 'F23535', fim: 'F23535' },
